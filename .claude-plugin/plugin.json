@@ -1,0 +1,10 @@
+{
+  "name": "cs-paper-table",
+  "version": "1.0.0",
+  "description": "Design, repair and typeset tables for computer-science research papers.",
+  "author": { "name": "zichuanxu", "url": "https://github.com/zichuanxu" },
+  "homepage": "https://github.com/zichuanxu/cs-paper-table-skill",
+  "repository": "https://github.com/zichuanxu/cs-paper-table-skill",
+  "license": "MIT",
+  "keywords": ["tables", "latex", "booktabs", "research", "papers", "computer-science"]
+}

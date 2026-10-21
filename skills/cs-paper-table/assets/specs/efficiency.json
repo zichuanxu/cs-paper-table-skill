@@ -1,0 +1,270 @@
+{
+  "id": "efficiency",
+  "number": 3,
+  "title": "Quality, serving cost and capacity constraints",
+  "caption": "Quality and serving cost of three attention variants at 16k context; the 32k column is for reference and is not ranked.",
+  "data_status": "synthetic",
+  "provenance": {
+    "origin": "Original constructed demonstration data; no real system results",
+    "generator": "scripts/build_examples.py",
+    "raw_data": "../data/efficiency_raw.json"
+  },
+  "style": {
+    "width_mm": 180,
+    "body_pt": 8.5,
+    "note_pt": 7.6,
+    "caption_pt": 9.0,
+    "tabcolsep_pt": 5.0,
+    "arraystretch": 1.18
+  },
+  "columns": [
+    {
+      "id": "metric",
+      "label": "Metric",
+      "kind": "text",
+      "width_mm": 50
+    },
+    {
+      "id": "dense",
+      "label": [
+        "Dense",
+        "16k"
+      ],
+      "kind": "number",
+      "precision": 1
+    },
+    {
+      "id": "sparse",
+      "label": [
+        "Sparse",
+        "16k"
+      ],
+      "kind": "number",
+      "precision": 1
+    },
+    {
+      "id": "hybrid",
+      "label": [
+        "Hybrid",
+        "16k"
+      ],
+      "kind": "number",
+      "precision": 1
+    },
+    {
+      "id": "extended",
+      "label": [
+        "Hybrid",
+        "32k"
+      ],
+      "kind": "number",
+      "precision": 1
+    }
+  ],
+  "rows": [
+    {
+      "id": "accuracy",
+      "display_group": "quality",
+      "direction": "max",
+      "precision": 1,
+      "cells": {
+        "metric": "Task success (%) ↑",
+        "dense": {
+          "value": 74.2
+        },
+        "sparse": {
+          "value": 74.3
+        },
+        "hybrid": {
+          "value": 76.6
+        },
+        "extended": {
+          "value": 78.0
+        }
+      }
+    },
+    {
+      "id": "calibration",
+      "display_group": "quality",
+      "direction": "min",
+      "precision": 1,
+      "cells": {
+        "metric": "Calibration error (pp) ↓",
+        "dense": {
+          "value": 4.8
+        },
+        "sparse": {
+          "value": 4.2
+        },
+        "hybrid": {
+          "value": 3.5
+        },
+        "extended": {
+          "value": 3.2
+        }
+      }
+    },
+    {
+      "id": "latency",
+      "display_group": "serve",
+      "direction": "min",
+      "precision": 1,
+      "cells": {
+        "metric": "P95 request latency (ms) ↓",
+        "dense": {
+          "value": 184.2
+        },
+        "sparse": {
+          "value": 157.9
+        },
+        "hybrid": {
+          "value": 149.8
+        },
+        "extended": {
+          "value": 230.3
+        }
+      }
+    },
+    {
+      "id": "throughput",
+      "display_group": "serve",
+      "direction": "max",
+      "precision": 1,
+      "cells": {
+        "metric": "Throughput (requests/s) ↑",
+        "dense": {
+          "value": 30.4
+        },
+        "sparse": {
+          "value": 34.7
+        },
+        "hybrid": {
+          "value": 36.2
+        },
+        "extended": {
+          "value": 23.5
+        }
+      }
+    },
+    {
+      "id": "memory",
+      "display_group": "serve",
+      "direction": "min",
+      "precision": 1,
+      "cells": {
+        "metric": "Peak device memory (GB) ↓",
+        "dense": {
+          "value": 36.4
+        },
+        "sparse": {
+          "value": 30.1
+        },
+        "hybrid": {
+          "value": 28.5
+        },
+        "extended": {
+          "value": 44.8
+        }
+      }
+    },
+    {
+      "id": "energy",
+      "display_group": "serve",
+      "direction": "min",
+      "precision": 1,
+      "cells": {
+        "metric": "Energy per request (J) ↓",
+        "dense": {
+          "value": 9.8
+        },
+        "sparse": {
+          "value": 8.2
+        },
+        "hybrid": {
+          "value": 7.6
+        },
+        "extended": {
+          "value": 12.4
+        }
+      }
+    },
+    {
+      "id": "stress_latency",
+      "display_group": "stress",
+      "direction": "min",
+      "precision": 0,
+      "cells": {
+        "metric": "P95 request latency (ms) ↓",
+        "dense": {
+          "failure": "oom"
+        },
+        "sparse": {
+          "value": 392
+        },
+        "hybrid": {
+          "value": 351
+        },
+        "extended": {
+          "failure": "oom"
+        }
+      }
+    },
+    {
+      "id": "stress_throughput",
+      "display_group": "stress",
+      "direction": "max",
+      "precision": 1,
+      "cells": {
+        "metric": "Throughput (requests/s) ↑",
+        "dense": {
+          "failure": "oom"
+        },
+        "sparse": {
+          "value": 61.3
+        },
+        "hybrid": {
+          "value": 66.9
+        },
+        "extended": {
+          "failure": "oom"
+        }
+      }
+    }
+  ],
+  "notes": [
+    "One 80 GB GPU, BF16 weights, 256 output tokens per request. P95 is a within-run latency quantile, not an interval."
+  ],
+  "ranking": {
+    "axis": "row",
+    "scopes": [
+      [
+        "dense",
+        "sparse",
+        "hybrid"
+      ]
+    ],
+    "tie_policy": "rounded",
+    "meaning": "Bold: best 16k value in each row, following its arrow."
+  },
+  "column_groups": [
+    {
+      "label": "Matched 16k context",
+      "columns": [
+        "dense",
+        "sparse",
+        "hybrid"
+      ]
+    },
+    {
+      "label": "Reference",
+      "columns": [
+        "extended"
+      ]
+    }
+  ],
+  "row_group_labels": {
+    "quality": "Quality (1,000 requests)",
+    "serve": "Serving (batch 4)",
+    "stress": "Capacity stress (batch 32)"
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "CS Paper Table"
+  short_description: "Design precise, polished tables for CS research"
+  default_prompt: "Use $cs-paper-table to design or improve my research tables, drawing on inspected AI papers for typography, hierarchy, grouping and emphasis while preserving scientific comparability."

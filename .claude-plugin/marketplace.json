@@ -1,0 +1,13 @@
+{
+  "name": "cs-paper-table-skill",
+  "description": "Design, repair and typeset tables for computer-science research papers.",
+  "owner": { "name": "zichuanxu", "url": "https://github.com/zichuanxu" },
+  "plugins": [
+    {
+      "name": "cs-paper-table",
+      "source": "./",
+      "description": "Design, repair and typeset tables for computer-science research papers.",
+      "category": "productivity"
+    }
+  ]
+}

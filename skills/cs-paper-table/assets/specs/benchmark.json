@@ -1,0 +1,425 @@
+{
+  "id": "benchmark",
+  "number": 1,
+  "title": "Quality and cost under matched inference budgets",
+  "caption": "Success rate on four task suites and inference cost, compared within each token budget.",
+  "data_status": "synthetic",
+  "provenance": {
+    "origin": "Original constructed demonstration data; no real system results",
+    "generator": "scripts/build_examples.py",
+    "raw_data": "../data/benchmark_raw.json"
+  },
+  "style": {
+    "width_mm": 180,
+    "body_pt": 8.5,
+    "note_pt": 7.6,
+    "caption_pt": 9.0,
+    "tabcolsep_pt": 5.0,
+    "arraystretch": 1.18
+  },
+  "columns": [
+    {
+      "id": "method",
+      "label": "Method",
+      "kind": "text",
+      "width_mm": 30
+    },
+    {
+      "id": "math",
+      "label": [
+        "Math",
+        "n=250"
+      ],
+      "kind": "number",
+      "precision": 1,
+      "direction": "max",
+      "bounds": [
+        0,
+        100
+      ]
+    },
+    {
+      "id": "code",
+      "label": [
+        "Code",
+        "n=200"
+      ],
+      "kind": "number",
+      "precision": 1,
+      "direction": "max",
+      "bounds": [
+        0,
+        100
+      ]
+    },
+    {
+      "id": "docs",
+      "label": [
+        "Docs",
+        "n=150"
+      ],
+      "kind": "number",
+      "precision": 1,
+      "direction": "max",
+      "bounds": [
+        0,
+        100
+      ]
+    },
+    {
+      "id": "tools",
+      "label": [
+        "Tools",
+        "n=100"
+      ],
+      "kind": "number",
+      "precision": 1,
+      "direction": "max",
+      "bounds": [
+        0,
+        100
+      ]
+    },
+    {
+      "id": "macro",
+      "label": [
+        "Avg.",
+        "macro"
+      ],
+      "kind": "number",
+      "precision": 1,
+      "direction": "max",
+      "bounds": [
+        0,
+        100
+      ]
+    },
+    {
+      "id": "tokens",
+      "label": [
+        "Tokens",
+        "mean ↓"
+      ],
+      "kind": "number",
+      "precision": 0,
+      "direction": "min",
+      "thousands": true
+    },
+    {
+      "id": "latency",
+      "label": [
+        "Latency",
+        "ms ↓"
+      ],
+      "kind": "number",
+      "precision": 0,
+      "direction": "min",
+      "thousands": true
+    }
+  ],
+  "rows": [
+    {
+      "id": "r0",
+      "display_group": "16k",
+      "comparison_group": "16k",
+      "focus": false,
+      "cells": {
+        "method": "Direct",
+        "math": {
+          "value": 65.6
+        },
+        "code": {
+          "value": 61.5
+        },
+        "docs": {
+          "value": 73.33333333333333
+        },
+        "tools": {
+          "value": 54.0
+        },
+        "macro": {
+          "value": 63.608333333333334
+        },
+        "tokens": {
+          "value": 4800
+        },
+        "latency": {
+          "value": 410.3
+        }
+      }
+    },
+    {
+      "id": "r1",
+      "display_group": "16k",
+      "comparison_group": "16k",
+      "focus": false,
+      "cells": {
+        "method": "Chain of thought",
+        "math": {
+          "value": 72.0
+        },
+        "code": {
+          "value": 68.0
+        },
+        "docs": {
+          "value": 77.33333333333333
+        },
+        "tools": {
+          "value": 61.0
+        },
+        "macro": {
+          "value": 69.58333333333333
+        },
+        "tokens": {
+          "value": 6200
+        },
+        "latency": {
+          "value": 520.8
+        }
+      }
+    },
+    {
+      "id": "r2",
+      "display_group": "16k",
+      "comparison_group": "16k",
+      "focus": false,
+      "cells": {
+        "method": "Search",
+        "math": {
+          "value": 78.8
+        },
+        "code": {
+          "value": 74.0
+        },
+        "docs": {
+          "value": 82.0
+        },
+        "tools": {
+          "value": 65.0
+        },
+        "macro": {
+          "value": 74.95
+        },
+        "tokens": {
+          "value": 10150
+        },
+        "latency": {
+          "value": 811.2
+        }
+      }
+    },
+    {
+      "id": "r3",
+      "display_group": "16k",
+      "comparison_group": "16k",
+      "focus": false,
+      "cells": {
+        "method": "Verifier",
+        "math": {
+          "value": 78.0
+        },
+        "code": {
+          "value": 75.5
+        },
+        "docs": {
+          "value": 83.33333333333333
+        },
+        "tools": {
+          "value": 64.0
+        },
+        "macro": {
+          "value": 75.20833333333333
+        },
+        "tokens": {
+          "value": 11280
+        },
+        "latency": {
+          "value": 952.6
+        }
+      }
+    },
+    {
+      "id": "r4",
+      "display_group": "16k",
+      "comparison_group": "16k",
+      "focus": true,
+      "cells": {
+        "method": "Adaptive routing",
+        "math": {
+          "value": 80.4
+        },
+        "code": {
+          "value": 77.5
+        },
+        "docs": {
+          "value": 85.33333333333333
+        },
+        "tools": {
+          "value": 69.0
+        },
+        "macro": {
+          "value": 78.05833333333334
+        },
+        "tokens": {
+          "value": 9800
+        },
+        "latency": {
+          "value": 754.4
+        }
+      }
+    },
+    {
+      "id": "r5",
+      "display_group": "32k",
+      "comparison_group": "32k",
+      "focus": false,
+      "cells": {
+        "method": "Chain of thought",
+        "math": {
+          "value": 73.6
+        },
+        "code": {
+          "value": 70.5
+        },
+        "docs": {
+          "value": 80.66666666666667
+        },
+        "tools": {
+          "value": 64.0
+        },
+        "macro": {
+          "value": 72.19166666666666
+        },
+        "tokens": {
+          "value": 9700
+        },
+        "latency": {
+          "value": 742.5
+        }
+      }
+    },
+    {
+      "id": "r6",
+      "display_group": "32k",
+      "comparison_group": "32k",
+      "focus": false,
+      "cells": {
+        "method": "Search",
+        "math": {
+          "value": 82.8
+        },
+        "code": {
+          "value": 77.5
+        },
+        "docs": {
+          "value": 87.33333333333333
+        },
+        "tools": {
+          "value": 71.0
+        },
+        "macro": {
+          "value": 79.65833333333333
+        },
+        "tokens": {
+          "value": 17200
+        },
+        "latency": {
+          "value": 1236.4
+        }
+      }
+    },
+    {
+      "id": "r7",
+      "display_group": "32k",
+      "comparison_group": "32k",
+      "focus": false,
+      "cells": {
+        "method": "Verifier",
+        "math": {
+          "value": 83.2
+        },
+        "code": {
+          "value": 79.0
+        },
+        "docs": {
+          "value": 88.66666666666667
+        },
+        "tools": {
+          "value": 72.0
+        },
+        "macro": {
+          "value": 80.71666666666667
+        },
+        "tokens": {
+          "value": 18400
+        },
+        "latency": {
+          "value": 1402.7
+        }
+      }
+    },
+    {
+      "id": "r8",
+      "display_group": "32k",
+      "comparison_group": "32k",
+      "focus": true,
+      "cells": {
+        "method": "Adaptive routing",
+        "math": {
+          "value": 84.8
+        },
+        "code": {
+          "value": 81.5
+        },
+        "docs": {
+          "value": 90.0
+        },
+        "tools": {
+          "value": 76.0
+        },
+        "macro": {
+          "value": 83.075
+        },
+        "tokens": {
+          "value": 15100
+        },
+        "latency": {
+          "value": 1128.3
+        }
+      }
+    }
+  ],
+  "notes": [
+    "Rate = successes / n; Avg. = unweighted mean of the four unrounded rates. Budgets cap all branches and verification calls."
+  ],
+  "ranking": {
+    "axis": "column",
+    "tie_policy": "rounded",
+    "runner_up": "underline",
+    "meaning": "Bold: best and underline: second best within each budget (ties at the shown precision share the mark; not a significance test)."
+  },
+  "column_groups": [
+    {
+      "label": "Task success (%) ↑",
+      "columns": [
+        "math",
+        "code",
+        "docs",
+        "tools",
+        "macro"
+      ]
+    },
+    {
+      "label": "Inference cost",
+      "columns": [
+        "tokens",
+        "latency"
+      ]
+    }
+  ],
+  "row_group_labels": {
+    "16k": "16k-token budget",
+    "32k": "32k-token budget"
+  },
+  "focus_meaning": "Shaded: the proposed method."
+}

@@ -1,0 +1,117 @@
+{
+  "data_status": "synthetic",
+  "data": [
+    {
+      "id": "proofs",
+      "collection": "Mathematical proofs",
+      "unit": "problem",
+      "train": {
+        "value": 120000
+      },
+      "dev": {
+        "value": 2000
+      },
+      "test": {
+        "value": 3000
+      },
+      "coverage": "English",
+      "separation": "Hold out entire problem families"
+    },
+    {
+      "id": "patches",
+      "collection": "Repository patches",
+      "unit": "task",
+      "train": {
+        "value": 8200
+      },
+      "dev": {
+        "value": 600
+      },
+      "test": {
+        "value": 900
+      },
+      "coverage": "Python / C++",
+      "separation": "Disjoint repositories; freeze revision"
+    },
+    {
+      "id": "tools",
+      "collection": "Tool trajectories",
+      "unit": "trajectory",
+      "train": {
+        "value": 45000
+      },
+      "dev": {
+        "value": 1500
+      },
+      "test": {
+        "value": 2500
+      },
+      "coverage": "6 languages",
+      "separation": "Hold out goal templates and tool schemas"
+    },
+    {
+      "id": "docs",
+      "collection": "Long-document QA",
+      "unit": "question",
+      "train": {
+        "value": 18000
+      },
+      "dev": {
+        "value": 800
+      },
+      "test": {
+        "value": 1200
+      },
+      "coverage": "2 domains",
+      "separation": "Split by source document before sampling"
+    },
+    {
+      "id": "manuals",
+      "collection": "Technical manuals",
+      "unit": "document",
+      "train": {
+        "value": 125000
+      },
+      "dev": {
+        "value": 0
+      },
+      "test": {
+        "value": 5000
+      },
+      "coverage": "12 domains",
+      "separation": "Zero dev entries are intentional"
+    },
+    {
+      "id": "holdout",
+      "collection": "Sealed code tasks",
+      "unit": "problem",
+      "train": {
+        "missing": "not_applicable"
+      },
+      "dev": {
+        "missing": "not_reported"
+      },
+      "test": {
+        "value": 750
+      },
+      "coverage": "Python",
+      "separation": "Evaluation only; dev count unspecified"
+    },
+    {
+      "id": "actions",
+      "collection": "Interactive tasks",
+      "unit": "episode",
+      "train": {
+        "missing": "not_applicable"
+      },
+      "dev": {
+        "value": 100
+      },
+      "test": {
+        "value": 400
+      },
+      "coverage": "Browser / CLI",
+      "separation": "Freeze environment and initial state"
+    }
+  ]
+}

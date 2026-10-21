@@ -1,0 +1,167 @@
+{
+  "data_status": "synthetic",
+  "data": [
+    {
+      "budget": "16k",
+      "method": "Direct",
+      "successes": {
+        "math": 164,
+        "code": 123,
+        "docs": 110,
+        "tools": 54
+      },
+      "denominators": {
+        "math": 250,
+        "code": 200,
+        "docs": 150,
+        "tools": 100
+      },
+      "mean_tokens": 4800,
+      "latency_ms": 410.3
+    },
+    {
+      "budget": "16k",
+      "method": "Chain of thought",
+      "successes": {
+        "math": 180,
+        "code": 136,
+        "docs": 116,
+        "tools": 61
+      },
+      "denominators": {
+        "math": 250,
+        "code": 200,
+        "docs": 150,
+        "tools": 100
+      },
+      "mean_tokens": 6200,
+      "latency_ms": 520.8
+    },
+    {
+      "budget": "16k",
+      "method": "Search",
+      "successes": {
+        "math": 197,
+        "code": 148,
+        "docs": 123,
+        "tools": 65
+      },
+      "denominators": {
+        "math": 250,
+        "code": 200,
+        "docs": 150,
+        "tools": 100
+      },
+      "mean_tokens": 10150,
+      "latency_ms": 811.2
+    },
+    {
+      "budget": "16k",
+      "method": "Verifier",
+      "successes": {
+        "math": 195,
+        "code": 151,
+        "docs": 125,
+        "tools": 64
+      },
+      "denominators": {
+        "math": 250,
+        "code": 200,
+        "docs": 150,
+        "tools": 100
+      },
+      "mean_tokens": 11280,
+      "latency_ms": 952.6
+    },
+    {
+      "budget": "16k",
+      "method": "Adaptive routing",
+      "successes": {
+        "math": 201,
+        "code": 155,
+        "docs": 128,
+        "tools": 69
+      },
+      "denominators": {
+        "math": 250,
+        "code": 200,
+        "docs": 150,
+        "tools": 100
+      },
+      "mean_tokens": 9800,
+      "latency_ms": 754.4
+    },
+    {
+      "budget": "32k",
+      "method": "Chain of thought",
+      "successes": {
+        "math": 184,
+        "code": 141,
+        "docs": 121,
+        "tools": 64
+      },
+      "denominators": {
+        "math": 250,
+        "code": 200,
+        "docs": 150,
+        "tools": 100
+      },
+      "mean_tokens": 9700,
+      "latency_ms": 742.5
+    },
+    {
+      "budget": "32k",
+      "method": "Search",
+      "successes": {
+        "math": 207,
+        "code": 155,
+        "docs": 131,
+        "tools": 71
+      },
+      "denominators": {
+        "math": 250,
+        "code": 200,
+        "docs": 150,
+        "tools": 100
+      },
+      "mean_tokens": 17200,
+      "latency_ms": 1236.4
+    },
+    {
+      "budget": "32k",
+      "method": "Verifier",
+      "successes": {
+        "math": 208,
+        "code": 158,
+        "docs": 133,
+        "tools": 72
+      },
+      "denominators": {
+        "math": 250,
+        "code": 200,
+        "docs": 150,
+        "tools": 100
+      },
+      "mean_tokens": 18400,
+      "latency_ms": 1402.7
+    },
+    {
+      "budget": "32k",
+      "method": "Adaptive routing",
+      "successes": {
+        "math": 212,
+        "code": 163,
+        "docs": 135,
+        "tools": 76
+      },
+      "denominators": {
+        "math": 250,
+        "code": 200,
+        "docs": 150,
+        "tools": 100
+      },
+      "mean_tokens": 15100,
+      "latency_ms": 1128.3
+    }
+  ]
+}

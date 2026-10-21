@@ -1,0 +1,310 @@
+{
+ "id": "transformer_t2",
+ "number": 2,
+ "title": "Machine translation on newstest2014",
+ "caption": "BLEU and estimated training cost. The Transformer outperforms earlier single models and ensembles at a fraction of their training cost.",
+ "data_status": "reported",
+ "provenance": {
+  "origin": "Vaswani et al., Attention Is All You Need, NeurIPS 2017, arXiv:1706.03762v7, Table 2 (PDF p. 8)",
+  "transcribed": "2026-10-21 from the PDF text layer and checked against the rendered page",
+  "reuse": "Google grants permission to reproduce tables and figures of this paper for scholarly works with attribution"
+ },
+ "style": {
+  "width_mm": 140,
+  "body_pt": 9.0,
+  "note_pt": 7.8,
+  "caption_pt": 9.0,
+  "tabcolsep_pt": 6.0,
+  "arraystretch": 1.18
+ },
+ "missing_style": "dash",
+ "columns": [
+  {
+   "id": "model",
+   "label": "Model",
+   "kind": "text",
+   "width_mm": 47
+  },
+  {
+   "id": "bleu_de",
+   "label": [
+    "EN–DE"
+   ],
+   "kind": "number",
+   "precision": "reported",
+   "direction": "max"
+  },
+  {
+   "id": "bleu_fr",
+   "label": [
+    "EN–FR"
+   ],
+   "kind": "number",
+   "precision": "reported",
+   "direction": "max"
+  },
+  {
+   "id": "cost_de",
+   "label": [
+    "EN–DE"
+   ],
+   "kind": "number",
+   "precision": "reported",
+   "format": "sci"
+  },
+  {
+   "id": "cost_fr",
+   "label": [
+    "EN–FR"
+   ],
+   "kind": "number",
+   "precision": "reported",
+   "format": "sci"
+  }
+ ],
+ "column_groups": [
+  {
+   "label": "BLEU ↑",
+   "columns": [
+    "bleu_de",
+    "bleu_fr"
+   ]
+  },
+  {
+   "label": "Training cost (FLOPs) ↓",
+   "columns": [
+    "cost_de",
+    "cost_fr"
+   ]
+  }
+ ],
+ "row_group_labels": {
+  "single": "Single models",
+  "ensemble": "Ensembles",
+  "ours": "This paper"
+ },
+ "rows": [
+  {
+   "id": "r0",
+   "display_group": "single",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "model": "ByteNet [18]",
+    "bleu_de": {
+     "value": "23.75"
+    },
+    "bleu_fr": {
+     "missing": "not_reported"
+    },
+    "cost_de": {
+     "missing": "not_reported"
+    },
+    "cost_fr": {
+     "missing": "not_reported"
+    }
+   }
+  },
+  {
+   "id": "r1",
+   "display_group": "single",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "model": "Deep-Att + PosUnk [39]",
+    "bleu_de": {
+     "missing": "not_reported"
+    },
+    "bleu_fr": {
+     "value": "39.2"
+    },
+    "cost_de": {
+     "missing": "not_reported"
+    },
+    "cost_fr": {
+     "value": "1.0e20"
+    }
+   }
+  },
+  {
+   "id": "r2",
+   "display_group": "single",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "model": "GNMT + RL [38]",
+    "bleu_de": {
+     "value": "24.6"
+    },
+    "bleu_fr": {
+     "value": "39.92"
+    },
+    "cost_de": {
+     "value": "2.3e19"
+    },
+    "cost_fr": {
+     "value": "1.4e20"
+    }
+   }
+  },
+  {
+   "id": "r3",
+   "display_group": "single",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "model": "ConvS2S [9]",
+    "bleu_de": {
+     "value": "25.16"
+    },
+    "bleu_fr": {
+     "value": "40.46"
+    },
+    "cost_de": {
+     "value": "9.6e18"
+    },
+    "cost_fr": {
+     "value": "1.5e20"
+    }
+   }
+  },
+  {
+   "id": "r4",
+   "display_group": "single",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "model": "MoE [32]",
+    "bleu_de": {
+     "value": "26.03"
+    },
+    "bleu_fr": {
+     "value": "40.56"
+    },
+    "cost_de": {
+     "value": "2.0e19"
+    },
+    "cost_fr": {
+     "value": "1.2e20"
+    }
+   }
+  },
+  {
+   "id": "r5",
+   "display_group": "ensemble",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "model": "Deep-Att + PosUnk Ensemble [39]",
+    "bleu_de": {
+     "missing": "not_reported"
+    },
+    "bleu_fr": {
+     "value": "40.4"
+    },
+    "cost_de": {
+     "missing": "not_reported"
+    },
+    "cost_fr": {
+     "value": "8.0e20"
+    }
+   }
+  },
+  {
+   "id": "r6",
+   "display_group": "ensemble",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "model": "GNMT + RL Ensemble [38]",
+    "bleu_de": {
+     "value": "26.30"
+    },
+    "bleu_fr": {
+     "value": "41.16"
+    },
+    "cost_de": {
+     "value": "1.8e20"
+    },
+    "cost_fr": {
+     "value": "1.1e21"
+    }
+   }
+  },
+  {
+   "id": "r7",
+   "display_group": "ensemble",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "model": "ConvS2S Ensemble [9]",
+    "bleu_de": {
+     "value": "26.36"
+    },
+    "bleu_fr": {
+     "value": "41.29"
+    },
+    "cost_de": {
+     "value": "7.7e19"
+    },
+    "cost_fr": {
+     "value": "1.2e21"
+    }
+   }
+  },
+  {
+   "id": "r8",
+   "display_group": "ours",
+   "comparison_group": "all",
+   "focus": true,
+   "cells": {
+    "model": "Transformer (base model)",
+    "bleu_de": {
+     "value": "27.3"
+    },
+    "bleu_fr": {
+     "value": "38.1"
+    },
+    "cost_de": {
+     "value": "3.3e18",
+     "span": 2
+    },
+    "cost_fr": {
+     "spanned": true
+    }
+   }
+  },
+  {
+   "id": "r9",
+   "display_group": "ours",
+   "comparison_group": "all",
+   "focus": true,
+   "cells": {
+    "model": "Transformer (big)",
+    "bleu_de": {
+     "value": "28.4"
+    },
+    "bleu_fr": {
+     "value": "41.8"
+    },
+    "cost_de": {
+     "value": "2.3e19",
+     "span": 2
+    },
+    "cost_fr": {
+     "spanned": true
+    }
+   }
+  }
+ ],
+ "ranking": {
+  "axis": "column",
+  "tie_policy": "raw",
+  "runner_up": "underline",
+  "meaning": "Bold: best and underline: second best BLEU in each column, across all rows."
+ },
+ "focus_meaning": "Shaded: models from this paper; one training-cost estimate covers both language pairs.",
+ "notes": [
+  "Values as reported in the paper. Training cost is the paper's estimate: training time × number of GPUs × sustained single-precision throughput per GPU."
+ ]
+}

@@ -1,0 +1,288 @@
+{
+ "id": "budget_comparison",
+ "number": 1,
+ "title": "Budget-specific configuration results",
+ "caption": "Internal rows share a checkpoint, hardware and a 10,000-item evaluation set.",
+ "data_status": "synthetic",
+ "provenance": {
+  "source": "Constructed application-example CSV and context JSON; no real performance claims.",
+  "inputs": {
+   "results.csv": {
+    "path": "inputs/results.csv",
+    "sha256": "25929c0a7925b50a7d38d9ef106d20fea843d752262f1786cf2ce5b10ef63ff9"
+   },
+   "context.json": {
+    "path": "inputs/context.json",
+    "sha256": "016ee11faf952d24b5d20737c30984374b9fe3ebd1686ffa137034ebddf31a88"
+   }
+  },
+  "context": {
+   "data_status": "synthetic",
+   "purpose": "A publication layout example, not real performance claims",
+   "comparison": "Internal rows use the same checkpoint, evaluation set of 10000 items and hardware; inference-token ceilings differ across budget blocks. External reference uses a different evaluation harness and is for context only.",
+   "units": {
+    "success_percent": "percent, larger is better",
+    "error_percent": "percent, smaller is better",
+    "p95_latency_ms": "milliseconds, smaller is better; within-run quantile, no interval claim"
+   },
+   "missingness": {
+    "NR": "not reported",
+    "OOM": "execution ran out of memory under this configuration"
+   },
+   "precision": "One decimal in every numeric column",
+   "uncertainty": "No replication or confidence interval information is available; do not infer significance."
+  },
+  "intended_claim": "The synthetic data illustrate budget-specific quality and latency comparisons while preserving displayed ties, missing results and execution failures.",
+  "comparison_contract": {
+   "internal_16k": "Same checkpoint, evaluation set and hardware; 16k inference-token ceiling.",
+   "internal_32k": "Same checkpoint, evaluation set and hardware; 32k inference-token ceiling.",
+   "external": "Different evaluation harness; background context only; rank false."
+  },
+  "rounding": "Decimal ROUND_HALF_UP, one decimal in every numeric result column. Raw decimal strings retained. Ranking compares displayed values.",
+  "uncertainty": "No replication or confidence interval information available. P95 is a within-run quantile, not an interval.",
+  "calculations": "No new scores, aggregates, intervals or deltas calculated. Only display rounding and within-budget optimum selection.",
+  "input_limitations": [
+   "No checkpoint identifier, dataset/evaluation version, metric scoring definition or hardware model is supplied.",
+   "No latency workload, batch/concurrency, runtime setup or repetition information is supplied.",
+   "The external entry has no source citation or precise budget beyond 'other'; it remains explicitly synthetic background context.",
+   "No manuscript template is supplied; the standalone specimen uses Latin Modern and must be checked again after manuscript integration."
+  ]
+ },
+ "columns": [
+  {
+   "id": "configuration",
+   "label": "Configuration",
+   "kind": "text",
+   "width_mm": 29
+  },
+  {
+   "id": "success_percent",
+   "label": [
+    "Success",
+    "% ↑"
+   ],
+   "kind": "number",
+   "direction": "max",
+   "precision": 1,
+   "bounds": [
+    0,
+    100
+   ]
+  },
+  {
+   "id": "error_percent",
+   "label": [
+    "Error",
+    "% ↓"
+   ],
+   "kind": "number",
+   "direction": "min",
+   "precision": 1,
+   "bounds": [
+    0,
+    100
+   ]
+  },
+  {
+   "id": "p95_latency_ms",
+   "label": [
+    "P95 latency",
+    "ms ↓"
+   ],
+   "kind": "number",
+   "direction": "min",
+   "precision": 1
+  }
+ ],
+ "rows": [
+  {
+   "id": "baseline_16k",
+   "display_group": "internal_16k",
+   "comparison_group": "internal_16k",
+   "rank": true,
+   "source_record": 1,
+   "source_budget": "16k",
+   "source_origin": "internal",
+   "cells": {
+    "configuration": "Baseline",
+    "success_percent": {
+     "value": "72.34"
+    },
+    "error_percent": {
+     "value": "4.26"
+    },
+    "p95_latency_ms": {
+     "value": "181.4"
+    }
+   }
+  },
+  {
+   "id": "cache_16k",
+   "display_group": "internal_16k",
+   "comparison_group": "internal_16k",
+   "rank": true,
+   "source_record": 2,
+   "source_budget": "16k",
+   "source_origin": "internal",
+   "cells": {
+    "configuration": "Cache",
+    "success_percent": {
+     "value": "72.33"
+    },
+    "error_percent": {
+     "value": "4.24"
+    },
+    "p95_latency_ms": {
+     "value": "139.7"
+    }
+   }
+  },
+  {
+   "id": "router_16k",
+   "display_group": "internal_16k",
+   "comparison_group": "internal_16k",
+   "rank": true,
+   "source_record": 3,
+   "source_budget": "16k",
+   "source_origin": "internal",
+   "cells": {
+    "configuration": "Router",
+    "success_percent": {
+     "value": "74.02"
+    },
+    "error_percent": {
+     "value": "4.10"
+    },
+    "p95_latency_ms": {
+     "value": "147.2"
+    }
+   }
+  },
+  {
+   "id": "expert_16k",
+   "display_group": "internal_16k",
+   "comparison_group": "internal_16k",
+   "rank": true,
+   "source_record": 4,
+   "source_budget": "16k",
+   "source_origin": "internal",
+   "cells": {
+    "configuration": "Expert",
+    "success_percent": {
+     "value": "74.04"
+    },
+    "error_percent": {
+     "value": "3.95"
+    },
+    "p95_latency_ms": {
+     "missing": "not_reported"
+    }
+   }
+  },
+  {
+   "id": "baseline_32k",
+   "display_group": "internal_32k",
+   "comparison_group": "internal_32k",
+   "rank": true,
+   "source_record": 5,
+   "source_budget": "32k",
+   "source_origin": "internal",
+   "cells": {
+    "configuration": "Baseline",
+    "success_percent": {
+     "value": "75.14"
+    },
+    "error_percent": {
+     "value": "3.68"
+    },
+    "p95_latency_ms": {
+     "value": "245.8"
+    }
+   }
+  },
+  {
+   "id": "router_32k",
+   "display_group": "internal_32k",
+   "comparison_group": "internal_32k",
+   "rank": true,
+   "source_record": 6,
+   "source_budget": "32k",
+   "source_origin": "internal",
+   "cells": {
+    "configuration": "Router",
+    "success_percent": {
+     "value": "76.64"
+    },
+    "error_percent": {
+     "value": "3.42"
+    },
+    "p95_latency_ms": {
+     "value": "220.2"
+    }
+   }
+  },
+  {
+   "id": "expert_32k",
+   "display_group": "internal_32k",
+   "comparison_group": "internal_32k",
+   "rank": true,
+   "source_record": 7,
+   "source_budget": "32k",
+   "source_origin": "internal",
+   "cells": {
+    "configuration": "Expert",
+    "success_percent": {
+     "failure": "oom"
+    },
+    "error_percent": {
+     "failure": "oom"
+    },
+    "p95_latency_ms": {
+     "failure": "oom"
+    }
+   }
+  },
+  {
+   "id": "external_reference",
+   "display_group": "external_context",
+   "comparison_group": "external_other_harness",
+   "rank": false,
+   "source_record": 8,
+   "source_budget": "other",
+   "source_origin": "external",
+   "cells": {
+    "configuration": "External reference",
+    "success_percent": {
+     "value": "80.00"
+    },
+    "error_percent": {
+     "value": "2.00"
+    },
+    "p95_latency_ms": {
+     "value": "88.0"
+    }
+   }
+  }
+ ],
+ "row_group_labels": {
+  "internal_16k": "16k-token budget",
+  "internal_32k": "32k-token budget",
+  "external_context": "External reference (different harness)"
+ },
+ "ranking": {
+  "axis": "column",
+  "tie_policy": "rounded",
+  "meaning": "Bold: best within each internal budget (ties share the mark)."
+ },
+ "notes": [
+  "P95 is a within-run latency quantile; no replication, so no intervals. The external reference uses a different harness and is not ranked."
+ ],
+ "style": {
+  "width_mm": 88,
+  "body_pt": 8.5,
+  "note_pt": 7.6,
+  "caption_pt": 9.0,
+  "tabcolsep_pt": 4.0,
+  "arraystretch": 1.18
+ }
+}

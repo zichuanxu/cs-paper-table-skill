@@ -1,0 +1,513 @@
+{
+  "inspection_date": "2026-10-21",
+  "counts": {
+    "distinct_papers": 54,
+    "distinct_pdf_hashes": 54,
+    "visually_inspected_table_anchors": 95,
+    "table_only_visual_inspection_status": "pdf_visual_inspected",
+    "companies": 9,
+    "papers_by_year": {
+      "2025": 30,
+      "2026": 24
+    },
+    "tables_by_year": {
+      "2025": 50,
+      "2026": 45
+    },
+    "papers_located_from_prior_figure_corpus": 52,
+    "additional_papers": 2,
+    "by_company": [
+      {
+        "company": "OpenAI",
+        "papers": 6,
+        "tables": 10,
+        "papers_by_year": {
+          "2025": 4,
+          "2026": 2
+        },
+        "tables_by_year": {
+          "2025": 8,
+          "2026": 2
+        }
+      },
+      {
+        "company": "Anthropic",
+        "papers": 6,
+        "tables": 9,
+        "papers_by_year": {
+          "2025": 3,
+          "2026": 3
+        },
+        "tables_by_year": {
+          "2025": 4,
+          "2026": 5
+        }
+      },
+      {
+        "company": "Microsoft Research",
+        "papers": 6,
+        "tables": 14,
+        "papers_by_year": {
+          "2025": 4,
+          "2026": 2
+        },
+        "tables_by_year": {
+          "2025": 8,
+          "2026": 6
+        }
+      },
+      {
+        "company": "Google / DeepMind",
+        "papers": 6,
+        "tables": 10,
+        "papers_by_year": {
+          "2025": 4,
+          "2026": 2
+        },
+        "tables_by_year": {
+          "2025": 6,
+          "2026": 4
+        }
+      },
+      {
+        "company": "Meta / FAIR",
+        "papers": 6,
+        "tables": 10,
+        "papers_by_year": {
+          "2025": 4,
+          "2026": 2
+        },
+        "tables_by_year": {
+          "2025": 7,
+          "2026": 3
+        }
+      },
+      {
+        "company": "NVIDIA",
+        "papers": 6,
+        "tables": 10,
+        "papers_by_year": {
+          "2025": 2,
+          "2026": 4
+        },
+        "tables_by_year": {
+          "2025": 3,
+          "2026": 7
+        }
+      },
+      {
+        "company": "DeepSeek",
+        "papers": 6,
+        "tables": 10,
+        "papers_by_year": {
+          "2025": 2,
+          "2026": 4
+        },
+        "tables_by_year": {
+          "2025": 2,
+          "2026": 8
+        }
+      },
+      {
+        "company": "Alibaba / Qwen",
+        "papers": 6,
+        "tables": 10,
+        "papers_by_year": {
+          "2025": 2,
+          "2026": 4
+        },
+        "tables_by_year": {
+          "2025": 3,
+          "2026": 7
+        }
+      },
+      {
+        "company": "Tencent",
+        "papers": 6,
+        "tables": 12,
+        "papers_by_year": {
+          "2025": 5,
+          "2026": 1
+        },
+        "tables_by_year": {
+          "2025": 9,
+          "2026": 3
+        }
+      }
+    ],
+    "raw_pdf_object_reports": 95,
+    "supplemental_layout_reports": 30
+  },
+  "deduplication": {
+    "unique_canonical_works": 54,
+    "unique_pdf_hashes": 54,
+    "unique_work_anchor_pairs": 95,
+    "unique_work_anchor_page_triples": 95,
+    "duplicates_found": [],
+    "unique_normalized_titles": 54
+  },
+  "pdf_hash_verification": [
+    {
+      "paper_id": "astra",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "77ff1e8aaf7018c7d7bbe347c374cd74188387ceca91f1ef637ccc59ea930895"
+    },
+    {
+      "paper_id": "openai-controllability",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "0739b5d4b8da2d1b9956216e7111ceaa1625d232ec137cc6cd3cf8658eaafb0f"
+    },
+    {
+      "paper_id": "healthbench",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "f61c53f6bde84a3964531efe04a75389f9bba9e70a35b4012c871c9ec0b512f3"
+    },
+    {
+      "paper_id": "paperbench",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "2f58f1a6581af9d99432422dccf3cf61f5c263377c1e4550e7333c4a22d7184d"
+    },
+    {
+      "paper_id": "swe-lancer",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "5592089e626e52af27222a144f65ef8e2748e4f8a2ab3cba29df82366a48a5c8"
+    },
+    {
+      "paper_id": "gpt-oss",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "8839e1efdf835be08ad1d60bfa99c8c4fdde15c7ef49eda6a8b910575fb699a0"
+    },
+    {
+      "paper_id": "auditbench",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "1d123f568cb93028d9af6d3829ba8403836c678d07aa0d2e80dfdc8e3b28a80d"
+    },
+    {
+      "paper_id": "anthropic-aar",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "a4d6b53eb486b9335f0652a3675c1a08ccdde056df62345d3740c6c2c621fbb6"
+    },
+    {
+      "paper_id": "hidden-objectives",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "6cea87ef4a49ef861ce9c37a3aeef3d82dced5c70028a5b924211bb27773b60a"
+    },
+    {
+      "paper_id": "reasoning-faithfulness",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "546afa672e0c50d50b7c86b7dbacb6f51d200be74f33577012d98cb18eee7600"
+    },
+    {
+      "paper_id": "shade-arena",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "f9c1656907b7387faad5099d405d048a0346071bea8dbffc0b68962a278330f4"
+    },
+    {
+      "paper_id": "sonnet5-system",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "33573adb9f1871b903f79b77d7755a44cc20bb913ef48ac9000ddb090e41f7ed"
+    },
+    {
+      "paper_id": "phi-vision",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "eb2b08149058f4e73c25bb5e0e1ae5fc033e6ee1fde3576dd88100f184f590dc"
+    },
+    {
+      "paper_id": "skillopt",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "87f7f0f323b1671e9202b3ebb1596e909e507c71ecd1b360b0075a5ee1727fe3"
+    },
+    {
+      "paper_id": "agent-lightning",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "e223648a09b021785a46f60dd5ce13301622eca930ff91a5b45e971b53422561"
+    },
+    {
+      "paper_id": "fara",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "06a6b28b6fb088e7c65bf2fc4094078c13b97a8cef17f2ad9ed404caf6aff586"
+    },
+    {
+      "paper_id": "magma",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "df8e92d42a6b14f4298711d300fb23547bb95a2a1c9a81d6b3287ce96103b994"
+    },
+    {
+      "paper_id": "phi-mini",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "e13bf559aee1a1e1295c068b2c99d3cb71e82a65a76bf988ce77755806a86c81"
+    },
+    {
+      "paper_id": "gemma4",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "b20b25f18d76217d0c49c89f9ed1ffe3cf1912cd8ce710e1a325977653c7bfa6"
+    },
+    {
+      "paper_id": "harness2",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "440be1f694f3b0fdfb8e612e9b2288ff0d8ab38641cfd1064fd77052ba360282"
+    },
+    {
+      "paper_id": "gemini25",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "b4cfe19f7eea7b0308cb0282127ef4821bb8f1d1e270e7a6f398b30fe57d41cb"
+    },
+    {
+      "paper_id": "gemma3",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "b2793d288d6672f8d6a03f65370bb4a48d607f54937a22fc7d9f727435795305"
+    },
+    {
+      "paper_id": "miras",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "faceb861d46d65fd7098cbdb97aa400081c7b5cb7e048ac8d010f01537915ab2"
+    },
+    {
+      "paper_id": "agent-scaling",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "028f329010d95143915db8db6ce1ad26a4e844b66e4abd6b36fdb39651aff7fd"
+    },
+    {
+      "paper_id": "eupe",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "f1d91b91820967e8b4aee3f34b563c1de2507cd2d53ee7492fb98cfd252d9481"
+    },
+    {
+      "paper_id": "fast-blt",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "7957dd70eb7175a86bdcb1f8e8fca2f1444a348c0058dc924633f892d7efc8a2"
+    },
+    {
+      "paper_id": "dinov3",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "c68dc50b1f73e1641a592f777984fc360759e84b7fe65ac4f6e1377927f20b2e"
+    },
+    {
+      "paper_id": "perception-encoder",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "e2447fdcf48da2fe717bb7795adb4a902b0b939d9ca9f79feff95d222b6f16a1"
+    },
+    {
+      "paper_id": "perception-lm",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "af62f17abd55e038860539940b41ca082becb250dbdc5d3ab8bd1db75f2ce130"
+    },
+    {
+      "paper_id": "sam3",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "876e138b0e07c57aaa251e1eea9fcaf0008a44987ebc48a075806bacc43894bc"
+    },
+    {
+      "paper_id": "cosmos3",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "df058bd2447fbdd83d13fd63be60a8b0aceb00ef6e50ba428b0a6bdbbed64b8d"
+    },
+    {
+      "paper_id": "cosmos-policy",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "05696475c9b5481afbf88673a65f80a46cf3fb87a5755c1410e83d0f468cc6e0"
+    },
+    {
+      "paper_id": "nemotron3-super",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "fa7e8a9a1a8f9f716e38e46170371d4bc67c3f6d1ac3e4857c574e911f0e107f"
+    },
+    {
+      "paper_id": "nemotron-diffusion",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "59dbe4282e085a0606298647de5b6fab650da86d9525b0d67e69d14a5ac61739"
+    },
+    {
+      "paper_id": "cosmos-reason1",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "f0721fecb78a726cb5648a44958f65f2a8f70bd8032e36c24c5cd26ee57064a8"
+    },
+    {
+      "paper_id": "nvidia-nemotron-h",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "14b26ba4fa89e51f884790e200d660d409e61fc86db5c8396c0627b6c0c8cd42"
+    },
+    {
+      "paper_id": "deepseek-v4",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "55b2d72f772ac00de2e470b3ee08443c648d971c7f57c52d6202895665e5978d"
+    },
+    {
+      "paper_id": "deepseek-v41-flash",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "0cfdda19c8e1691b5226dd0d4949e2397051268e8a823c2fb61db94ea20c4ac0"
+    },
+    {
+      "paper_id": "engram",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "90bf37b36cf5b507705c53d54f6e8142870fba23955f82a6a3b0aa1a983193a3"
+    },
+    {
+      "paper_id": "deepseek-ocr2",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "7c8aceb1dbe0845b9e1a0c5afd761925913662e2e2c4c79b482198f3e5e1a96b"
+    },
+    {
+      "paper_id": "deepseek-r1",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "52d8ca3ac93e88cef9944e1fd03b0e04aec5954495a8250fb2fadf8fa20a4dad"
+    },
+    {
+      "paper_id": "native-sparse-attention",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "d96f7b38fa7480cbb8add18fba1307249175865a6674583ccbd5db14b5a13aa2"
+    },
+    {
+      "paper_id": "qwen38-next",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "17db868acaa0b86caaf89cd9516e0a92f79d7e161431e5e274b70a3123d60ef7"
+    },
+    {
+      "paper_id": "qwen3-asr",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "757a83e38cbff00acb60667a03b53ae91b1f91f8900f84bf8c12f337be3fedd2"
+    },
+    {
+      "paper_id": "qwen3-tts",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "4a857188ba3478a410faacc0045cf00b40a00ecb0499617b4e9d70e7cf4b87c8"
+    },
+    {
+      "paper_id": "qwen3-vl-embedding",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "cca1873faa72c13f680b5f34242bd0a5354b94aea42dd492a45991aae6e84d76"
+    },
+    {
+      "paper_id": "qwen3-omni",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "4608d7f5d0694dd09a66144dac921797e161331d92b5eef133615bec392ec928"
+    },
+    {
+      "paper_id": "qwen3-vl",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "bc09ce99cface4dae5deaeb5327b936195d162f4df719ab2e86ee3807a0db865"
+    },
+    {
+      "paper_id": "hunyuanworld2",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "6a92b680015f1318de716eb64fe3a7fccccd3cc18d835a4ab845deafc5f1973b"
+    },
+    {
+      "paper_id": "hunyuanimage-3",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "aca2dbdfddd1df7d1ffe914c99242a0a402bc5cc1c9dc6bb34ced75699207361"
+    },
+    {
+      "paper_id": "hunyuanvideo-1.5",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "59e3d4612b5f8bc0a4ff95c7267725894fd7f0d70a879974762a9015c4016658"
+    },
+    {
+      "paper_id": "hunyuan3d-2.1",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "f6142fe646f9ff22bacac95118ac952d382088a4c3fb7ccd0f1f8a5f8afd8a93"
+    },
+    {
+      "paper_id": "worldmirror",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "f8b2dfa3e8ff27c457ff994fe35ccc57bd268500c0618d96c1d9625d1afacbc3"
+    },
+    {
+      "paper_id": "hunyuan-a13b",
+      "sha256_matches_recorded": true,
+      "pdf_sha256": "2a559bd51425ae183081085412487b6cfadc27f44563c388b9204d8a87f39396"
+    }
+  ],
+  "original_study_input_hashes": {
+    "openai-anthropic-microsoft": {
+      "findings_json_sha256": "ca52e50c7820d94b3aafc4668123a50931666ba9f5baef8e4c3cb2effddd923a",
+      "findings_md_sha256": "b6848ce4a4bac9f0a8a4bd0ec74233db561ec018d88d234786ae5091a2d42e18"
+    },
+    "google-meta-nvidia": {
+      "findings_json_sha256": "657a5a5141d877ba8690e3c191db89c21dc9c7caabed49735c49b1a5c6a6502c",
+      "findings_md_sha256": "bb013515397e6766c399e849eb6725d04fd218f8162c736002f2d88a1579ece5"
+    },
+    "deepseek-tencent-alibaba": {
+      "findings_json_sha256": "a14fe7b8de32431ac15630d7053dfb24e97cb306d5b90f0cd0a2d3dbf4bde92c",
+      "findings_md_sha256": "f906bfaa43cad73af283f20e1ab3fe80f468c36cc456a3a4ffac7aa5eb6de83f"
+    }
+  },
+  "table_status_counts": {
+    "pdf_visual_inspected": 95
+  },
+  "source_artwork_bundled": false,
+  "search_verification": [
+    {
+      "command": "python scripts/search_corpus.py --company DeepSeek --year 2026 --query tie --limit 2",
+      "matched": 4,
+      "returned": 2,
+      "result_ids": [
+        "deepseek-v4--table-1",
+        "deepseek-v41-flash--table-1"
+      ],
+      "status": "passed"
+    },
+    {
+      "command": "python scripts/search_corpus.py --company Tencent --query \"uncertainty timing\" --limit 1 --format json",
+      "matched": 2,
+      "returned": 1,
+      "result_ids": [
+        "hunyuanvideo-1.5--table-7"
+      ],
+      "status": "passed",
+      "also_verified": "Executed from a different working directory; full measured, observed, and recommended layers retained."
+    }
+  ],
+  "retention_validation": {
+    "full_observation_records_preserved": 95,
+    "lesson_and_caution_items_preserved": 348,
+    "summary_numeric_leaves_preserved": 9104,
+    "raw_measurement_numeric_leaves_preserved": 184116,
+    "absolute_or_ephemeral_tool_reference_leaks": 0,
+    "broken_relative_markdown_links": 0,
+    "all_recorded_rectangles_inside_physical_pdf_pages": true
+  },
+  "distribution_note": "distribution omits extracted source text; style properties retained",
+  "distribution_cleanup": {
+    "policy": "distribution omits extracted source text; style properties retained",
+    "scope": "Packaged evidence/measurements JSON only; original scratch research evidence and original analyst observations/design analysis are unchanged.",
+    "measurement_files_scanned": 125,
+    "measurement_files_modified": 95,
+    "source_text_fields_removed": 8020,
+    "source_text_characters_removed": 74909,
+    "source_text_utf8_bytes_removed": 76288,
+    "removed_field_counts": {
+      "text_in_pdf_order": 8020
+    },
+    "remaining_source_text_fields": 0,
+    "numeric_leaves_preserved_before_after_cleanup": 184304,
+    "by_group": {
+      "deepseek-tencent-alibaba": {
+        "measurement_files_scanned": 32,
+        "measurement_files_modified": 32,
+        "source_text_fields_removed": 2154,
+        "source_text_characters_removed": 18739,
+        "source_text_utf8_bytes_removed": 19096,
+        "numeric_leaves_preserved": 48133
+      },
+      "google-meta-nvidia": {
+        "measurement_files_scanned": 60,
+        "measurement_files_modified": 30,
+        "source_text_fields_removed": 3597,
+        "source_text_characters_removed": 33203,
+        "source_text_utf8_bytes_removed": 33867,
+        "numeric_leaves_preserved": 87190
+      },
+      "openai-anthropic-microsoft": {
+        "measurement_files_scanned": 33,
+        "measurement_files_modified": 33,
+        "source_text_fields_removed": 2269,
+        "source_text_characters_removed": 22967,
+        "source_text_utf8_bytes_removed": 23325,
+        "numeric_leaves_preserved": 48981
+      }
+    },
+    "span_style_records_verified_unchanged": 8020,
+    "original_research_text_fields_still_present": 8020
+  }
+}

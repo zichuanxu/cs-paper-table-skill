@@ -1,0 +1,1115 @@
+{
+ "id": "harness2_t1",
+ "number": 1,
+ "title": "WorkBuddy-Bench",
+ "caption": "Results under two open-source initial harnesses for two executor models. Harness² uses one improvement step (k = 1).",
+ "data_status": "reported",
+ "provenance": {
+  "origin": "Harness²: Recursive Agent Harnessing for an Open World, arXiv:2610.14224, Table 1 (PDF p. 8)",
+  "license": "CC BY 4.0",
+  "transcribed": "2026-10-21 from the PDF text layer and checked against the rendered page"
+ },
+ "style": {
+  "width_mm": 178,
+  "body_pt": 8.5,
+  "note_pt": 7.6,
+  "caption_pt": 9.0,
+  "tabcolsep_pt": 3.6,
+  "arraystretch": 1.16
+ },
+ "columns": [
+  {
+   "id": "method",
+   "label": "Method",
+   "kind": "text",
+   "width_mm": 31
+  },
+  {
+   "id": "code_s",
+   "label": [
+    "Score ↑"
+   ],
+   "kind": "mean_sd",
+   "precision": 1,
+   "sd_style": "paren",
+   "direction": "max",
+   "uncertainty_definition": "SD over repeated runs; for Avg., SD over runs of the per-run average (as stated in the source caption)"
+  },
+  {
+   "id": "code_t",
+   "label": [
+    "#Steps ↓"
+   ],
+   "kind": "mean_sd",
+   "precision": 1,
+   "sd_style": "paren",
+   "direction": "min",
+   "uncertainty_definition": "SD over repeated runs; for Avg., SD over runs of the per-run average (as stated in the source caption)"
+  },
+  {
+   "id": "web_s",
+   "label": [
+    "Score ↑"
+   ],
+   "kind": "mean_sd",
+   "precision": 1,
+   "sd_style": "paren",
+   "direction": "max",
+   "uncertainty_definition": "SD over repeated runs; for Avg., SD over runs of the per-run average (as stated in the source caption)"
+  },
+  {
+   "id": "web_t",
+   "label": [
+    "#Steps ↓"
+   ],
+   "kind": "mean_sd",
+   "precision": 1,
+   "sd_style": "paren",
+   "direction": "min",
+   "uncertainty_definition": "SD over repeated runs; for Avg., SD over runs of the per-run average (as stated in the source caption)"
+  },
+  {
+   "id": "office_s",
+   "label": [
+    "Score ↑"
+   ],
+   "kind": "mean_sd",
+   "precision": 1,
+   "sd_style": "paren",
+   "direction": "max",
+   "uncertainty_definition": "SD over repeated runs; for Avg., SD over runs of the per-run average (as stated in the source caption)"
+  },
+  {
+   "id": "office_t",
+   "label": [
+    "#Steps ↓"
+   ],
+   "kind": "mean_sd",
+   "precision": 1,
+   "sd_style": "paren",
+   "direction": "min",
+   "uncertainty_definition": "SD over repeated runs; for Avg., SD over runs of the per-run average (as stated in the source caption)"
+  },
+  {
+   "id": "avg_s",
+   "label": [
+    "Score ↑"
+   ],
+   "kind": "mean_sd",
+   "precision": 1,
+   "sd_style": "paren",
+   "direction": "max",
+   "uncertainty_definition": "SD over repeated runs; for Avg., SD over runs of the per-run average (as stated in the source caption)"
+  },
+  {
+   "id": "avg_t",
+   "label": [
+    "#Steps ↓"
+   ],
+   "kind": "mean_sd",
+   "precision": 1,
+   "sd_style": "paren",
+   "direction": "min",
+   "uncertainty_definition": "SD over repeated runs; for Avg., SD over runs of the per-run average (as stated in the source caption)"
+  }
+ ],
+ "column_groups": [
+  {
+   "label": "Code",
+   "columns": [
+    "code_s",
+    "code_t"
+   ]
+  },
+  {
+   "label": "Web",
+   "columns": [
+    "web_s",
+    "web_t"
+   ]
+  },
+  {
+   "label": "Office",
+   "columns": [
+    "office_s",
+    "office_t"
+   ]
+  },
+  {
+   "label": "Avg.",
+   "columns": [
+    "avg_s",
+    "avg_t"
+   ]
+  }
+ ],
+ "row_group_labels": {
+  "gem_oc": "Gemini 3.5 Flash · initial harness OpenCode",
+  "gem_cx": "Gemini 3.5 Flash · initial harness Codex",
+  "glm_oc": "GLM-5 · initial harness OpenCode",
+  "glm_cx": "GLM-5 · initial harness Codex"
+ },
+ "rows": [
+  {
+   "id": "gem_oc_opencode",
+   "display_group": "gem_oc",
+   "comparison_group": "gem_oc",
+   "focus": false,
+   "cells": {
+    "method": "OpenCode (initial)",
+    "code_s": {
+     "value": "73.4",
+     "sd": "3.6"
+    },
+    "code_t": {
+     "value": "29.6",
+     "sd": "1.0"
+    },
+    "web_s": {
+     "value": "69.9",
+     "sd": "4.2"
+    },
+    "web_t": {
+     "value": "19.2",
+     "sd": "0.8"
+    },
+    "office_s": {
+     "value": "74.0",
+     "sd": "2.2"
+    },
+    "office_t": {
+     "value": "27.3",
+     "sd": "3.3"
+    },
+    "avg_s": {
+     "value": "72.4",
+     "sd": "0.9"
+    },
+    "avg_t": {
+     "value": "25.4",
+     "sd": "0.4"
+    }
+   }
+  },
+  {
+   "id": "gem_oc_reasoningbank",
+   "display_group": "gem_oc",
+   "comparison_group": "gem_oc",
+   "focus": false,
+   "cells": {
+    "method": "ReasoningBank",
+    "code_s": {
+     "value": "72.6",
+     "sd": "3.1"
+    },
+    "code_t": {
+     "value": "28.7",
+     "sd": "2.6"
+    },
+    "web_s": {
+     "value": "70.7",
+     "sd": "6.9"
+    },
+    "web_t": {
+     "value": "18.8",
+     "sd": "0.7"
+    },
+    "office_s": {
+     "value": "76.8",
+     "sd": "2.1"
+    },
+    "office_t": {
+     "value": "27.1",
+     "sd": "1.2"
+    },
+    "avg_s": {
+     "value": "73.4",
+     "sd": "2.5"
+    },
+    "avg_t": {
+     "value": "24.9",
+     "sd": "1.0"
+    }
+   }
+  },
+  {
+   "id": "gem_oc_meta-harness",
+   "display_group": "gem_oc",
+   "comparison_group": "gem_oc",
+   "focus": false,
+   "cells": {
+    "method": "Meta-Harness†",
+    "code_s": {
+     "value": "75.5",
+     "sd": "1.7"
+    },
+    "code_t": {
+     "value": "31.5",
+     "sd": "0.8"
+    },
+    "web_s": {
+     "value": "75.1",
+     "sd": "0.6"
+    },
+    "web_t": {
+     "value": "26.4",
+     "sd": "1.1"
+    },
+    "office_s": {
+     "value": "78.6",
+     "sd": "1.4"
+    },
+    "office_t": {
+     "value": "28.6",
+     "sd": "2.4"
+    },
+    "avg_s": {
+     "value": "76.4",
+     "sd": "0.7"
+    },
+    "avg_t": {
+     "value": "28.8",
+     "sd": "0.8"
+    }
+   }
+  },
+  {
+   "id": "gem_oc_harness_scaling",
+   "display_group": "gem_oc",
+   "comparison_group": "gem_oc",
+   "focus": false,
+   "cells": {
+    "method": "Harness Scaling",
+    "code_s": {
+     "value": "74.0",
+     "sd": "1.1"
+    },
+    "code_t": {
+     "value": "26.1",
+     "sd": "0.9"
+    },
+    "web_s": {
+     "value": "74.0",
+     "sd": "1.9"
+    },
+    "web_t": {
+     "value": "16.6",
+     "sd": "1.5"
+    },
+    "office_s": {
+     "value": "77.9",
+     "sd": "1.3"
+    },
+    "office_t": {
+     "value": "24.3",
+     "sd": "1.4"
+    },
+    "avg_s": {
+     "value": "75.3",
+     "sd": "0.7"
+    },
+    "avg_t": {
+     "value": "22.3",
+     "sd": "0.4"
+    }
+   }
+  },
+  {
+   "id": "gem_oc_harness2",
+   "display_group": "gem_oc",
+   "comparison_group": "gem_oc",
+   "focus": true,
+   "cells": {
+    "method": "Harness²",
+    "code_s": {
+     "value": "76.5",
+     "sd": "1.3"
+    },
+    "code_t": {
+     "value": "22.8",
+     "sd": "1.3"
+    },
+    "web_s": {
+     "value": "76.4",
+     "sd": "4.5"
+    },
+    "web_t": {
+     "value": "17.7",
+     "sd": "0.7"
+    },
+    "office_s": {
+     "value": "79.5",
+     "sd": "3.1"
+    },
+    "office_t": {
+     "value": "25.1",
+     "sd": "1.7"
+    },
+    "avg_s": {
+     "value": "77.5",
+     "sd": "2.5"
+    },
+    "avg_t": {
+     "value": "21.9",
+     "sd": "0.4"
+    }
+   }
+  },
+  {
+   "id": "gem_oc_recursion",
+   "display_group": "gem_oc",
+   "comparison_group": "gem_oc",
+   "delta": true,
+   "cells": {
+    "method": "+ Recursion (k=5)",
+    "code_s": {
+     "value": "+4.3"
+    },
+    "code_t": {
+     "value": "-0.4"
+    },
+    "web_s": {
+     "value": "+1.9"
+    },
+    "web_t": {
+     "value": "+0.4"
+    },
+    "office_s": {
+     "value": "+3.9"
+    },
+    "office_t": {
+     "value": "-2.2"
+    },
+    "avg_s": {
+     "value": "+3.3"
+    },
+    "avg_t": {
+     "value": "-0.8"
+    }
+   }
+  },
+  {
+   "id": "gem_cx_codex",
+   "display_group": "gem_cx",
+   "comparison_group": "gem_cx",
+   "focus": false,
+   "cells": {
+    "method": "Codex (initial)",
+    "code_s": {
+     "value": "74.0",
+     "sd": "1.7"
+    },
+    "code_t": {
+     "value": "31.8",
+     "sd": "0.9"
+    },
+    "web_s": {
+     "value": "72.5",
+     "sd": "1.2"
+    },
+    "web_t": {
+     "value": "22.6",
+     "sd": "0.9"
+    },
+    "office_s": {
+     "value": "77.0",
+     "sd": "2.2"
+    },
+    "office_t": {
+     "value": "30.6",
+     "sd": "1.2"
+    },
+    "avg_s": {
+     "value": "74.5",
+     "sd": "1.6"
+    },
+    "avg_t": {
+     "value": "28.3",
+     "sd": "0.7"
+    }
+   }
+  },
+  {
+   "id": "gem_cx_reasoningbank",
+   "display_group": "gem_cx",
+   "comparison_group": "gem_cx",
+   "focus": false,
+   "cells": {
+    "method": "ReasoningBank",
+    "code_s": {
+     "value": "73.5",
+     "sd": "3.3"
+    },
+    "code_t": {
+     "value": "32.8",
+     "sd": "1.7"
+    },
+    "web_s": {
+     "value": "65.7",
+     "sd": "2.2"
+    },
+    "web_t": {
+     "value": "22.7",
+     "sd": "2.2"
+    },
+    "office_s": {
+     "value": "78.4",
+     "sd": "0.9"
+    },
+    "office_t": {
+     "value": "32.1",
+     "sd": "2.3"
+    },
+    "avg_s": {
+     "value": "72.5",
+     "sd": "2.2"
+    },
+    "avg_t": {
+     "value": "29.2",
+     "sd": "1.1"
+    }
+   }
+  },
+  {
+   "id": "gem_cx_meta-harness",
+   "display_group": "gem_cx",
+   "comparison_group": "gem_cx",
+   "focus": false,
+   "cells": {
+    "method": "Meta-Harness†",
+    "code_s": {
+     "value": "74.6",
+     "sd": "3.3"
+    },
+    "code_t": {
+     "value": "33.5",
+     "sd": "1.1"
+    },
+    "web_s": {
+     "value": "67.8",
+     "sd": "1.5"
+    },
+    "web_t": {
+     "value": "22.1",
+     "sd": "2.8"
+    },
+    "office_s": {
+     "value": "77.6",
+     "sd": "1.6"
+    },
+    "office_t": {
+     "value": "30.1",
+     "sd": "1.9"
+    },
+    "avg_s": {
+     "value": "73.3",
+     "sd": "0.8"
+    },
+    "avg_t": {
+     "value": "28.6",
+     "sd": "1.2"
+    }
+   }
+  },
+  {
+   "id": "gem_cx_harness_scaling",
+   "display_group": "gem_cx",
+   "comparison_group": "gem_cx",
+   "focus": false,
+   "cells": {
+    "method": "Harness Scaling",
+    "code_s": {
+     "value": "75.5",
+     "sd": "2.1"
+    },
+    "code_t": {
+     "value": "32.4",
+     "sd": "0.6"
+    },
+    "web_s": {
+     "value": "69.3",
+     "sd": "3.8"
+    },
+    "web_t": {
+     "value": "23.5",
+     "sd": "0.9"
+    },
+    "office_s": {
+     "value": "76.7",
+     "sd": "3.8"
+    },
+    "office_t": {
+     "value": "34.0",
+     "sd": "2.6"
+    },
+    "avg_s": {
+     "value": "73.8",
+     "sd": "1.7"
+    },
+    "avg_t": {
+     "value": "30.0",
+     "sd": "1.0"
+    }
+   }
+  },
+  {
+   "id": "gem_cx_harness2",
+   "display_group": "gem_cx",
+   "comparison_group": "gem_cx",
+   "focus": true,
+   "cells": {
+    "method": "Harness²",
+    "code_s": {
+     "value": "79.4",
+     "sd": "3.6"
+    },
+    "code_t": {
+     "value": "26.6",
+     "sd": "2.8"
+    },
+    "web_s": {
+     "value": "74.7",
+     "sd": "3.8"
+    },
+    "web_t": {
+     "value": "19.5",
+     "sd": "1.1"
+    },
+    "office_s": {
+     "value": "78.5",
+     "sd": "2.4"
+    },
+    "office_t": {
+     "value": "25.6",
+     "sd": "1.3"
+    },
+    "avg_s": {
+     "value": "77.5",
+     "sd": "2.0"
+    },
+    "avg_t": {
+     "value": "23.9",
+     "sd": "0.6"
+    }
+   }
+  },
+  {
+   "id": "gem_cx_recursion",
+   "display_group": "gem_cx",
+   "comparison_group": "gem_cx",
+   "delta": true,
+   "cells": {
+    "method": "+ Recursion (k=5)",
+    "code_s": {
+     "value": "+1.6"
+    },
+    "code_t": {
+     "value": "-2.0"
+    },
+    "web_s": {
+     "value": "+2.6"
+    },
+    "web_t": {
+     "value": "0.0"
+    },
+    "office_s": {
+     "value": "+4.3"
+    },
+    "office_t": {
+     "value": "+1.3"
+    },
+    "avg_s": {
+     "value": "+2.9"
+    },
+    "avg_t": {
+     "value": "-0.2"
+    }
+   }
+  },
+  {
+   "id": "glm_oc_opencode",
+   "display_group": "glm_oc",
+   "comparison_group": "glm_oc",
+   "focus": false,
+   "cells": {
+    "method": "OpenCode (initial)",
+    "code_s": {
+     "value": "58.4",
+     "sd": "5.2"
+    },
+    "code_t": {
+     "value": "19.2",
+     "sd": "1.8"
+    },
+    "web_s": {
+     "value": "59.2",
+     "sd": "6.9"
+    },
+    "web_t": {
+     "value": "9.2",
+     "sd": "1.2"
+    },
+    "office_s": {
+     "value": "75.1",
+     "sd": "3.2"
+    },
+    "office_t": {
+     "value": "12.0",
+     "sd": "1.1"
+    },
+    "avg_s": {
+     "value": "64.2",
+     "sd": "1.4"
+    },
+    "avg_t": {
+     "value": "13.5",
+     "sd": "0.5"
+    }
+   }
+  },
+  {
+   "id": "glm_oc_reasoningbank",
+   "display_group": "glm_oc",
+   "comparison_group": "glm_oc",
+   "focus": false,
+   "cells": {
+    "method": "ReasoningBank",
+    "code_s": {
+     "value": "63.3",
+     "sd": "4.3"
+    },
+    "code_t": {
+     "value": "18.6",
+     "sd": "0.6"
+    },
+    "web_s": {
+     "value": "61.4",
+     "sd": "4.2"
+    },
+    "web_t": {
+     "value": "10.3",
+     "sd": "2.5"
+    },
+    "office_s": {
+     "value": "72.0",
+     "sd": "0.9"
+    },
+    "office_t": {
+     "value": "14.3",
+     "sd": "0.4"
+    },
+    "avg_s": {
+     "value": "65.6",
+     "sd": "1.2"
+    },
+    "avg_t": {
+     "value": "14.4",
+     "sd": "0.7"
+    }
+   }
+  },
+  {
+   "id": "glm_oc_meta-harness",
+   "display_group": "glm_oc",
+   "comparison_group": "glm_oc",
+   "focus": false,
+   "cells": {
+    "method": "Meta-Harness†",
+    "code_s": {
+     "value": "69.0",
+     "sd": "1.2"
+    },
+    "code_t": {
+     "value": "22.4",
+     "sd": "1.6"
+    },
+    "web_s": {
+     "value": "61.9",
+     "sd": "4.1"
+    },
+    "web_t": {
+     "value": "10.0",
+     "sd": "1.9"
+    },
+    "office_s": {
+     "value": "78.1",
+     "sd": "1.3"
+    },
+    "office_t": {
+     "value": "13.6",
+     "sd": "1.7"
+    },
+    "avg_s": {
+     "value": "69.7",
+     "sd": "0.6"
+    },
+    "avg_t": {
+     "value": "15.3",
+     "sd": "1.5"
+    }
+   }
+  },
+  {
+   "id": "glm_oc_harness_scaling",
+   "display_group": "glm_oc",
+   "comparison_group": "glm_oc",
+   "focus": false,
+   "cells": {
+    "method": "Harness Scaling",
+    "code_s": {
+     "value": "60.3",
+     "sd": "2.6"
+    },
+    "code_t": {
+     "value": "16.0",
+     "sd": "2.6"
+    },
+    "web_s": {
+     "value": "63.4",
+     "sd": "2.2"
+    },
+    "web_t": {
+     "value": "9.0",
+     "sd": "1.2"
+    },
+    "office_s": {
+     "value": "79.8",
+     "sd": "3.0"
+    },
+    "office_t": {
+     "value": "12.8",
+     "sd": "1.1"
+    },
+    "avg_s": {
+     "value": "67.8",
+     "sd": "1.3"
+    },
+    "avg_t": {
+     "value": "12.6",
+     "sd": "1.1"
+    }
+   }
+  },
+  {
+   "id": "glm_oc_harness2",
+   "display_group": "glm_oc",
+   "comparison_group": "glm_oc",
+   "focus": true,
+   "cells": {
+    "method": "Harness²",
+    "code_s": {
+     "value": "77.1",
+     "sd": "2.7"
+    },
+    "code_t": {
+     "value": "14.8",
+     "sd": "2.1"
+    },
+    "web_s": {
+     "value": "69.1",
+     "sd": "3.3"
+    },
+    "web_t": {
+     "value": "11.0",
+     "sd": "2.0"
+    },
+    "office_s": {
+     "value": "80.8",
+     "sd": "2.6"
+    },
+    "office_t": {
+     "value": "15.2",
+     "sd": "1.8"
+    },
+    "avg_s": {
+     "value": "75.7",
+     "sd": "2.2"
+    },
+    "avg_t": {
+     "value": "13.7",
+     "sd": "0.2"
+    }
+   }
+  },
+  {
+   "id": "glm_oc_recursion",
+   "display_group": "glm_oc",
+   "comparison_group": "glm_oc",
+   "delta": true,
+   "cells": {
+    "method": "+ Recursion (k=5)",
+    "code_s": {
+     "value": "+4.8"
+    },
+    "code_t": {
+     "value": "-5.5"
+    },
+    "web_s": {
+     "value": "+5.3"
+    },
+    "web_t": {
+     "value": "-0.2"
+    },
+    "office_s": {
+     "value": "+1.7"
+    },
+    "office_t": {
+     "value": "-2.3"
+    },
+    "avg_s": {
+     "value": "+3.9"
+    },
+    "avg_t": {
+     "value": "-2.7"
+    }
+   }
+  },
+  {
+   "id": "glm_cx_codex",
+   "display_group": "glm_cx",
+   "comparison_group": "glm_cx",
+   "focus": false,
+   "cells": {
+    "method": "Codex (initial)",
+    "code_s": {
+     "value": "56.8",
+     "sd": "2.7"
+    },
+    "code_t": {
+     "value": "28.5",
+     "sd": "1.8"
+    },
+    "web_s": {
+     "value": "59.6",
+     "sd": "1.0"
+    },
+    "web_t": {
+     "value": "18.0",
+     "sd": "0.9"
+    },
+    "office_s": {
+     "value": "76.9",
+     "sd": "2.4"
+    },
+    "office_t": {
+     "value": "23.4",
+     "sd": "1.4"
+    },
+    "avg_s": {
+     "value": "64.4",
+     "sd": "1.2"
+    },
+    "avg_t": {
+     "value": "23.3",
+     "sd": "0.3"
+    }
+   }
+  },
+  {
+   "id": "glm_cx_reasoningbank",
+   "display_group": "glm_cx",
+   "comparison_group": "glm_cx",
+   "focus": false,
+   "cells": {
+    "method": "ReasoningBank",
+    "code_s": {
+     "value": "50.2",
+     "sd": "3.8"
+    },
+    "code_t": {
+     "value": "24.9",
+     "sd": "0.6"
+    },
+    "web_s": {
+     "value": "66.3",
+     "sd": "2.5"
+    },
+    "web_t": {
+     "value": "17.5",
+     "sd": "1.6"
+    },
+    "office_s": {
+     "value": "75.8",
+     "sd": "4.2"
+    },
+    "office_t": {
+     "value": "20.9",
+     "sd": "0.5"
+    },
+    "avg_s": {
+     "value": "64.1",
+     "sd": "0.9"
+    },
+    "avg_t": {
+     "value": "21.1",
+     "sd": "0.7"
+    }
+   }
+  },
+  {
+   "id": "glm_cx_meta-harness",
+   "display_group": "glm_cx",
+   "comparison_group": "glm_cx",
+   "focus": false,
+   "cells": {
+    "method": "Meta-Harness†",
+    "code_s": {
+     "value": "76.8",
+     "sd": "1.9"
+    },
+    "code_t": {
+     "value": "33.0",
+     "sd": "2.1"
+    },
+    "web_s": {
+     "value": "67.8",
+     "sd": "4.1"
+    },
+    "web_t": {
+     "value": "24.7",
+     "sd": "0.5"
+    },
+    "office_s": {
+     "value": "77.9",
+     "sd": "2.8"
+    },
+    "office_t": {
+     "value": "31.4",
+     "sd": "2.8"
+    },
+    "avg_s": {
+     "value": "74.2",
+     "sd": "1.6"
+    },
+    "avg_t": {
+     "value": "29.7",
+     "sd": "1.2"
+    }
+   }
+  },
+  {
+   "id": "glm_cx_harness_scaling",
+   "display_group": "glm_cx",
+   "comparison_group": "glm_cx",
+   "focus": false,
+   "cells": {
+    "method": "Harness Scaling",
+    "code_s": {
+     "value": "49.5",
+     "sd": "3.9"
+    },
+    "code_t": {
+     "value": "24.2",
+     "sd": "1.0"
+    },
+    "web_s": {
+     "value": "60.9",
+     "sd": "1.7"
+    },
+    "web_t": {
+     "value": "18.9",
+     "sd": "1.4"
+    },
+    "office_s": {
+     "value": "78.2",
+     "sd": "2.4"
+    },
+    "office_t": {
+     "value": "22.0",
+     "sd": "2.8"
+    },
+    "avg_s": {
+     "value": "62.9",
+     "sd": "1.3"
+    },
+    "avg_t": {
+     "value": "21.7",
+     "sd": "1.2"
+    }
+   }
+  },
+  {
+   "id": "glm_cx_harness2",
+   "display_group": "glm_cx",
+   "comparison_group": "glm_cx",
+   "focus": true,
+   "cells": {
+    "method": "Harness²",
+    "code_s": {
+     "value": "74.9",
+     "sd": "1.5"
+    },
+    "code_t": {
+     "value": "19.7",
+     "sd": "1.3"
+    },
+    "web_s": {
+     "value": "70.0",
+     "sd": "4.3"
+    },
+    "web_t": {
+     "value": "22.4",
+     "sd": "2.2"
+    },
+    "office_s": {
+     "value": "81.1",
+     "sd": "2.0"
+    },
+    "office_t": {
+     "value": "21.8",
+     "sd": "1.5"
+    },
+    "avg_s": {
+     "value": "75.3",
+     "sd": "1.3"
+    },
+    "avg_t": {
+     "value": "21.3",
+     "sd": "1.3"
+    }
+   }
+  },
+  {
+   "id": "glm_cx_recursion",
+   "display_group": "glm_cx",
+   "comparison_group": "glm_cx",
+   "delta": true,
+   "cells": {
+    "method": "+ Recursion (k=5)",
+    "code_s": {
+     "value": "+2.3"
+    },
+    "code_t": {
+     "value": "-1.4"
+    },
+    "web_s": {
+     "value": "+3.3"
+    },
+    "web_t": {
+     "value": "-2.5"
+    },
+    "office_s": {
+     "value": "+3.2"
+    },
+    "office_t": {
+     "value": "+0.1"
+    },
+    "avg_s": {
+     "value": "+3.0"
+    },
+    "avg_t": {
+     "value": "-1.3"
+    }
+   }
+  }
+ ],
+ "ranking": {
+  "axis": "column",
+  "tie_policy": "rounded",
+  "meaning": "Bold: best before recursion within each block."
+ },
+ "focus_meaning": "Shaded: Harness².",
+ "notes": [
+  "Mean over runs with SD in parentheses; Avg. is the macro-average of the three domains. + Recursion is the change after parallel task-level recursion at k = 5 (green better, red worse, following each column's arrow). † Offline method optimized on separate training tasks."
+ ]
+}

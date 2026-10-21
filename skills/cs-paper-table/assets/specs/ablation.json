@@ -1,0 +1,279 @@
+{
+  "id": "ablation",
+  "number": 2,
+  "title": "Controlled ablations with paired uncertainty",
+  "caption": "Removing components from the full system; each row is paired with the full system on the same eight seeds.",
+  "data_status": "synthetic",
+  "provenance": {
+    "origin": "Original constructed demonstration data; no real system results",
+    "generator": "scripts/build_examples.py",
+    "raw_data": "../data/ablation_raw.json"
+  },
+  "style": {
+    "width_mm": 180,
+    "body_pt": 8.3,
+    "note_pt": 7.6,
+    "caption_pt": 9.0,
+    "tabcolsep_pt": 2.3,
+    "arraystretch": 1.18
+  },
+  "columns": [
+    {
+      "id": "method",
+      "label": "Configuration",
+      "kind": "text",
+      "width_mm": 34
+    },
+    {
+      "id": "retrieve",
+      "label": "Retrieve",
+      "kind": "status"
+    },
+    {
+      "id": "verify",
+      "label": "Verify",
+      "kind": "status"
+    },
+    {
+      "id": "route",
+      "label": "Route",
+      "kind": "status"
+    },
+    {
+      "id": "cache",
+      "label": "Cache",
+      "kind": "status"
+    },
+    {
+      "id": "score",
+      "label": [
+        "Success (%)",
+        "mean ± SD"
+      ],
+      "kind": "mean_sd",
+      "precision": 1,
+      "uncertainty_definition": "Sample standard deviation across 8 independent synthetic training-seed blocks; ddof=1, not a confidence interval",
+      "bounds": [
+        0,
+        100
+      ]
+    },
+    {
+      "id": "delta",
+      "label": [
+        "Δ vs. full (pp)",
+        "[95% CI]"
+      ],
+      "kind": "interval",
+      "precision": 1,
+      "signed": true,
+      "uncertainty_definition": "Paired seed bootstrap of the mean difference from full; 20,000 resamples, 8 paired seed blocks, percentile 2.5/97.5, generator seed 120"
+    },
+    {
+      "id": "latency",
+      "label": [
+        "Latency",
+        "ms"
+      ],
+      "kind": "number",
+      "precision": 0
+    }
+  ],
+  "rows": [
+    {
+      "id": "full",
+      "display_group": "single",
+      "focus": true,
+      "cells": {
+        "method": "Full system",
+        "retrieve": "yes",
+        "verify": "yes",
+        "route": "yes",
+        "cache": "yes",
+        "score": {
+          "value": 83.5,
+          "sd": 0.6480740698407874
+        },
+        "delta": {
+          "missing": "not_applicable"
+        },
+        "latency": {
+          "value": 512
+        }
+      }
+    },
+    {
+      "id": "no_retrieve",
+      "display_group": "single",
+      "focus": false,
+      "cells": {
+        "method": "Remove retrieval",
+        "retrieve": "no",
+        "verify": "yes",
+        "route": "yes",
+        "cache": "yes",
+        "score": {
+          "value": 75.225,
+          "sd": 0.6798108980759705
+        },
+        "delta": {
+          "value": -8.274999999999999,
+          "low": -8.525,
+          "high": -8.025
+        },
+        "latency": {
+          "value": 418
+        }
+      }
+    },
+    {
+      "id": "no_verify",
+      "display_group": "single",
+      "focus": false,
+      "cells": {
+        "method": "Remove verifier",
+        "retrieve": "yes",
+        "verify": "no",
+        "route": "yes",
+        "cache": "yes",
+        "score": {
+          "value": 78.8,
+          "sd": 0.49280538030458154
+        },
+        "delta": {
+          "value": -4.7,
+          "low": -4.8875,
+          "high": -4.5375
+        },
+        "latency": {
+          "value": 435
+        }
+      }
+    },
+    {
+      "id": "no_route",
+      "display_group": "single",
+      "focus": false,
+      "cells": {
+        "method": "Remove routing",
+        "retrieve": "yes",
+        "verify": "yes",
+        "route": "no",
+        "cache": "yes",
+        "score": {
+          "value": 80.38749999999999,
+          "sd": 0.5356904756613552
+        },
+        "delta": {
+          "value": -3.1125,
+          "low": -3.3000000000000003,
+          "high": -2.925
+        },
+        "latency": {
+          "value": 566
+        }
+      }
+    },
+    {
+      "id": "no_cache",
+      "display_group": "single",
+      "focus": false,
+      "cells": {
+        "method": "Remove cache",
+        "retrieve": "yes",
+        "verify": "yes",
+        "route": "yes",
+        "cache": "no",
+        "score": {
+          "value": 83.52499999999999,
+          "sd": 0.5897941529526602
+        },
+        "delta": {
+          "value": 0.025000000000000005,
+          "low": -0.07500000000000001,
+          "high": 0.125
+        },
+        "latency": {
+          "value": 689
+        }
+      }
+    },
+    {
+      "id": "no_rv",
+      "display_group": "joint",
+      "focus": false,
+      "cells": {
+        "method": "Remove retrieval + verifier",
+        "retrieve": "no",
+        "verify": "no",
+        "route": "yes",
+        "cache": "yes",
+        "score": {
+          "value": 71.3375,
+          "sd": 0.5578978401105331
+        },
+        "delta": {
+          "value": -12.1625,
+          "low": -12.3875,
+          "high": -11.9375
+        },
+        "latency": {
+          "value": 341
+        }
+      }
+    },
+    {
+      "id": "no_rc",
+      "display_group": "joint",
+      "focus": false,
+      "cells": {
+        "method": "Remove routing + cache",
+        "retrieve": "yes",
+        "verify": "yes",
+        "route": "no",
+        "cache": "no",
+        "score": {
+          "value": 80.32499999999999,
+          "sd": 0.5470701182533313
+        },
+        "delta": {
+          "value": -3.175,
+          "low": -3.35,
+          "high": -3.0
+        },
+        "latency": {
+          "value": 748
+        }
+      }
+    }
+  ],
+  "notes": [
+    "SD over 8 seeds; CI is a paired percentile bootstrap over seeds (20,000 resamples), so it excludes item-sampling uncertainty. pp = percentage points. Joint removals do not isolate single-component effects."
+  ],
+  "ranking": {
+    "axis": "none"
+  },
+  "column_groups": [
+    {
+      "label": "Components",
+      "columns": [
+        "retrieve",
+        "verify",
+        "route",
+        "cache"
+      ]
+    },
+    {
+      "label": "Paired evaluation",
+      "columns": [
+        "score",
+        "delta"
+      ]
+    }
+  ],
+  "row_group_labels": {
+    "single": "Remove one component",
+    "joint": "Remove two components"
+  },
+  "focus_meaning": "Shaded: the reference for Δ."
+}
