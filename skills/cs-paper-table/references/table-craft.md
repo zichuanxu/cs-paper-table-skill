@@ -28,6 +28,31 @@ Cross-paper facts: table type is 0.82–0.9 of body size; rows are 1.0–1.4× t
 rule ≈ 1.6:1 (booktabs' em-based defaults); 8 of 13 use no colour at all in result tables; text is
 pure black; missing values are "–" or "—", never blank.
 
+Two further studies (2026-10):
+
+- **PlugMem** (arXiv 2603.03296, UIUC / Tsinghua / Microsoft Research). Grey full-width category bands
+  (`#EBEBEB`, centred labels "Vanilla baseline / Task-agnostic / Task-specific / Ours") instead of rules;
+  a cooler near-white tint for the "ours" row (`#F2F5FA`) with the name in small caps; thin vertical
+  hairlines **only between column groups** (meta | results | cost); a feature matrix with coloured ✓/✗
+  (teal / red, amber ✗ for partial) that reads like a heat map; `*` = from the original paper and `†` =
+  subset evaluation as cell marks defined in the caption; scientific notation for ratios spanning orders of
+  magnitude; the full model first in ablations with "No X" rows below. Weak: no deltas or intervals; tables
+  shrunk to ~7 pt; `52.6/58.4` pairs with only one half bolded.
+- **StudentSim** (arXiv 2609.01591, Microsoft Research / UIUC). Strict booktabs (0.8 / 0.5 / 0.3 pt, no
+  fills); n inside the row label ("Chess (30 players)"); a metric-definition column carrying the arrow
+  ("top-1 accuracy (↑)"); ours as the last column, the only bold; a small `±0.0003` after bold values;
+  a signed "ΔR vs. ρ = 0" column with the default row tagged "(default)"; relative cost as `1.0×`,
+  `≈ 2.0×`; ranges in a cell ("59 (21–99)"); "N/A" for structurally impossible cells. Weak: no second-best
+  mark, no intervals in main tables, a "naive baseline" that changes meaning per row.
+
+- **PaperBanana** (arXiv 2601.23265). A shaded own-method row with indented "w/ …" sub-rows; a module matrix
+  with ✓ / - / ○; circled row IDs (① … ⑥) that the text cites; the default ablation row in bold; iteration
+  counts as cell values ("3 iters"). Weak: per-cell shading seams, a broken vertical rule, no deltas.
+- **ReHarness** (arXiv 2610.12668). Benchmark × backbone spanners over 10 numeric columns; a doubled midrule;
+  "Average / Δ per revision" column pairs with ↑/↓ in the group header; the setting encoded as τ symbols in
+  the leading columns. Weak: bold is the only emphasis, the method row looks like a baseline, and the margin
+  over the strongest baseline is left to mental subtraction.
+
 ## 2. Rules (each implemented by the renderer unless noted)
 
 1. **Restraint first.** Black text, booktabs rules, no vertical lines, no per-row hairlines. Colour,
@@ -59,7 +84,21 @@ pure black; missing values are "–" or "—", never blank.
     (², †) ≥ 6 pt; never `\resizebox` below ~0.9×. Recompose instead (split, transpose, shorten headers).
 15. **Natural width** by default: columns stay close so groups read as groups; stretch to the full
     width (`style.fill`) only when the table is nearly full width anyway.
-16. **Never** rotate column headers, put citations or descriptions in data cells, use link blue for
+16. **Categories as bands** when a table has 3+ row blocks of different kinds (`style.group_style: "band"`):
+    the band separates blocks, so no rule is needed. Add hairlines between column groups only when groups
+    mix kinds of quantities (`style.group_rules`), never between every column. (PlugMem)
+17. **Marks travel with the cell**: `{"value": …, "mark": "*"}` plus a root `marks` map; the legend is added
+    to the notes. Use them for "reported by the original authors", subset runs, or anomalies. (PlugMem, Phi-4, Kimi K2)
+18. **Coloured status only in matrices** (`status_colors`): green ✓ / red ✗ / amber partial, glyph shape still
+    differing so greyscale and colour-blind readers lose nothing; set `status_legend` to the table's words
+    ("supported / not supported"). (PlugMem)
+19. **Units on values when they are ratios** (`suffix: "×"`): `1.0×`, `3.2×`. Put n in the row label rather
+    than in a new column, and define a baseline that changes per row in that row's label. (StudentSim)
+20. **Show the margin, not just the winner**: a derived "Δ vs. best baseline" delta row, or a change column
+    (`column.delta: "max"`) such as "Δ Overall vs. ①", coloured by improvement. Say in the notes and the
+    provenance that it is derived. (ReHarness, PaperBanana redesigns)
+21. **Row IDs the text can cite**: circled digits ① … ⑩ in a narrow first column.
+22. **Never** rotate column headers, put citations or descriptions in data cells, use link blue for
     emphasis, or mix "46%" with "46.2". (Llama 3, Gemini 1.5, GPT-4)
 
 ## 3. Defaults the renderer now uses

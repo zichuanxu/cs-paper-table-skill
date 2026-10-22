@@ -1,0 +1,517 @@
+{
+ "id": "reharness_t1",
+ "number": 1,
+ "title": "Mean normalized gain across task streams",
+ "caption": "Each benchmark–backbone combination; higher is better. ReHarness is best or tied in 9 of 10 columns.",
+ "data_status": "reported",
+ "provenance": {
+  "origin": "Recurrent Harness for Agentic Continual Learning (ReHarness), arXiv:2610.12668, Table 1 (PDF p. 5)",
+  "transcribed": "2026-10-22 from the PDF text layer; values match the printed table",
+  "derived": "The 'Δ vs. best baseline' row is computed here: ReHarness minus the best of the seven baselines in each column."
+ },
+ "style": {
+  "width_mm": 178,
+  "body_pt": 8.5,
+  "note_pt": 7.6,
+  "caption_pt": 9.0,
+  "tabcolsep_pt": 3.4,
+  "arraystretch": 1.18
+ },
+ "columns": [
+  {
+   "id": "method",
+   "label": "Method",
+   "kind": "text",
+   "width_mm": 27
+  },
+  {
+   "id": "cl_c",
+   "label": [
+    "Claude"
+   ],
+   "kind": "number",
+   "precision": 3,
+   "direction": "max"
+  },
+  {
+   "id": "cl_g",
+   "label": [
+    "GPT"
+   ],
+   "kind": "number",
+   "precision": 3,
+   "direction": "max"
+  },
+  {
+   "id": "cl_m",
+   "label": [
+    "Gemini"
+   ],
+   "kind": "number",
+   "precision": 3,
+   "direction": "max"
+  },
+  {
+   "id": "mb_c",
+   "label": [
+    "Claude"
+   ],
+   "kind": "number",
+   "precision": 3,
+   "direction": "max"
+  },
+  {
+   "id": "mb_g",
+   "label": [
+    "GPT"
+   ],
+   "kind": "number",
+   "precision": 3,
+   "direction": "max"
+  },
+  {
+   "id": "mb_m",
+   "label": [
+    "Gemini"
+   ],
+   "kind": "number",
+   "precision": 3,
+   "direction": "max"
+  },
+  {
+   "id": "ma_c",
+   "label": [
+    "Claude"
+   ],
+   "kind": "number",
+   "precision": 3,
+   "direction": "max"
+  },
+  {
+   "id": "ma_g",
+   "label": [
+    "GPT"
+   ],
+   "kind": "number",
+   "precision": 3,
+   "direction": "max"
+  },
+  {
+   "id": "ma_m",
+   "label": [
+    "Gemini"
+   ],
+   "kind": "number",
+   "precision": 3,
+   "direction": "max"
+  },
+  {
+   "id": "avg",
+   "label": [
+    "Avg."
+   ],
+   "kind": "number",
+   "precision": 3,
+   "direction": "max"
+  }
+ ],
+ "column_groups": [
+  {
+   "label": "CL-Bench",
+   "columns": [
+    "cl_c",
+    "cl_g",
+    "cl_m"
+   ]
+  },
+  {
+   "label": "MemoryBench",
+   "columns": [
+    "mb_c",
+    "mb_g",
+    "mb_m"
+   ]
+  },
+  {
+   "label": "MemoryArena",
+   "columns": [
+    "ma_c",
+    "ma_g",
+    "ma_m"
+   ]
+  },
+  {
+   "label": "All",
+   "columns": [
+    "avg"
+   ]
+  }
+ ],
+ "row_group_labels": {
+  "base": "",
+  "ours": ""
+ },
+ "rows": [
+  {
+   "id": "m0",
+   "display_group": "base",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "method": "Mem0",
+    "cl_c": {
+     "value": "0.103"
+    },
+    "cl_g": {
+     "value": "0.220"
+    },
+    "cl_m": {
+     "value": "0.092"
+    },
+    "mb_c": {
+     "value": "0.049"
+    },
+    "mb_g": {
+     "value": "0.016"
+    },
+    "mb_m": {
+     "value": "0.053"
+    },
+    "ma_c": {
+     "value": "0.093"
+    },
+    "ma_g": {
+     "value": "0.322"
+    },
+    "ma_m": {
+     "value": "0.235"
+    },
+    "avg": {
+     "value": "0.131"
+    }
+   }
+  },
+  {
+   "id": "m1",
+   "display_group": "base",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "method": "RBank",
+    "cl_c": {
+     "value": "0.073"
+    },
+    "cl_g": {
+     "value": "0.065"
+    },
+    "cl_m": {
+     "value": "0.040"
+    },
+    "mb_c": {
+     "value": "0.023"
+    },
+    "mb_g": {
+     "value": "0.004"
+    },
+    "mb_m": {
+     "value": "0.045"
+    },
+    "ma_c": {
+     "value": "0.014"
+    },
+    "ma_g": {
+     "value": "0.017"
+    },
+    "ma_m": {
+     "value": "0.023"
+    },
+    "avg": {
+     "value": "0.034"
+    }
+   }
+  },
+  {
+   "id": "m2",
+   "display_group": "base",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "method": "DoT",
+    "cl_c": {
+     "value": "0.125"
+    },
+    "cl_g": {
+     "value": "0.081"
+    },
+    "cl_m": {
+     "value": "-0.008"
+    },
+    "mb_c": {
+     "value": "0.053"
+    },
+    "mb_g": {
+     "value": "0.027"
+    },
+    "mb_m": {
+     "value": "0.010"
+    },
+    "ma_c": {
+     "value": "0.129"
+    },
+    "ma_g": {
+     "value": "0.179"
+    },
+    "ma_m": {
+     "value": "0.042"
+    },
+    "avg": {
+     "value": "0.071"
+    }
+   }
+  },
+  {
+   "id": "m3",
+   "display_group": "base",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "method": "ACE",
+    "cl_c": {
+     "value": "0.042"
+    },
+    "cl_g": {
+     "value": "0.088"
+    },
+    "cl_m": {
+     "value": "0.036"
+    },
+    "mb_c": {
+     "value": "0.085"
+    },
+    "mb_g": {
+     "value": "-0.018"
+    },
+    "mb_m": {
+     "value": "0.028"
+    },
+    "ma_c": {
+     "value": "0.045"
+    },
+    "ma_g": {
+     "value": "0.004"
+    },
+    "ma_m": {
+     "value": "0.073"
+    },
+    "avg": {
+     "value": "0.043"
+    }
+   }
+  },
+  {
+   "id": "m4",
+   "display_group": "base",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "method": "GEPA-Online",
+    "cl_c": {
+     "value": "0.076"
+    },
+    "cl_g": {
+     "value": "0.239"
+    },
+    "cl_m": {
+     "value": "0.132"
+    },
+    "mb_c": {
+     "value": "0.138"
+    },
+    "mb_g": {
+     "value": "0.064"
+    },
+    "mb_m": {
+     "value": "-0.134"
+    },
+    "ma_c": {
+     "value": "0.126"
+    },
+    "ma_g": {
+     "value": "0.129"
+    },
+    "ma_m": {
+     "value": "0.058"
+    },
+    "avg": {
+     "value": "0.092"
+    }
+   }
+  },
+  {
+   "id": "m5",
+   "display_group": "base",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "method": "Top-K Raw",
+    "cl_c": {
+     "value": "0.165"
+    },
+    "cl_g": {
+     "value": "0.268"
+    },
+    "cl_m": {
+     "value": "0.190"
+    },
+    "mb_c": {
+     "value": "0.035"
+    },
+    "mb_g": {
+     "value": "0.041"
+    },
+    "mb_m": {
+     "value": "0.037"
+    },
+    "ma_c": {
+     "value": "0.145"
+    },
+    "ma_g": {
+     "value": "0.340"
+    },
+    "ma_m": {
+     "value": "0.291"
+    },
+    "avg": {
+     "value": "0.168"
+    }
+   }
+  },
+  {
+   "id": "m6",
+   "display_group": "base",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "method": "Full Raw",
+    "cl_c": {
+     "value": "0.191"
+    },
+    "cl_g": {
+     "value": "0.299"
+    },
+    "cl_m": {
+     "value": "0.234"
+    },
+    "mb_c": {
+     "value": "0.063"
+    },
+    "mb_g": {
+     "value": "0.024"
+    },
+    "mb_m": {
+     "value": "-0.013"
+    },
+    "ma_c": {
+     "value": "0.082"
+    },
+    "ma_g": {
+     "value": "0.358"
+    },
+    "ma_m": {
+     "value": "0.237"
+    },
+    "avg": {
+     "value": "0.164"
+    }
+   }
+  },
+  {
+   "id": "m7",
+   "display_group": "ours",
+   "comparison_group": "all",
+   "focus": true,
+   "cells": {
+    "method": "ReHarness",
+    "cl_c": {
+     "value": "0.217"
+    },
+    "cl_g": {
+     "value": "0.317"
+    },
+    "cl_m": {
+     "value": "0.233"
+    },
+    "mb_c": {
+     "value": "0.160"
+    },
+    "mb_g": {
+     "value": "0.096"
+    },
+    "mb_m": {
+     "value": "0.064"
+    },
+    "ma_c": {
+     "value": "0.305"
+    },
+    "ma_g": {
+     "value": "0.358"
+    },
+    "ma_m": {
+     "value": "0.408"
+    },
+    "avg": {
+     "value": "0.240"
+    }
+   }
+  },
+  {
+   "id": "margin",
+   "display_group": "ours",
+   "comparison_group": "all",
+   "delta": true,
+   "cells": {
+    "method": "Δ vs. best baseline",
+    "cl_c": {
+     "value": "0.026"
+    },
+    "cl_g": {
+     "value": "0.018"
+    },
+    "cl_m": {
+     "value": "-0.001"
+    },
+    "mb_c": {
+     "value": "0.022"
+    },
+    "mb_g": {
+     "value": "0.032"
+    },
+    "mb_m": {
+     "value": "0.011"
+    },
+    "ma_c": {
+     "value": "0.160"
+    },
+    "ma_g": {
+     "value": "0.000"
+    },
+    "ma_m": {
+     "value": "0.117"
+    },
+    "avg": {
+     "value": "0.072"
+    }
+   }
+  }
+ ],
+ "ranking": {
+  "axis": "column",
+  "tie_policy": "rounded",
+  "runner_up": "underline",
+  "meaning": "Bold: best and underline: second best in each column (ties share the mark)."
+ },
+ "focus_meaning": "Shaded: ReHarness.",
+ "notes": [
+  "Δ vs. best baseline is ReHarness minus the strongest of the seven baselines in that column (green: ahead, grey: tied, red: behind); derived here, not in the paper."
+ ]
+}

@@ -43,6 +43,8 @@ Every column has `id`, `label` and `kind`. Set `label` to a string or a list of 
 | `interval` | `{"value": -2.31, "low": -3.02, "high": -1.60}` | Ordered endpoints; column must have `uncertainty_definition` |
 | `status` | `"yes"`, `"no"`, `"partial"`, `"unknown"` | Printed as ✓ ✗ ◐ ? with an automatic legend (root `status_style: "words"` for words); unknown is not no |
 
+Cell marks: a numeric cell may add `"mark": "*"` (or `†`, `‡`, a digit) defined in the root `marks` map, e.g. `{"*": "reported by the original authors"}`; the mark is raised after the value and its definition is added to the notes. Root `status_colors: true` colours ✓/✗/partial (green / red / amber) for capability matrices, and `status_legend` renames the legend words (default enabled / disabled). Column `suffix` appends a unit to every value (`"×"` gives `1.0×`). Column `delta: "max" | "min"` makes a change column: values print signed and are coloured green when the change is an improvement in that direction, red when it is not, grey at zero. Text cells may use circled digits ① … ⑩ (row IDs) and ○.
+
 Number formatting options on a column: `thousands: true` (120,000), `format: "sci"` (`3.3·10^18`, mantissa at `precision` decimals), `precision: "reported"` (keep each value's own decimals; give values as strings such as `"23.75"`), `sd_style: "paren"` (`76.5 (1.3)` with a small muted SD instead of `±`), `focus: true` (pale column band; needs `focus_meaning`). Text columns accept `align: "l" | "c" | "r"`.
 
 A number cell may span later columns: `{"value": "3.3e18", "span": 2}` followed by `{"spanned": true}` in each covered column (one value shared by two settings).
@@ -140,7 +142,7 @@ Recommended starting settings for the included full-width specimens:
 }
 ```
 
-Visual options (defaults follow [table-craft.md](table-craft.md)): `font` (`"times"` | `"lmodern"`), `header_weight` (`"bold"` | `"regular"`), `group_style` (`"banner"` centred italic | `"label"` left italic), `fill` (stretch to the full width; default natural width, centred), `focus_fill` (hex, default `EEF3FA`), `tint_delta_rows` (default false).
+Visual options (defaults follow [table-craft.md](table-craft.md)): `font` (`"times"` | `"lmodern"`), `header_weight` (`"bold"` | `"regular"`), `group_style` (`"banner"` centred italic | `"label"` left italic | `"band"` grey full-width category band), `group_rules` (hairlines only between column groups), `fill` (stretch to the full width; default natural width, centred), `focus_fill` (hex, default `EEF3FA`), `tint_delta_rows` (default false).
 
 These are original design defaults, not measured company mandates. Width is constrained to 65–250 mm; select the real manuscript's width. Set `leading_pt` if needed; default is 1.25 times body size. Body and note size must be at least 7.2 TeX pt. TeX pt and PDF points differ slightly (72.27 versus 72 per inch), so automated PDF checking includes a small conversion allowance.
 

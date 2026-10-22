@@ -1,0 +1,348 @@
+{
+ "id": "paperbanana_t2",
+ "number": 2,
+ "title": "Ablation study on PaperBananaBench",
+ "caption": "Each row removes or weakens agents of the default pipeline ①.",
+ "data_status": "reported",
+ "provenance": {
+  "origin": "PaperBanana: Automating Academic Illustration for AI Scientists, arXiv:2601.23265, Table 2 (PDF p. 8)",
+  "transcribed": "2026-10-22 from the PDF text layer and the rendered page",
+  "derived": "The Δ Overall column (row minus row ①) is computed here."
+ },
+ "style": {
+  "width_mm": 178,
+  "body_pt": 8.5,
+  "note_pt": 7.6,
+  "caption_pt": 9.0,
+  "tabcolsep_pt": 4.4,
+  "arraystretch": 1.2
+ },
+ "status_colors": true,
+ "status_legend": {
+  "yes": "agent used",
+  "no": "agent removed",
+  "partial": "random retriever (10 random examples instead of semantic retrieval)"
+ },
+ "missing_style": "dash",
+ "columns": [
+  {
+   "id": "id",
+   "label": "#",
+   "kind": "text",
+   "width_mm": 5,
+   "align": "c"
+  },
+  {
+   "id": "retr",
+   "label": [
+    "Retriever"
+   ],
+   "kind": "status"
+  },
+  {
+   "id": "plan",
+   "label": [
+    "Planner"
+   ],
+   "kind": "status"
+  },
+  {
+   "id": "style",
+   "label": [
+    "Stylist"
+   ],
+   "kind": "status"
+  },
+  {
+   "id": "vis",
+   "label": [
+    "Visualizer"
+   ],
+   "kind": "status"
+  },
+  {
+   "id": "critic",
+   "label": [
+    "Critic"
+   ],
+   "kind": "text",
+   "width_mm": 11,
+   "align": "c"
+  },
+  {
+   "id": "faith",
+   "label": [
+    "Faith."
+   ],
+   "kind": "number",
+   "precision": 1,
+   "direction": "max"
+  },
+  {
+   "id": "conc",
+   "label": [
+    "Conc."
+   ],
+   "kind": "number",
+   "precision": 1,
+   "direction": "max"
+  },
+  {
+   "id": "read",
+   "label": [
+    "Read."
+   ],
+   "kind": "number",
+   "precision": 1,
+   "direction": "max"
+  },
+  {
+   "id": "aes",
+   "label": [
+    "Aesth."
+   ],
+   "kind": "number",
+   "precision": 1,
+   "direction": "max"
+  },
+  {
+   "id": "overall",
+   "label": [
+    "Overall"
+   ],
+   "kind": "number",
+   "precision": 1,
+   "direction": "max"
+  },
+  {
+   "id": "d",
+   "label": [
+    "Δ Overall",
+    "vs. ①"
+   ],
+   "kind": "number",
+   "precision": 1,
+   "delta": "max"
+  }
+ ],
+ "column_groups": [
+  {
+   "label": "Agents",
+   "columns": [
+    "retr",
+    "plan",
+    "style",
+    "vis",
+    "critic"
+   ]
+  },
+  {
+   "label": "Win rate vs. human (%) ↑",
+   "columns": [
+    "faith",
+    "conc",
+    "read",
+    "aes",
+    "overall"
+   ]
+  }
+ ],
+ "rows": [
+  {
+   "id": "r1",
+   "comparison_group": "all",
+   "focus": true,
+   "cells": {
+    "id": "①",
+    "retr": "yes",
+    "plan": "yes",
+    "style": "yes",
+    "vis": "yes",
+    "critic": "3 iters",
+    "faith": {
+     "value": "45.8"
+    },
+    "conc": {
+     "value": "80.7"
+    },
+    "read": {
+     "value": "51.4"
+    },
+    "aes": {
+     "value": "72.1"
+    },
+    "overall": {
+     "value": "60.2"
+    },
+    "d": {
+     "missing": "not_applicable"
+    }
+   }
+  },
+  {
+   "id": "r2",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "id": "②",
+    "retr": "yes",
+    "plan": "yes",
+    "style": "yes",
+    "vis": "yes",
+    "critic": "1 iter",
+    "faith": {
+     "value": "38.3"
+    },
+    "conc": {
+     "value": "75.2"
+    },
+    "read": {
+     "value": "50.6"
+    },
+    "aes": {
+     "value": "68.9"
+    },
+    "overall": {
+     "value": "51.8"
+    },
+    "d": {
+     "value": "-8.4"
+    }
+   }
+  },
+  {
+   "id": "r3",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "id": "③",
+    "retr": "yes",
+    "plan": "yes",
+    "style": "yes",
+    "vis": "yes",
+    "critic": "–",
+    "faith": {
+     "value": "30.7"
+    },
+    "conc": {
+     "value": "79.2"
+    },
+    "read": {
+     "value": "47.0"
+    },
+    "aes": {
+     "value": "72.1"
+    },
+    "overall": {
+     "value": "45.6"
+    },
+    "d": {
+     "value": "-14.6"
+    }
+   }
+  },
+  {
+   "id": "r4",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "id": "④",
+    "retr": "yes",
+    "plan": "yes",
+    "style": "no",
+    "vis": "yes",
+    "critic": "–",
+    "faith": {
+     "value": "39.2"
+    },
+    "conc": {
+     "value": "61.7"
+    },
+    "read": {
+     "value": "47.9"
+    },
+    "aes": {
+     "value": "67.4"
+    },
+    "overall": {
+     "value": "49.2"
+    },
+    "d": {
+     "value": "-11.0"
+    }
+   }
+  },
+  {
+   "id": "r5",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "id": "⑤",
+    "retr": "partial",
+    "plan": "yes",
+    "style": "no",
+    "vis": "yes",
+    "critic": "–",
+    "faith": {
+     "value": "37.3"
+    },
+    "conc": {
+     "value": "62.7"
+    },
+    "read": {
+     "value": "51.1"
+    },
+    "aes": {
+     "value": "65.6"
+    },
+    "overall": {
+     "value": "48.3"
+    },
+    "d": {
+     "value": "-11.9"
+    }
+   }
+  },
+  {
+   "id": "r6",
+   "comparison_group": "all",
+   "focus": false,
+   "cells": {
+    "id": "⑥",
+    "retr": "no",
+    "plan": "yes",
+    "style": "no",
+    "vis": "yes",
+    "critic": "–",
+    "faith": {
+     "value": "41.9"
+    },
+    "conc": {
+     "value": "58.6"
+    },
+    "read": {
+     "value": "43.1"
+    },
+    "aes": {
+     "value": "62.9"
+    },
+    "overall": {
+     "value": "44.2"
+    },
+    "d": {
+     "value": "-16.0"
+    }
+   }
+  }
+ ],
+ "ranking": {
+  "axis": "column",
+  "tie_policy": "rounded",
+  "runner_up": "underline",
+  "meaning": "Bold: best and underline: second best in each column; ties share the mark (Aesthetic 72.1 in ① and ③)."
+ },
+ "focus_meaning": "Shaded: the default PaperBanana setting.",
+ "notes": [
+  "Critic: number of refinement iterations (– in the Critic column: no critic). Δ Overall is each row minus row ① in percentage points (computed here)."
+ ]
+}

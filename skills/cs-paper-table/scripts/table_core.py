@@ -87,7 +87,8 @@ def formatted(col, value, digits, signed=False):
         mant, exp = scientific(value, digits)
         return f"{mant}·10^{exp}"
     text = number(value, digits, signed)
-    return grouped(text) if col.get("thousands") else text
+    text = grouped(text) if col.get("thousands") else text
+    return text + col.get("suffix", "")
 
 
 def display_cell(col, row, cell, spec=None):
@@ -185,9 +186,13 @@ def validate(spec):
                     if len(following) != cell["span"] - 1 or any(row["cells"][c] != {"spanned": True} for c in following):
                         raise ValueError("Cells covered by a span must be {\"spanned\": true}: " + row["id"])
                     expected = expected | {"span"}
+                if isinstance(cell, dict) and "mark" in cell:
+                    if cell["mark"] not in spec.get("marks", {}):
+                        raise ValueError(f"Cell mark {cell['mark']!r} needs a definition in root 'marks': {row['id']}")
+                    expected = expected | {"mark"}
                 if not isinstance(cell, dict) or set(cell) != expected:
                     raise ValueError(f"Cell {row['id']}/{col['id']} needs exactly {expected}")
-                for key in expected:
+                for key in expected - {"mark", "span"}:
                     decimal(cell[key])
                 if "sd" in cell and decimal(cell["sd"]) < 0:
                     raise ValueError("SD cannot be negative")
@@ -203,9 +208,16 @@ def validate(spec):
         kinds = {c["missing"] for r in rows for c in r["cells"].values() if isinstance(c, dict) and "missing" in c}
         if len(kinds) > 1:
             raise ValueError("A dash can stand for only one missing state; use codes when several occur: " + str(sorted(kinds)))
+    for mark, meaning in spec.get("marks", {}).items():
+        if not mark or len(mark) > 2 or not meaning:
+            raise ValueError("marks map short symbols (e.g. '*', '†') to their meaning")
+    if spec["style"].get("group_style", "banner") not in {"banner", "label", "band"}:
+        raise ValueError("style.group_style is banner, label or band")
     if spec.get("status_style", "symbols") not in {"symbols", "words"}:
         raise ValueError("status_style is symbols or words")
     for col in cols:
+        if col.get("delta") not in {None, "max", "min"}:
+            raise ValueError("column delta is the direction in which a change is an improvement: max or min")
         if col.get("format", "fixed") not in {"fixed", "sci"} or col.get("sd_style", "pm") not in {"pm", "paren"}:
             raise ValueError("format is fixed or sci; sd_style is pm or paren")
         if col.get("sd_style") == "paren" and "(" not in col.get("uncertainty_definition", "("):

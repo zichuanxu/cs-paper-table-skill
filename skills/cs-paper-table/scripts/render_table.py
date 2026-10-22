@@ -31,6 +31,8 @@ def tex(value):
                # raised marks at a fixed 6.2 pt: \textsuperscript at 8-9 pt body falls to ~5.5 pt
                "²": r"\raisebox{0.6ex}{\fontsize{6.2}{6.2}\selectfont 2}", "†": r"\raisebox{0.6ex}{\fontsize{6.2}{6.2}\selectfont\dag}",
                "‡": r"\raisebox{0.6ex}{\fontsize{6.2}{6.2}\selectfont\ddag}",
+               **{chr(0x2460 + k): r"\ding{" + str(172 + k) + "}" for k in range(10)},  # ① .. ⑩ row IDs
+               "○": r"\ensuremath{\circ}",
                "✓": r"\ding{51}", "✗": r"\textcolor{TableMuted}{\ding{55}}", "◐": r"\ensuremath{\sim}"}
     return "".join(mapping.get(c, c) for c in str(value))
 
@@ -58,6 +60,10 @@ def notes(spec):
                 if "failure" in cell: seen_failures.add(cell["failure"])
             elif cid in status_cols:
                 seen_status.add(cell)
+    used = {c.get("mark") for r in spec["rows"] for c in r["cells"].values() if isinstance(c, dict) and c.get("mark")}
+    for mark, meaning in spec.get("marks", {}).items():
+        if mark in used:
+            result.append(mark + " " + meaning.rstrip(".") + ".")
     if seen_missing:
         if spec.get("missing_style") == "dash":
             result.append("– = " + MISSING_WORDS[next(iter(seen_missing))] + ".")
@@ -67,7 +73,8 @@ def notes(spec):
         descriptions = {'oom': 'out of memory', 'timeout': 'timeout', 'execution_error': 'execution error'}
         result.append("; ".join(f"{FAILURES[k]} = {descriptions[k]}" for k in sorted(seen_failures)) + " (an outcome, not a score of zero).")
     if seen_status and spec.get("status_style", "symbols") == "symbols":
-        words = {"yes": "✓ enabled", "no": "✗ disabled", "partial": "◐ partial", "unknown": "? unknown"}
+        legend = {"yes": "enabled", "no": "disabled", "partial": "partial", "unknown": "unknown", **spec.get("status_legend", {})}
+        words = {"yes": "✓ " + legend["yes"], "no": "✗ " + legend["no"], "partial": "◐ " + legend["partial"], "unknown": "? " + legend["unknown"]}
         result.append(", ".join(words[k] for k in ("yes", "no", "partial", "unknown") if k in seen_status) + ".")
     return result
 
@@ -96,7 +103,7 @@ def column_format(spec, col):
 
 def math_number(text):
     """Display string -> math-mode TeX: true minus, grouped thousands, a·10^n."""
-    text = text.replace("−", "-").replace(",", "{,}")
+    text = text.replace("−", "-").replace(",", "{,}").replace("×", r"\times ").replace("≈", r"\approx ")
     if "·10^" in text:
         mant, exp = text.split("·10^")
         text = mant + r"\cdot 10^{" + exp + "}"
@@ -120,6 +127,17 @@ def numeric_tex(text, bold, under=False):
 
 
 def cell_tex(spec, col, row, bold, under=False):
+    body = _cell_tex(spec, col, row, bold, under)
+    cell = row["cells"][col["id"]]
+    if body is not None and isinstance(cell, dict) and cell.get("mark"):
+        # a source/exception mark rides on the value (Phi-4 "66.3¹", Kimi "*"); defined once in the notes.
+        # \rlap keeps the decimal alignment of the number itself
+        mark = r"\rlap{\raisebox{0.6ex}{\fontsize{6.2}{6.2}\selectfont " + tex(cell["mark"]) + "}}"
+        body = body + ("$" + mark + "$" if col["kind"] == "number" and column_format(spec, col).startswith("D") else mark)
+    return body
+
+
+def _cell_tex(spec, col, row, bold, under=False):
     cell = row["cells"][col["id"]]
     if isinstance(cell, dict) and cell.get("spanned"):
         return None
@@ -127,6 +145,14 @@ def cell_tex(spec, col, row, bold, under=False):
     if isinstance(cell, dict) and ("missing" in cell or "failure" in cell):
         mark = tex(text) if text == "–" else r"\textit{" + tex(text) + "}"
         return r"\multicolumn{1}{c}{\textcolor{TableMuted}{" + mark + "}}"
+    if col.get("delta") in {"max", "min"} and col["kind"] == "number" and isinstance(cell, dict) and "value" in cell:
+        # a change column (e.g. "Δ vs. default"): signed, coloured by whether the change is an improvement
+        value = decimal(cell["value"])
+        shown = rounded(value, precision(col, row, cell))
+        good = shown > 0 if col["delta"] == "max" else shown < 0
+        shade = "TableMuted" if shown == 0 else ("DeltaUp" if good else "DeltaDown")
+        sign = "+" if shown > 0 else ""
+        return r"\multicolumn{1}{c}{\textcolor{" + shade + "}{$" + math_number(sign + text.lstrip("+")) + "$}}"
     if row.get("delta") and col["kind"] in {"number", "mean_sd", "interval"}:
         # Change rows: colour follows the column's direction (better = green, worse = red);
         # the sign carries the same meaning in greyscale.
@@ -158,6 +184,10 @@ def cell_tex(spec, col, row, bold, under=False):
         interval = "[" + math_number(number(cell['low'], digits, col.get('signed', False))) + r",\," + math_number(number(cell['high'], digits, col.get('signed', False))) + "]"
         return r"$" + lead + r"$\,{\CSPsmall$" + interval + "$}"
     if col["kind"] == "status":
+        if spec.get("status_colors") and spec.get("status_style", "symbols") == "symbols":
+            shade = {"yes": "StatusYes", "no": "StatusNo", "partial": "StatusPartial"}.get(cell, "TableMuted")
+            glyph = {"yes": r"\ding{51}", "no": r"\ding{55}", "partial": r"\ensuremath{\sim}", "unknown": "?"}[cell]
+            return r"\textcolor{" + shade + "}{" + glyph + "}"
         return tex(text)
     return tex(text).replace("\n", r"\newline ")
 
@@ -186,7 +216,16 @@ def make_latex(spec, marked, second=frozenset()):
              r"\arrayrulecolor{TableRule}", r"\gdef\CSPdot{.}",
              # secondary text (units under headers, SDs, intervals): ~0.86 of body, never below the 7.2 pt floor
              r"\def\CSPsmall{\fontsize{" + str(max(7.2, round(style["body_pt"] * 0.86, 2))) + "}{" + str(max(7.2, round(style["body_pt"] * 0.86, 2)) * 1.1) + r"}\selectfont}"]
-    colspec = "".join((r">{\columncolor{FocusFill}}" if c.get("focus") else "") + column_format(spec, c) for c in cols)
+    edges = set()
+    if style.get("group_rules"):
+        # hairline only where one column group ends and another begins (PlugMem, Tables 3-8)
+        for g in groups:
+            first, last = ids.index(g["columns"][0]), ids.index(g["columns"][-1])
+            if first > 0: edges.add(first)
+            if last < n - 1: edges.add(last + 1)
+    colspec = "".join((r"!{\color{TableMuted!55}\vrule width .4pt}" if i in edges else "") +
+                      (r">{\columncolor{FocusFill}}" if c.get("focus") else "") + column_format(spec, c)
+                      for i, c in enumerate(cols))
     parts = [r"\toprule"]
     if groups:
         cells, i = [], 0
@@ -205,10 +244,21 @@ def make_latex(spec, marked, second=frozenset()):
     parts.append(r"\midrule")
     previous = None
     labels = spec.get("row_group_labels", {})
-    banner = style.get("group_style", "banner") == "banner"
+    gstyle = style.get("group_style", "banner")
+    banner = gstyle == "banner"
     for k, row in enumerate(rows):
         group = row.get("display_group")
         if group != previous and group is not None:
+            if gstyle == "band":
+                # grey category band instead of a rule (PlugMem): the band itself separates the blocks
+                label = labels.get(group, group)
+                parts.append(r"\rowcolor{BandFill}\multicolumn{" + str(n) + r"}{c}{\textbf{" + tex(label) + r"}}\\")
+                previous = group
+                cells_ = [cell_tex(spec, c, row, (row['id'], c['id']) in marked, (row['id'], c['id']) in second) for c in cols]
+                if row.get("focus"):
+                    parts.append(r"\rowcolor{FocusFill}")
+                parts.append(" & ".join(x for x in cells_ if x is not None) + r" \\")
+                continue
             if previous is not None:
                 parts.append(r"\midrule")
             label = labels.get(group, group)
@@ -255,6 +305,10 @@ def make_latex(spec, marked, second=frozenset()):
 \definecolor{TableNote}{HTML}{374151}
 \definecolor{FocusFill}{HTML}{""" + style.get("focus_fill", "EEF3FA") + r"""}
 \definecolor{DeltaFill}{HTML}{F6F7F9}
+\definecolor{BandFill}{HTML}{ECEDEF}
+\definecolor{StatusYes}{HTML}{2E8B57}
+\definecolor{StatusNo}{HTML}{B5523F}
+\definecolor{StatusPartial}{HTML}{C9822B}
 \definecolor{DeltaUp}{HTML}{408C40}
 \definecolor{DeltaDown}{HTML}{8C4040}
 \begin{document}

@@ -1,6 +1,6 @@
 # cs-paper-table
 
-An agent skill for designing, repairing and typesetting tables for computer-science research papers: benchmark and leaderboard tables, ablations, efficiency comparisons, dataset registers and capability matrices. It turns a typed JSON spec into editable LaTeX, a vector PDF, a PNG preview, semantic HTML and CSV, and it is built from a study of the typeset tables in recent papers by Google, Meta, Microsoft, NVIDIA, OpenAI, Anthropic, DeepSeek, Qwen/Alibaba, Tencent and Moonshot.
+An agent skill for designing, repairing and typesetting tables for computer-science research papers: benchmark and leaderboard tables, ablations, efficiency comparisons, dataset registers and capability matrices. It turns a typed JSON spec into editable LaTeX, a vector PDF, a PNG preview, semantic HTML and CSV, and it is built from a close study of how tables are typeset in leading AI research papers.
 
 ![Harness² Table 1, redesigned with this skill](gallery/redesign/harness2_t1.png)
 
@@ -11,7 +11,7 @@ An agent skill for designing, repairing and typesetting tables for computer-scie
 | Part | Purpose |
 | --- | --- |
 | [`SKILL.md`](skills/cs-paper-table/SKILL.md) | The workflow: table contract → structure → design at final size → editable output → verification |
-| [`table-craft.md`](skills/cs-paper-table/references/table-craft.md) | How it should look: a 13-paper visual study, 16 rules with LaTeX hints, the renderer's defaults and a redesign protocol |
+| [`table-craft.md`](skills/cs-paper-table/references/table-craft.md) | How it should look: a 17-paper visual study, 22 rules with LaTeX hints, the renderer's defaults and a redesign protocol |
 | [`render_table.py`](skills/cs-paper-table/scripts/render_table.py) | Typed spec → LaTeX / PDF / PNG / HTML / CSV, with scoped bold and underline, decimal alignment, ± or (SD), ✓/✗, direction-aware delta rows, spanning cells, `a·10ⁿ`, thousands separators and automated export checks |
 | [`scientific-contract.md`](skills/cs-paper-table/references/scientific-contract.md), [`spec-schema.md`](skills/cs-paper-table/references/spec-schema.md) | What a table may claim: comparison scopes, uncertainty types, typed missing values, provenance |
 | `references/evidence*`, `*.csv` | A 54-paper / 95-table evidence corpus with measured fonts, rules and colours |
@@ -48,6 +48,20 @@ Every value, row and column comes from the paper; only the typesetting changes.
 
 [PDF](gallery/redesign/harness2_t1.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/harness2_t1.json)
 
+#### ReHarness, Table 1 ([arXiv:2610.12668](https://arxiv.org/abs/2610.12668))
+
+<img src="gallery/redesign/reharness_t1.png" width="760">
+
+Underline for second best, the method row shaded and set apart, and a derived "Δ vs. best baseline" row (green ahead, grey tied, red behind) so the margin is read, not computed; the doubled midrule and vertical rules are gone. Compare with Table 1 of the paper. [PDF](gallery/redesign/reharness_t1.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/reharness_t1.json)
+
+#### PaperBanana, Table 2 ([arXiv:2601.23265](https://arxiv.org/abs/2601.23265))
+
+| Original (PaperBanana paper) | Redesigned with this skill |
+| --- | --- |
+| <img src="gallery/redesign/original/paperbanana_t2_original.png" width="420"> | <img src="gallery/redesign/paperbanana_t2.png" width="420"> |
+
+Coloured ✓/✗ with a legend that defines the random retriever, an "Agents" spanner instead of vertical rules, bold and underline per column with the Aesthetic tie stated, and a "Δ Overall vs. ①" column coloured by improvement. [PDF](gallery/redesign/paperbanana_t2.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/paperbanana_t2.json)
+
 ### Five examples: before → after
 
 Synthetic data for illustration.
@@ -61,6 +75,12 @@ Synthetic data for illustration.
 | **Single column**: 88 mm | <img src="gallery/before/budget_comparison.png" width="260"> | <img src="gallery/after/budget_comparison.png" width="260"> |
 
 What changed: Times instead of Latin Modern, bold names over small muted units, centred italic group banners, ✓/✗ instead of Yes/No, `120,000` instead of `120000`, smaller ± and intervals, an optional underline for second best, and captions and notes cut from six lines to two or three.
+
+### Capability matrix
+
+<img src="gallery/after/capability.png" width="620">
+
+Grey category bands instead of rules, hairlines only between column groups, coloured ✓/✗ with the glyph shape still distinct, `1.0×` relative cost, and `*` / `†` cell marks defined once in the notes, following the PlugMem and StudentSim tables (synthetic data). [PDF](gallery/after/capability.pdf) · [spec](skills/cs-paper-table/assets/specs/capability.json)
 
 ## What the study found
 
@@ -106,4 +126,4 @@ Each table comes out as `.tex`, `_body.tex` (drop into your `table` float), `_ca
 
 ## License
 
-[MIT](LICENSE), except the original table crops in `gallery/redesign/original/`: the Transformer table is reproduced under Google's permission to reproduce tables and figures of *Attention Is All You Need* for scholarly works with attribution (Vaswani et al., NeurIPS 2017); the Harness² table is © its authors under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The redesigns are independent demonstrations, not affiliated with those papers' authors.
+[MIT](LICENSE), except the original table crops in `gallery/redesign/original/`: the Transformer table is reproduced under Google's permission to reproduce tables and figures of *Attention Is All You Need* for scholarly works with attribution (Vaswani et al., NeurIPS 2017); the Harness² and PaperBanana tables are © their authors under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The redesigns are independent demonstrations, not affiliated with those papers' authors.
