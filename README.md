@@ -50,9 +50,11 @@ Every value, row and column comes from the paper; only the typesetting changes.
 
 #### ReHarness, Table 1 ([arXiv:2610.12668](https://arxiv.org/abs/2610.12668))
 
-<img src="gallery/redesign/reharness_t1.png" width="760">
+| Original (ReHarness paper) | Redesigned with this skill |
+| --- | --- |
+| <img src="gallery/redesign/original/reharness_t1_original.png" width="420"> | <img src="gallery/redesign/reharness_t1.png" width="420"> |
 
-Underline for second best, the method row shaded and set apart, and a derived "Δ vs. best baseline" row (green ahead, grey tied, red behind) so the margin is read, not computed; the doubled midrule and vertical rules are gone. Compare with Table 1 of the paper. [PDF](gallery/redesign/reharness_t1.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/reharness_t1.json)
+Underline for second best, the method row shaded and set apart, and a derived "Δ vs. best baseline" row (green ahead, grey tied, red behind) so the margin is read, not computed; the doubled midrule and vertical rules are gone. [PDF](gallery/redesign/reharness_t1.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/reharness_t1.json)
 
 #### PaperBanana, Table 2 ([arXiv:2601.23265](https://arxiv.org/abs/2601.23265))
 
@@ -126,4 +128,4 @@ Each table comes out as `.tex`, `_body.tex` (drop into your `table` float), `_ca
 
 ## License
 
-[MIT](LICENSE), except the original table crops in `gallery/redesign/original/`: the Transformer table is reproduced under Google's permission to reproduce tables and figures of *Attention Is All You Need* for scholarly works with attribution (Vaswani et al., NeurIPS 2017); the Harness² and PaperBanana tables are © their authors under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The redesigns are independent demonstrations, not affiliated with those papers' authors.
+[MIT](LICENSE), except the original table crops in `gallery/redesign/original/`: the Transformer table is reproduced under Google's permission to reproduce tables and figures of *Attention Is All You Need* for scholarly works with attribution (Vaswani et al., NeurIPS 2017); the Harness² and PaperBanana tables are © their authors under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); the ReHarness table is © its authors, reproduced for commentary and comparison and removed on request. The redesigns are independent demonstrations, not affiliated with those papers' authors.
