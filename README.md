@@ -93,6 +93,7 @@ The skill's [table-craft.md](skills/cs-paper-table/references/table-craft.md) re
 - **One emphasis, defined**: bold = best within a stated scope, ties all bold; underline only with a legend.
 - **Secondary numbers recede**: ± and SDs smaller and muted; deltas small and muted green/red (`#408C40` / `#8C4040`, DINOv2).
 - **Short captions**: a bold title and one or two sentences.
+- **Notes that earn their place**: each note changes how a cell is read; tools, mark placement, procedure from the methods and disclaimers stay out, and the renderer rejects them.
 - **Failures to avoid**: `\resizebox` down to 6.9 pt, rotated headers, link-blue emphasis, per-row hairlines, mixed "46%"/"46.2".
 
 ## Installation

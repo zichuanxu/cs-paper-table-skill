@@ -118,6 +118,29 @@ def display_cell(col, row, cell, spec=None):
     raise ValueError(kind)
 
 
+NOTE_NOISE = [  # (what the reader does not need, pattern): captions and notes say what the cells mean, not how they were made
+    ("how the artwork was made",
+     r"\b(generated|drawn|created|made|produced|rendered|illustrated)\s+(with|by|using|in)\b[^.;]{0,30}"
+     r"\b(codex|chatgpt|dall-?e|midjourney|stable diffusion|gpt-image|image[- ]generation)|\brecolou?red by\b"
+     r"|\b(icons?|illustrations?|images?|artwork|drawings?|vignettes?|pictures?)\s+(were|was|are|is)\s+"
+     r"(generated|drawn|created|made|produced|rendered)\b"),
+    ("how marks are drawn",
+     r"\b(offset|nudged|jittered|dodged|moved apart|spread apart)\b[^.;:]{0,40}\b(marks?|markers?|points?|labels?|dots?)\b"
+     r"|\b(marks?|markers?|points?|labels?|dots?)\b[^.;:]{0,40}\b(offset|nudged|jittered|dodged|moved apart|spread apart)\b"
+     r"|\bleast amount\b"),
+    ("procedure that belongs in the methods",
+     r"\bbefore any (model )?(call|run|experiment|evaluation)s?\b|\bfixed (in advance|beforehand|before)\b"),
+    ("disclaimer that changes no reading",
+     r"\b(names?|examples?|people|persons?|users?|personas?|characters?)\s+(are|is)\s+"
+     r"(illustrative|fictional|fictitious|invented|made[- ]up|hypothetical)\b"),
+]
+
+
+def note_issues(text):
+    """Phrases in a caption or note that narrate production, drawing mechanics or protocol instead of content."""
+    return [(why, m.group(0)) for why, pat in NOTE_NOISE for m in re.finditer(pat, text, re.I)]
+
+
 def validate(spec):
     for key in ("id", "title", "caption", "data_status", "provenance", "columns", "rows", "notes", "style"):
         if key not in spec:
@@ -128,6 +151,10 @@ def validate(spec):
         raise ValueError("Declare data_status explicitly")
     if not spec["provenance"] or not spec["notes"]:
         raise ValueError("Supply provenance and interpretation notes")
+    noise = note_issues(" ".join([spec["title"], spec["caption"]] + list(spec["notes"])))
+    if noise:
+        raise ValueError("Cut from the caption/notes (keep it in provenance or the methods text): "
+                         + "; ".join(f"{why}: {phrase!r}" for why, phrase in noise))
     cols = spec["columns"]
     ids = [c["id"] for c in cols]
     if len(ids) != len(set(ids)) or len(ids) < 2:

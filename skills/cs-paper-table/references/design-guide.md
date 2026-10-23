@@ -163,6 +163,10 @@ Use this default order unless the venue requires another placement:
 5. Emphasis key: eligible scope, ties, and the meaning of any fill/underline/colored annotation.
 
 Move a definition into the header when readers need it for every cell; leave long qualifications in notes.
+Keep only notes that change how a cell is read. Procedure belongs in the methods text and `provenance`, not in a
+note: "The 18 held-out definitions, in three draws of six fixed before any model call" reads better as "The 18
+held-out definitions in three draws of six". No tool names for how the table was made, no mark-placement
+mechanics, no disclaimers that change no reading; `table_core.validate` rejects these phrases.
 Do not make readers infer whether parentheses denote a delta, SD, or reference value.
 State the denominator or weighting for an aggregate, and explain any omitted results.
 Use literal descriptive note markers when possible; a star is not a significance claim unless a test and threshold are actually specified.
