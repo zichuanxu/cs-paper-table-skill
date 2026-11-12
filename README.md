@@ -1,6 +1,6 @@
 # cs-paper-table
 
-An agent skill for designing, repairing and typesetting tables for computer-science research papers: benchmark and leaderboard tables, ablations, efficiency comparisons, dataset registers and capability matrices. It turns a typed JSON spec into editable LaTeX, a vector PDF, a PNG preview, semantic HTML and CSV, and it is built from a close study of how tables are typeset in leading AI research papers.
+An agent skill for designing, repairing and typesetting tables for computer-science research papers: benchmark and leaderboard tables, ablations, efficiency comparisons, dataset registers and capability matrices. It turns a typed JSON spec into editable LaTeX, a vector PDF, a PNG preview, semantic HTML and CSV, and it is built from a close study of how tables are typeset in AI-lab reports and in 2025–2026 award papers across machine learning, vision, NLP, systems, security, databases and HCI.
 
 ![Harness² Table 1, redesigned with this skill](gallery/redesign/harness2_t1.png)
 
@@ -10,9 +10,10 @@ An agent skill for designing, repairing and typesetting tables for computer-scie
 
 | Part | Purpose |
 | --- | --- |
-| [`SKILL.md`](skills/cs-paper-table/SKILL.md) | The workflow: table contract → structure → design at final size → editable output → verification |
-| [`table-craft.md`](skills/cs-paper-table/references/table-craft.md) | How it should look: an 18-paper visual study, 27 rules with LaTeX hints, the renderer's defaults and a redesign protocol |
-| [`render_table.py`](skills/cs-paper-table/scripts/render_table.py) | Typed spec → LaTeX / PDF / PNG / HTML / CSV, with scoped bold and underline, decimal alignment, ± or (SD), ✓/✗, direction-aware delta rows, heat-map shading on a declared scale, count/share cells, spanning cells, `a·10ⁿ`, thousands separators and automated export checks |
+| [`SKILL.md`](skills/cs-paper-table/SKILL.md) | Eight principles and the workflow: table contract → structure → editable output → verification |
+| [`table-craft.md`](skills/cs-paper-table/references/table-craft.md) | How it should look: the principles, the rules that follow from them with their renderer fields, community conventions, the defects award papers still ship, a redesign protocol and a five-second review |
+| [`craft-study.md`](skills/cs-paper-table/references/craft-study.md) | The evidence: what each of 50 papers (about 190 tables) does well and badly, with measured sizes, rules and colours |
+| [`render_table.py`](skills/cs-paper-table/scripts/render_table.py) | Typed spec → LaTeX / PDF / PNG / HTML / CSV, with scoped bold and underline, optional rank tints, decimal alignment, ± or (SD), ✓/✗ or ●/◐/○, direction-aware delta rows, heat shading on a declared scale or by the drop from a reference column, count/share cells, censored values (`> 180`), spanning cells, `a·10ⁿ`, thousands separators and automated export checks |
 | [`scientific-contract.md`](skills/cs-paper-table/references/scientific-contract.md), [`spec-schema.md`](skills/cs-paper-table/references/spec-schema.md) | What a table may claim: comparison scopes, uncertainty types, typed missing values, provenance |
 | `references/evidence*`, `*.csv` | A 54-paper / 95-table evidence corpus with measured fonts, rules and colours |
 
@@ -72,9 +73,13 @@ Coloured ✓/✗ with a legend that defines the random retriever, an "Agents" sp
 
 The heat map stays, now linear on a shared 0–100% scale named in the notes (the original is quadratic); bold marks the best mean per column, which the original leaves to the shades; SDs are set small; "ISR (%) ↑" becomes one spanner; the shares are recomputed from the counts; the four-line caption becomes two sentences plus notes. [PDF](gallery/redesign/arebench_t6.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/arebench_t6.json)
 
-### Five more examples
+### Six more examples
 
 Synthetic data; each table is designed from the skill's rules for its own reading task.
+
+**Robustness.** The single-turn block is the unshaded reference; each multi-turn cell prints its raw score and is shaded by the points lost against the same model's single-turn score, so where the loss concentrates is seen before a digit is read. After *LLMs Get Lost in Multi-Turn Conversation* (ICLR 2026 outstanding paper), Table 1. [PDF](gallery/after/robustness.pdf) · [spec](skills/cs-paper-table/assets/specs/robustness.json)
+
+<img src="gallery/after/robustness.png" width="640">
 
 **Benchmark.** Two budgets as banner groups, the proposed method shaded and last in each, and under it a "Δ vs. Verifier" row: the margin over the strongest baseline, green for higher success and for lower cost alike. Directions sit in the spanners, n under each suite. [PDF](gallery/after/benchmark.pdf) · [spec](skills/cs-paper-table/assets/specs/benchmark.json)
 
@@ -100,15 +105,18 @@ Grey category bands instead of rules, hairlines only between column groups, colo
 
 ## What the study found
 
-The skill's [table-craft.md](skills/cs-paper-table/references/table-craft.md) records the typeset tables of DeepSeek-V3, Qwen2.5, Llama 3, LLaMA, Gemini 1.5, GPT-4, Phi-4, Nemotron-4 340B, DINOv2, Hunyuan-Large, Kimi k1.5/K2 and the Transformer, with fonts, rules and colours measured from the PDFs. The short version:
+Five visual studies, every table rendered from the typeset PDF and looked at: 13 AI-lab reports (DeepSeek-V3, Qwen2.5, Llama 3, Gemini 1.5, GPT-4, Phi-4, DINOv2 and others), five single papers, and 32 papers from 2025–2026 award lists (NeurIPS, ICML, ICLR; CVPR, ICCV, ACL, EMNLP; OSDI, SOSP, NSDI, USENIX Security, S&P, CCS, VLDB, SIGMOD, PLDI, CHI). The per-paper notes are in [craft-study.md](skills/cs-paper-table/references/craft-study.md). They distill into eight principles:
 
-- **Restraint is the style.** 8 of 13 papers use no colour in result tables; text is black; booktabs rules with no vertical lines.
-- **Hierarchy comes from type, not lines**: bold names with a small second line for n, unit or shots; spanners with trimmed `\cmidrule`s; centred banners for row groups.
-- **One emphasis, defined**: bold = best within a stated scope, ties all bold; underline only with a legend.
-- **Secondary numbers recede**: ± and SDs smaller and muted; deltas small and muted green/red (`#408C40` / `#8C4040`, DINOv2).
-- **Short captions**: a bold title and one or two sentences.
-- **Notes that earn their place**: each note changes how a cell is read; tools, mark placement, procedure from the methods and disclaimers stay out, and the renderer rejects them.
-- **Failures to avoid**: `\resizebox` down to 6.9 pt, rotated headers, link-blue emphasis, per-row hairlines, mixed "46%"/"46.2".
+1. **One table answers one question.** The compared numbers sit next to each other, down a column, in a stated order.
+2. **The reader never computes.** Direction, unit, n, the reference and the margin are printed.
+3. **Space and alignment before ink.** Rules only at real boundaries; the one vertical hairline award papers agree on separates what was set from what was measured.
+4. **Emphasis is a budget.** One mark per meaning, defined beside the table. Bold is defined in 1 of the 7 ML award papers that use it, and the legend is complete in 2 of 9 vision and NLP papers.
+5. **Secondary information recedes but stays readable.** ±, units and counts are smaller or muted, never under the size floor.
+6. **Comparability is visible.** Blocks whose banner names the condition or caveat; missing, failed and censored results (`TO`, `> 180`) as values.
+7. **Design at the final size, in the venue's template.** One table size per paper. Every table under 7 pt in the studies was scaled, and 7 of 13 systems award papers do not shrink tables at all.
+8. **One paper, one system.** The same row order, precision, marks and hue meanings throughout.
+
+What award papers still get wrong: undefined emphasis, direction stated nowhere (7 of 9 ML papers), "%" in every cell, `1354365` without separators, three-hue and traffic-light fills, the own row tinted pink, and 100-word captions that define each column.
 
 ## Installation
 
@@ -125,7 +133,7 @@ codex plugin marketplace add zichuanxu/cs-paper-table-skill
 codex plugin add cs-paper-table@cs-paper-table-skill
 ```
 
-Or copy `skills/cs-paper-table` into `~/.claude/skills/`. The renderer needs Python ≥ 3.10 with `pymupdf` (and `numpy` for the example builder) and a TeX distribution with `pdflatex`, `newtx`, `booktabs`, `dcolumn`, `pifont` and `xcolor`.
+Or copy `skills/cs-paper-table` into `~/.claude/skills/`. The renderer needs Python ≥ 3.10 with `pymupdf` (and `numpy` for the example builder) and a TeX distribution with `pdflatex`, `newtx`, `booktabs`, `dcolumn`, `pifont` and `xcolor` (`wasysym` for ●/◐/○ matrices).
 
 ## Usage
 

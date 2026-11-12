@@ -84,9 +84,9 @@ Use the fewest header levels that make every cell's meaning unambiguous.
 For a benchmark, make “best within the matched 16k budget” possible to read directly from the block heading and note.
 For an ablation, place the full reference before removals and specify whether every removal starts from that reference.
 For a capacity sweep, keep concurrency, precision, device count, and context length attached to every result block.
-For a capability matrix, prefer words over unlabelled check/cross glyphs; explain the scope of Partial.
+For a capability matrix, use ✓/✗ (or ●/◐/○) with a legend in the table's own words ("supported / not supported"); never leave the glyphs unlabelled, and explain the scope of Partial.
 For a register, allocate width to long descriptions rather than making prose into a field of small abbreviations.
-For an estimate panel, align the estimate consistently and reserve room for the full interval; do not shrink the interval to a footnote-sized suffix.
+For an estimate panel, align the estimate consistently and reserve room for the full interval; set the interval as secondary text (about 0.86 of the body, never under 7.2 pt), not as a footnote-sized suffix.
 If six or more fields are merely experimental setup, consider a small setup table plus a result table linked by stable configuration IDs.
 
 ## Recommended typography and geometry
@@ -97,14 +97,14 @@ The manuscript class and the venue's explicit instructions take precedence.
 | Property | Starting choice | Adaptation rule |
 |---|---|---|
 | Typeface | Inherit manuscript text and mathematics fonts | Do not impose a company font. The standalone preview's Times (newtx) is only a preview choice. |
-| Body type | Aim for 8–9 pt at final placement | Prefer the manuscript's normal table size when larger; never shrink a finished graphic to obtain a fit. |
+| Body type | The template's table size; 8–9 pt where it leaves the choice | acmart and PVLDB set tables at body size and 7 of 13 systems award papers keep it; ML, vision and NLP papers use about 0.8–0.9 of body. Use one size for every table in the paper; never shrink a finished graphic to obtain a fit. |
 | Minimum configured type | 7.2 pt for body and notes in the bundled renderer | This is a rejection threshold, not a target. Recompose if important content needs smaller type. |
 | Notes | About 7.6–8.2 pt, remaining readable at native page size | Essential protocol details must not become tiny superscripts or footnotes. |
 | Caption | Inherit venue caption styling; standalone preview starts at 9 pt | The manuscript supplies caption numbering and spacing. |
 | Leading | About 1.2–1.3 times type size | Increase for wrapped prose; inspect accents, math, and interval brackets. |
-| `\tabcolsep` | 2.5–4 pt; renderer starts at 3 pt | Reduce unnecessary padding before reducing type, but retain separation between adjacent numbers. |
+| `\tabcolsep` | 3–5 pt; renderer default 4 pt | Reduce unnecessary padding before reducing type, but retain separation between adjacent numbers. |
 | `\arraystretch` | About 1.10–1.25 | Use the upper end for mixed prose/status cells; avoid mechanical expansion of every row. |
-| Horizontal rules | Outer 0.75 pt; header/group 0.45 pt; partial 0.30 pt | These are renderer defaults. Keep the outer/header/group hierarchy visible in grayscale. |
+| Horizontal rules | booktabs' em-based `.08em` / `.05em` / `.03em` (0.68 / 0.43 / 0.26 pt at 8.5 pt type) | These are renderer defaults; they scale with the type. Keep the outer/header/group hierarchy visible in grayscale. |
 | Group gap | Roughly 0.4–0.8 ex in addition to rule spacing | Use a gap instead of a rule when the boundary is already clear. |
 | Focus fill | One pale neutral or muted accent, e.g. `#EEF3FA` | Label the reference/default/selected role explicitly; do not imply winning. |
 | Numeric precision | Declare per metric | Use the same decimals within a comparable quantity, while preserving integers and meaningful bounds. |

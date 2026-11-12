@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Compile a typed scientific table to LaTeX/PDF/PNG plus semantic HTML and CSV.
 
-Requires pdflatex with standalone, lmodern, booktabs, array, dcolumn, xcolor
-and colortbl; Python requires PyMuPDF. Does not shrink the artwork.
+Requires pdflatex with standalone, newtx (or lmodern), booktabs, array, dcolumn,
+pifont, xcolor and colortbl; Python requires PyMuPDF. Does not shrink the artwork.
 The generated fragment inherits a manuscript's typeface; the standalone preview
-uses Latin Modern. Review the actual manuscript placement after integration.
+uses Times (newtx). Review the actual manuscript placement after integration.
 """
 from __future__ import annotations
 import argparse
@@ -17,7 +17,7 @@ import shutil
 import subprocess
 import sys
 
-from table_core import FAILURES, MISSING, STATUS, decimal, display_cell, heat_fill, emphasis, formatted, number, precision, rounded, sha256, validate, write_json
+from table_core import FAILURES, MISSING, STATUS_GLYPHS, decimal, display_cell, heat_fill, emphasis, formatted, number, precision, rounded, sha256, validate, write_json
 
 
 def tex(value):
@@ -32,10 +32,19 @@ def tex(value):
                "²": r"\raisebox{0.6ex}{\fontsize{6.2}{6.2}\selectfont 2}", "†": r"\raisebox{0.6ex}{\fontsize{6.2}{6.2}\selectfont\dag}",
                "‡": r"\raisebox{0.6ex}{\fontsize{6.2}{6.2}\selectfont\ddag}",
                **{chr(0x2460 + k): r"\ding{" + str(172 + k) + "}" for k in range(10)},  # ① .. ⑩ row IDs
-               "○": r"\ensuremath{\circ}",
-               "✓": r"\ding{51}", "✗": r"\textcolor{TableMuted}{\ding{55}}", "◐": r"\ensuremath{\sim}"}
+               # wasysym's matched set; the standalone preview loads the package only when one is used
+               "●": r"\CIRCLE{}", "○": r"\Circle{}", "◐": r"\LEFTcircle{}",
+               "✓": r"\ding{51}", "✗": r"\textcolor{TableMuted}{\ding{55}}", "∼": r"\ensuremath{\sim}"}
     return "".join(mapping.get(c, c) for c in str(value))
 
+
+# Defined with \providecolor inside the body fragment, so a manuscript needs only the packages and can
+# override any of them in its preamble.
+COLORS = {"TableRule": "000000", "TableMuted": "6B7280", "TableNote": "374151", "FocusFill": "EEF3FA",
+          "DeltaFill": "F6F7F9", "BandFill": "ECEDEF", "HeadFill": "F0F4F7", "StatusYes": "2E8B57",
+          "StatusNo": "B5523F", "StatusPartial": "C9822B", "DeltaUp": "408C40", "DeltaDown": "8C4040",
+          # ranking.fill: one hue, two strengths, lightness monotone with rank (D4RT, arXiv 2512.08924)
+          "RankBest": "CDE3FF", "RankSecond": "EBF3FF"}
 
 MISSING_WORDS = {"not_reported": "not reported", "not_applicable": "not applicable", "not_run": "not run",
                  "incomparable": "not comparable"}
@@ -74,10 +83,10 @@ def notes(spec):
     if seen_failures:
         descriptions = {'oom': 'out of memory', 'timeout': 'timeout', 'execution_error': 'execution error'}
         result.append("; ".join(f"{FAILURES[k]} = {descriptions[k]}" for k in sorted(seen_failures)) + " (an outcome, not a score of zero).")
-    if seen_status and spec.get("status_style", "symbols") == "symbols":
+    style = spec.get("status_style", "symbols")
+    if seen_status and style != "words":
         legend = {"yes": "enabled", "no": "disabled", "partial": "partial", "unknown": "unknown", **spec.get("status_legend", {})}
-        words = {"yes": "✓ " + legend["yes"], "no": "✗ " + legend["no"], "partial": "◐ " + legend["partial"], "unknown": "? " + legend["unknown"]}
-        result.append(", ".join(words[k] for k in ("yes", "no", "partial", "unknown") if k in seen_status) + ".")
+        result.append(", ".join(STATUS_GLYPHS[style][k] + " " + legend[k] for k in ("yes", "no", "partial", "unknown") if k in seen_status) + ".")
     return result
 
 
@@ -95,34 +104,45 @@ def column_format(spec, col):
             # (tabular lining figures), and centring keeps underlines and bold intact
             return "c"
         before = max([len(x.split(".")[0].replace(",", "")) + x.split(".")[0].count(",") for x in values] + [1])
+        if any("bound" in r["cells"][col["id"]] for r in spec["rows"] if isinstance(r["cells"][col["id"]], dict)):
+            before += 1  # a relation sign and its space are wider than the digit slots they were counted as
         after = max([precision(col, row, row["cells"][col["id"]]) for row in spec["rows"]
                      if isinstance(row["cells"][col["id"]], dict) and "value" in row["cells"][col["id"]]] + [0])
         # The extra fractional slot accommodates bold digits without moving the
         # decimal anchor or reducing text size. It is spacing, not extra precision.
-        return f"D{{.}}{{\\CSPdot}}{{{before}.{after+1 if after else 0}}}"
+        # a unit suffix ("×") is wider than a digit and sits on whichever side of the point ends the number
+        suffix = 2 * len(col.get("suffix", ""))
+        return f"D{{.}}{{\\CSPdot}}{{{before + (0 if after else suffix)}.{after + 1 + suffix if after else 0}}}"
     return "c"
 
 
 def math_number(text):
     """Display string -> math-mode TeX: true minus, grouped thousands, a·10^n."""
     text = text.replace("−", "-").replace(",", "{,}").replace("×", r"\times ").replace("≈", r"\approx ")
+    text = text.replace("%", r"\%").replace("≥ ", r"\geq ").replace("≤ ", r"\leq ").replace("> ", ">").replace("< ", "<")  # censored values
     if "·10^" in text:
         mant, exp = text.split("·10^")
         text = mant + r"\cdot 10^{" + exp + "}"
     return text
 
 
+def bold_math(text):
+    """Bold a number inside math mode. \\mathbf changes only letters and digits, so the decimal point,
+    the thousands comma, the minus and a unit suffix would stay regular; \\boldmath switches all of them."""
+    return r"\mbox{\boldmath$" + text + "$}"
+
+
 def numeric_tex(text, bold, under=False):
     # dcolumn splits the cell at "." so every wrapper is applied per side of the point
     parts = math_number(text).split(".")
     if bold:
-        parts = [r"\mathbf{" + p + "}" for p in parts]
+        parts = [bold_math(p) for p in parts]
     if under:
         parts = [r"\underline{" + p + "}" for p in parts]
     if (bold or under) and len(parts) == 2:
         # dcolumn boxes the left half first, so it can switch the separator to a bold/underlined
         # point and the right half switches it back: the point matches the digits around it
-        dot = r"\mathbf{.}" if bold else "."
+        dot = bold_math(".") if bold else "."
         dot = r"\underline{" + dot + "}" if under else dot
         parts = [r"\gdef\CSPdot{" + dot + "}" + parts[0], parts[1] + r"\gdef\CSPdot{.}"]
     return ".".join(parts)
@@ -137,9 +157,11 @@ def cell_tex(spec, col, row, bold, under=False):
         mark = r"\rlap{\raisebox{0.6ex}{\fontsize{6.2}{6.2}\selectfont " + tex(cell["mark"]) + "}}"
         body = body + ("$" + mark + "$" if col["kind"] == "number" and column_format(spec, col).startswith("D") else mark)
     fill = heat_fill(col, row, cell)
+    fill = r"\cellcolor[HTML]{" + fill + "}" if fill else ""
+    if spec.get("ranking", {}).get("fill") and (bold or under):
+        fill = r"\cellcolor{" + ("RankBest" if bold else "RankSecond") + "}"
     if not fill or body is None:
         return body
-    fill = r"\cellcolor[HTML]{" + fill + "}"
     # \multicolumn must stay the first token of its cell (spanning and change cells): colour goes inside it
     head = re.match(r"\\multicolumn\{[^}]*\}\{[^}]*\}\{", body)
     return body[:head.end()] + fill + body[head.end():] if head else fill + body
@@ -181,7 +203,7 @@ def _cell_tex(spec, col, row, bold, under=False):
         content = numeric_tex(text, bold, under)
         if column_format(spec, col) == "c":
             whole = math_number(text)
-            whole = r"\mathbf{" + whole + "}" if bold else whole
+            whole = bold_math(whole) if bold else whole
             content = "$" + (r"\underline{" + whole + "}" if under else whole) + "$"
         if isinstance(cell, dict) and cell.get("span"):
             return r"\multicolumn{" + str(cell["span"]) + "}{c}{$" + numeric_tex(text, bold, under) + "$}"
@@ -199,7 +221,7 @@ def _cell_tex(spec, col, row, bold, under=False):
         # No uncertainty notation is guessed from a parenthetical number.
         digits = precision(col, row, cell)
         lead = math_number(formatted(col, cell['value'], digits, col.get('signed', False)))
-        lead = r"\mathbf{" + lead + "}" if bold else lead
+        lead = bold_math(lead) if bold else lead
         lead = r"\underline{" + lead + "}" if under else lead
         if col['kind'] == 'mean_sd' and col.get("sd_style") == "paren":
             # on a shaded cell the SD stays black: muted grey loses contrast on the darker shades
@@ -209,24 +231,30 @@ def _cell_tex(spec, col, row, bold, under=False):
             return r"$" + lead + r"$\,{\CSPsmall$\pm$" + number(cell['sd'], digits) + "}"
         return r"$" + lead + "$" + interval_tex(col, cell, digits)
     if col["kind"] == "status":
-        if spec.get("status_colors") and spec.get("status_style", "symbols") == "symbols":
+        if spec.get("status_colors") and spec.get("status_style", "symbols") != "words":
             shade = {"yes": "StatusYes", "no": "StatusNo", "partial": "StatusPartial"}.get(cell, "TableMuted")
-            glyph = {"yes": r"\ding{51}", "no": r"\ding{55}", "partial": r"\ensuremath{\sim}", "unknown": "?"}[cell]
+            glyph = r"\ding{55}" if text == "✗" else tex(text)  # tex() would mute the cross
             return r"\textcolor{" + shade + "}{" + glyph + "}"
         return tex(text)
     return tex(text).replace("\n", r"\newline ")
 
 
-def header_tex(label, bold):
-    """First line is the name; further lines (n, unit, direction) are set smaller and muted."""
-    lines = label if isinstance(label, list) else str(label).split("\n")
+def header_lines(label):
+    return label if isinstance(label, list) else str(label).split("\n")
+
+
+def header_tex(label, bold, depth=1, align="c"):
+    """First line is the name; further lines (n, unit, direction) are set smaller and muted.
+    Headers are padded to the row's deepest label so every name sits on the same baseline."""
+    lines = header_lines(label)
+    lines = lines + [""] * (depth - len(lines))
     head = (r"\textbf{" + tex(lines[0]) + "}") if bold else tex(lines[0])
     # every line gets the same height and depth, so names share a baseline whatever sits under them
     # ("Math / n=250" beside "Tokens / mean")
     rest = [r"{\CSPsmall\textcolor{TableMuted}{" + tex(x) + r"}\vphantom{1g}}" for x in lines[1:]]
     if rest:
         head += r"\vphantom{Ag}"
-    return r"\shortstack{" + r"\\[-0.15ex] ".join([head] + rest) + "}"
+    return r"\shortstack[" + align + "]{" + r"\\[-0.15ex] ".join([head] + rest) + "}"
 
 
 def make_latex(spec, marked, second=frozenset()):
@@ -237,7 +265,10 @@ def make_latex(spec, marked, second=frozenset()):
     groups = spec.get("column_groups", [])
     starts = {ids.index(g["columns"][0]): g for g in groups}
     bold_head = style.get("header_weight", "bold") == "bold"
-    setup = [r"\begingroup", r"\fontsize{" + str(style["body_pt"]) + "}{" + str(style.get("leading_pt", style["body_pt"]*1.25)) + r"}\selectfont",
+    colors = {**COLORS, "FocusFill": style.get("focus_fill", COLORS["FocusFill"])}
+    setup = [r"\begingroup", "".join(r"\providecolor{" + k + "}{HTML}{" + v + "}" for k, v in colors.items()),
+             # no double space after "Avg." or "vs." in notes
+             r"\frenchspacing", r"\fontsize{" + str(style["body_pt"]) + "}{" + str(style.get("leading_pt", style["body_pt"]*1.25)) + r"}\selectfont",
              r"\setlength{\tabcolsep}{" + str(style.get("tabcolsep_pt", 4.0)) + "pt}",
              r"\renewcommand{\arraystretch}{" + str(style.get("arraystretch", 1.2)) + "}",
              # booktabs' own em-based weights, so rules scale with the type (0.8/0.5/0.3 pt at 10 pt)
@@ -272,7 +303,9 @@ def make_latex(spec, marked, second=frozenset()):
                 i += 1
         parts.append(" & ".join(cells) + r" \\")
         parts.append("".join(r"\cmidrule(lr){" + str(ids.index(g["columns"][0])+1) + "-" + str(ids.index(g["columns"][-1])+1) + "}" for g in groups))
-    parts.append(head_fill + " & ".join(r"\multicolumn{1}{" + ("l" if c["kind"] == "text" and c.get("align", "l") == "l" else "c") + "}{" + header_tex(c["label"], bold_head) + "}" for c in cols) + r" \\")
+    depth = max(len(header_lines(c["label"])) for c in cols)
+    sides = ["l" if c["kind"] == "text" and c.get("align", "l") == "l" else "c" for c in cols]
+    parts.append(head_fill + " & ".join(r"\multicolumn{1}{" + a + "}{" + header_tex(c["label"], bold_head, depth, a) + "}" for c, a in zip(cols, sides)) + r" \\")
     parts.append(r"\midrule")
     previous = None
     labels = spec.get("row_group_labels", {})
@@ -322,8 +355,9 @@ def make_latex(spec, marked, second=frozenset()):
         for _ in range(12):
             parts += [r"\setlength{\tabcolsep}{\dimexpr\tabcolsep+(\linewidth-\wd\CSPTableMeasure)/" + str(2*n) + r"\relax}", measure]
     note_text = " ".join(tex(x) for x in notes(spec))
+    note_width = r"\dimexpr\ifdim\wd\CSPTableMeasure>.62\linewidth \wd\CSPTableMeasure\else .62\linewidth\fi\relax"
     parts += [r"\noindent\hfill\usebox{\CSPTableMeasure}\hfill\null", r"\par\vspace{1.4mm}",
-              r"{\fontsize{" + str(style["note_pt"]) + "}{" + str(style["note_pt"]*1.25) + r"}\selectfont\noindent\textcolor{TableNote}{" + note_text + r"}\par}", r"\endgroup"]
+              r"\noindent\hfill\parbox{" + note_width + r"}{\fontsize{" + str(style["note_pt"]) + "}{" + str(style["note_pt"]*1.25) + r"}\selectfont\textcolor{TableNote}{" + note_text + r"}}\hfill\null\par", r"\endgroup"]
     fragment = "\n".join(parts) + "\n"
     caption = r"\textbf{Table " + str(spec.get("number", 1)) + ". " + tex(spec["title"]) + ".} " + tex(spec["caption"])
     font = {"times": r"\usepackage{newtxtext,newtxmath}", "lmodern": r"\usepackage{lmodern}"}[style.get("font", "times")]
@@ -332,25 +366,15 @@ def make_latex(spec, marked, second=frozenset()):
 """ + font + r"""
 \usepackage{booktabs,array,dcolumn,pifont}
 \usepackage[table]{xcolor}
-\definecolor{TableRule}{HTML}{000000}
-\definecolor{TableMuted}{HTML}{6B7280}
-\definecolor{TableNote}{HTML}{374151}
-\definecolor{FocusFill}{HTML}{""" + style.get("focus_fill", "EEF3FA") + r"""}
-\definecolor{DeltaFill}{HTML}{F6F7F9}
-\definecolor{BandFill}{HTML}{ECEDEF}
-\definecolor{HeadFill}{HTML}{F0F4F7}
-\definecolor{StatusYes}{HTML}{2E8B57}
-\definecolor{StatusNo}{HTML}{B5523F}
-\definecolor{StatusPartial}{HTML}{C9822B}
-\definecolor{DeltaUp}{HTML}{408C40}
-\definecolor{DeltaDown}{HTML}{8C4040}
+""" + (r"\usepackage[nointegrals]{wasysym}" if re.search(r"\\(CIRCLE|Circle|LEFTcircle)\b", fragment) else "") + r"""
 \begin{document}
+\frenchspacing
 """
     standalone = preamble + r"\begin{minipage}{" + str(style["width_mm"]) + "mm}\n" + r"\vspace*{1mm}" + "\n" + r"\fontsize{" + str(style.get("caption_pt", 9.0)) + "}{" + str(style.get("caption_pt", 9.0)*1.22) + r"}\selectfont" + "\n" + caption + r"\par\vspace{1.6mm}" + "\n" + fragment + r"\vspace*{1mm}\end{minipage}" + "\n" + r"\end{document}" + "\n"
     return standalone, fragment, caption
 
 
-def make_html(spec, marked):
+def make_html(spec, marked, second=frozenset()):
     e = html.escape
     cols = spec["columns"]
     ids = [c['id'] for c in cols]
@@ -393,8 +417,10 @@ def make_html(spec, marked):
             if isinstance(cell,dict) and cell.get('spanned'): continue
             value=e(display_cell(col,row,cell,spec)).replace('\n','<br>')
             if (row["id"],col["id"]) in marked: value='<strong>'+value+'</strong>'
+            if (row["id"],col["id"]) in second: value='<u>'+value+'</u>'
             span=' colspan="'+str(cell['span'])+'"' if isinstance(cell,dict) and cell.get('span') else ''
             fill=heat_fill(col,row,cell)
+            if spec.get('ranking',{}).get('fill'): fill=COLORS['RankBest'] if (row["id"],col["id"]) in marked else COLORS['RankSecond'] if (row["id"],col["id"]) in second else None
             if fill: span+=' style="background:#'+fill+'"'
             tag='th' if i==0 else 'td'
             cls='row' if i==0 else 'text' if col["kind"]=='text' else 'status' if col["kind"]=='status' else 'num'
@@ -413,7 +439,8 @@ def audit_pdf(path, spec, log):
     with fitz.open(path) as doc:
         if len(doc)!=1: raise ValueError('The single-table renderer produced multiple pages; split or use a longtable template')
         p=doc[0]; spans=[s for b in p.get_text('dict')['blocks'] for l in b.get('lines',[]) for s in l.get('spans',[]) if s.get('text','').strip()]
-        out=[s['text'] for s in spans if s['bbox'][0]<-.25 or s['bbox'][1]<-.25 or s['bbox'][2]>p.rect.width+.25 or s['bbox'][3]>p.rect.height+.25]
+        # wasysym's circles report a font box far taller than their ink, so they are not a clipping signal
+        out=[s['text'] for s in spans if 'wasy' not in s['font'].lower() and (s['bbox'][0]<-.25 or s['bbox'][1]<-.25 or s['bbox'][2]>p.rect.width+.25 or s['bbox'][3]>p.rect.height+.25)]
         fonts=[]
         for font in p.get_fonts(full=True):
             name,ext,kind,content=doc.extract_font(font[0]); fonts.append({'name':name,'format':ext,'kind':kind,'embedded_bytes':len(content)})
@@ -457,7 +484,7 @@ def main():
     (out/(stem+'.tex')).write_text(texdoc)
     (out/(stem+'_body.tex')).write_text(fragment)
     (out/(stem+'_caption.tex')).write_text(caption+'\n')
-    (out/(stem+'.html')).write_text(make_html(spec,marked))
+    (out/(stem+'.html')).write_text(make_html(spec,marked,second))
     write_json(out/(stem+'_spec.json'),spec)
     write_json(out/(stem+'_emphasis.json'),rank_audit)
     with (out/(stem+'.csv')).open('w',newline='') as h:

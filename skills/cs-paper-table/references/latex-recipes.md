@@ -9,6 +9,7 @@ Keep the data and emphasis contract unchanged when changing the typesetting syst
 - [Rules and grouping with booktabs](#rules-and-grouping-with-booktabs)
 - [Decimal alignment with dcolumn](#decimal-alignment-with-dcolumn)
 - [Optional siunitx path](#optional-siunitx-path)
+- [Small tables, stacked cells and legends](#small-tables-stacked-cells-and-legends)
 - [Notes, long text, and multiple pages](#notes-long-text-and-multiple-pages)
 - [Font, width, and compilation constraints](#font-width-and-compilation-constraints)
 - [Semantic HTML and reusable data](#semantic-html-and-reusable-data)
@@ -19,20 +20,13 @@ Keep the data and emphasis contract unchanged when changing the typesetting syst
 
 The renderer writes a standalone document, an editable `_body.tex`, and a `_caption.tex` preview fragment.
 Use the body inside the manuscript's own float; it includes the table's notes and locally scoped formatting.
-Supply its color definitions in the manuscript preamble.
+It defines its own colours with `\providecolor`, so the manuscript needs only the packages; define a colour of the same name in the preamble to override one (for example `FocusFill` to match the paper's accent).
 Use the manuscript class's font configuration rather than importing the standalone preview's Times (`newtx`) choice.
 
 ```latex
 % Preamble: merge with packages already loaded by the manuscript.
 \usepackage{booktabs,array,dcolumn,pifont}
 \usepackage[table]{xcolor}
-\definecolor{TableRule}{HTML}{000000}
-\definecolor{FocusFill}{HTML}{EEF3FA}
-\definecolor{TableMuted}{HTML}{6B7280}
-\definecolor{TableNote}{HTML}{374151}
-\definecolor{DeltaUp}{HTML}{408C40}
-\definecolor{DeltaDown}{HTML}{8C4040}
-\definecolor{DeltaFill}{HTML}{F6F7F9}
 
 % In a two-column manuscript, table* is the full-width float.
 \begin{table*}[t]
@@ -65,7 +59,7 @@ Use `\addlinespace` for a semantic break that does not need another line.
 The package supplies rule spacing and different rule weights; its formal-table guidance discourages vertical and double rules.
 Its documented compatibility includes `longtable` and `colortbl`; these facts do not establish compatibility with every document class or tagging configuration. See [BT].
 
-**Recommended defaults in this skill:** outer/header/partial widths of 0.75/0.45/0.30 TeX pt, respectively.
+**Defaults in this skill:** booktabs' own em-based widths, `\heavyrulewidth=.08em`, `\lightrulewidth=.05em`, `\cmidrulewidth=.03em`, so the rules scale with the table's type (0.68 / 0.43 / 0.26 pt at 8.5 pt).
 These values are our production choices, not a company or publisher standard.
 Use the manuscript's approved convention when it differs.
 Do not insert a `\midrule` after every numeric row; reserve separators for meaningful boundaries.
@@ -90,7 +84,7 @@ Method & \multicolumn{1}{c}{Success (\%) $\uparrow$}
        & \multicolumn{1}{c}{Latency (ms) $\downarrow$} \\
 \midrule
 Reference & 71.2 & 128.0 \\
-Variant   & \mathbf{72}.\mathbf{4} & \mathbf{119}.\mathbf{5} \\
+Variant   & \mbox{\boldmath$72$}.\mbox{\boldmath$4$} & \mbox{\boldmath$119$}.\mbox{\boldmath$5$} \\
 \bottomrule
 \end{tabular}
 \par\smallskip
@@ -112,7 +106,7 @@ Override the numeric column for a text header or status with `\multicolumn{1}{c}
 The manual documents both decimal-place and left/right-width forms; a negative format allows unrestricted decimal places but may create excessive width. See [DC].
 
 Format numeric values upstream, using the declared precision and tie rule.
-Keep the decimal separator visible to `D` when adding bold: `\mathbf{72}.\mathbf{4}` preserves the alignment split.
+Keep the decimal separator visible to `D` when adding bold: bold each side of the point separately. `\mathbf` changes digits only, leaving the point, a thousands comma and the minus sign at regular weight; the renderer therefore uses `\mbox{\boldmath$…$}` per side and switches the output separator to a bold point for that cell.
 Do not surround the entire decimal string with a macro that hides that split without testing the result.
 The renderer reserves extra alignment room for bold digits; that space is not extra displayed precision.
 Use `\multicolumn{1}{c}{\textit{OOM}}` for an observed failure and explain it in notes.
@@ -145,6 +139,47 @@ Do not assume an old `siunitx` configuration from another paper remains valid in
 Its ability to parse uncertainty does not determine whether the input is SD, SE, or a CI; that meaning still belongs in the contract and caption.
 Keep one authoritative rounding step; disable or match downstream automatic rounding rather than creating different PDF and CSV values.
 Render a bold value, a negative value, an interval/status, and the widest number before adopting a custom setup.
+
+## Small tables, stacked cells and legends
+
+Patterns from the award-paper studies that the bundled renderer does not emit. Each keeps the table at the paper's one table size.
+
+```latex
+% A table of five or fewer columns beside its paragraph (5 of 9 ML award papers), at natural width.
+\usepackage{wrapfig}
+\begin{wraptable}{r}{0pt}   % 0pt: use the natural width of the contents
+  \centering\small
+  \input{tables/small_body.tex}
+  \caption{Short title. One sentence.}
+\end{wraptable}
+
+% Two small tables side by side under a full-width one (TRELLIS.2).
+\begin{table*}[t]
+  \begin{minipage}[t]{0.48\linewidth}\centering
+    \caption{Left title.}\input{tables/left_body.tex}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}\centering
+    \caption{Right title.}\input{tables/right_body.tex}
+  \end{minipage}
+\end{table*}
+
+% A share over its raw count, the count small and grey (SSH client signatures, Table 2).
+\newcommand{\sharecount}[2]{\shortstack[r]{#1\%\\[-0.2ex]{\footnotesize\textcolor{TableMuted}{#2}}}}
+RSA & \sharecount{61.53}{5,660,641} & \sharecount{79.44}{4,595,059} \\
+
+% A block label merged across its rows instead of a banner row: saves a line per block in a single column.
+\usepackage{multirow}
+\multirow{4}{*}{\textbf{16k}} & Baseline & 72.3 \\
+                              & Cache    & 72.3 \\
+
+% A legend that shows the tint it defines (Lost in Conversation, Table 1; ChordEdit, Table 1).
+Shading: \colorbox[HTML]{F2C1C1}{\strut points lost} against the single-turn score.
+```
+
+`wraptable` needs a few lines of text on both sides and fails next to floats, lists and section breaks; check the page.
+Generate a body for the width it will actually occupy (`style.width_mm`): the fragment refuses a placement narrower than its natural width.
+Feature matrices with ●/◐/○ (`status_style: "circles"`) need `\usepackage[nointegrals]{wasysym}` in the manuscript.
+For inferential statistics (HCI), prefer the tests in prose; if tabulated, print estimates with star superscripts, key the stars in the caption, group predictors by rules and put fit statistics after a final rule.
 
 ## Notes, long text, and multiple pages
 
@@ -193,7 +228,7 @@ Convert units deliberately; do not assume every CS template uses the same column
 Reallocate prose width, wrap labels, reduce excess padding, split panels, or choose a wider allowed float before reducing type.
 The bundled body expands spare padding after measuring its natural width; it does not geometrically scale the artwork.
 
-The bundled standalone path uses `pdflatex` with `standalone`, `lmodern`, `booktabs`, `array`, `dcolumn`, `xcolor`, and `colortbl` support.
+The bundled standalone path uses `pdflatex` with `standalone`, `newtx` (or `lmodern`), `booktabs`, `array`, `dcolumn`, `pifont`, `xcolor`, and `colortbl` support.
 Do not assume arbitrary Unicode, CJK, or a manuscript-specific font works through that path.
 Use the manuscript's configured XeLaTeX/LuaLaTeX or other supported route for such text, and check glyph coverage and embedded fonts.
 Keep user content as text and escape LaTeX special characters; do not accidentally interpret a dataset label as executable TeX.

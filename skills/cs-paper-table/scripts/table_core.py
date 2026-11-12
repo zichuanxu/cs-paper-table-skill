@@ -15,10 +15,15 @@ MISSING = {"not_reported": "NR", "not_applicable": "NA", "not_run": "NT", "incom
 FAILURES = {"oom": "OOM", "timeout": "TO", "execution_error": "ERR"}
 STATUS = {"yes": "Yes", "no": "No", "partial": "Partial", "unknown": "Unknown"}
 # status_style "symbols" (default): marks read faster than words in capability/ablation matrices
-STATUS_SYMBOLS = {"yes": "✓", "no": "✗", "partial": "◐", "unknown": "?"}
+STATUS_SYMBOLS = {"yes": "✓", "no": "✗", "partial": "∼", "unknown": "?"}
+# status_style "circles": the ●/◐/○ convention of security and systems feature matrices (needs wasysym)
+STATUS_CIRCLES = {"yes": "●", "no": "○", "partial": "◐", "unknown": "?"}
+STATUS_GLYPHS = {"symbols": STATUS_SYMBOLS, "circles": STATUS_CIRCLES, "words": STATUS}
+BOUNDS = {">", "<", "≥", "≤"}  # a censored measurement: "> 180" GB before the run was stopped, "< 0.001"
 # column.heat: white -> this colour, linear over the declared domain (ARE-bench, arXiv 2611.14364, Tables 5-12).
 # Black text keeps > 5:1 contrast on the darkest shade of either hue.
-HEAT = {"blue": (0x5B, 0x8C, 0xA5), "orange": (0xCA, 0x96, 0x57)}
+# "red" is for a loss against a reference (heat.reference; Lost in Conversation, arXiv 2505.06120, Table 1).
+HEAT = {"blue": (0x5B, 0x8C, 0xA5), "orange": (0xCA, 0x96, 0x57), "red": (0xE5, 0x84, 0x84)}
 NUMERIC = {"number", "mean_sd", "interval", "fraction"}
 
 
@@ -60,16 +65,29 @@ def number(value, digits, signed=False):
 def value_of(cell):
     if isinstance(cell, dict) and "count" in cell:  # fraction: the share in percent
         return decimal(cell["count"]) * 100 / decimal(cell["of"])
-    if not isinstance(cell, dict) or "missing" in cell or "value" not in cell:
-        return None
+    if not isinstance(cell, dict) or "missing" in cell or "value" not in cell or "bound" in cell:
+        return None  # a bound is not a point value: it is neither ranked nor shaded
     return decimal(cell["value"])
+
+
+def heat_value(col, row, cell):
+    """The quantity a shaded cell encodes: its own value, or with heat.reference how much worse it is
+    than the same row's cell in the reference column (0 when it is no worse), after the column's direction."""
+    # row.heat = false keeps totals and marginals unshaded
+    value = None if row.get("delta") or row.get("heat") is False or not col.get("heat") else value_of(cell)
+    reference = (col.get("heat") or {}).get("reference")
+    if value is None or not reference:
+        return value
+    base = value_of(row["cells"][reference])
+    if base is None:
+        return None
+    return max(base - value if col["direction"] == "max" else value - base, Decimal(0))
 
 
 def heat_fill(col, row, cell):
     """Hex fill for a shaded cell, or None. The scale is the column's declared domain, never the
     observed range, so columns that declare the same domain and hue are directly comparable."""
-    # row.heat = false keeps totals and marginals unshaded
-    value = None if row.get("delta") or row.get("heat") is False or not col.get("heat") else value_of(cell)
+    value = heat_value(col, row, cell)
     if value is None:
         return None
     lo, hi = map(decimal, col["heat"]["domain"])
@@ -120,7 +138,7 @@ def display_cell(col, row, cell, spec=None):
     if kind == "text":
         return cell
     if kind == "status":
-        return (STATUS if (spec or {}).get("status_style") == "words" else STATUS_SYMBOLS)[cell]
+        return STATUS_GLYPHS[(spec or {}).get("status_style", "symbols")][cell]
     digits = precision(col, row, cell)
     if kind == "fraction":
         count, of = (grouped(str(cell[k])) if col.get("thousands") else str(cell[k]) for k in ("count", "of"))
@@ -129,7 +147,7 @@ def display_cell(col, row, cell, spec=None):
         return formatted(col, cell["value"], digits, signed=True)
     lead = formatted(col, cell["value"], digits, col.get("signed", False))
     if kind == "number":
-        return lead
+        return (cell["bound"] + " " if "bound" in cell else "") + lead
     if kind == "mean_sd":
         if col.get("sd_style") == "paren":
             return lead + " (" + number(cell["sd"], digits) + ")"
@@ -190,7 +208,10 @@ def validate(spec):
             heat = col["heat"]
             if col["kind"] not in NUMERIC or not isinstance(heat, dict) or heat.get("hue") not in HEAT \
                     or len(heat.get("domain", [])) != 2 or decimal(heat["domain"][0]) >= decimal(heat["domain"][1]):
-                raise ValueError("heat is {'hue': 'blue'|'orange', 'domain': [low, high]} on a numeric column: " + col["id"])
+                raise ValueError("heat is {'hue': 'blue'|'orange'|'red', 'domain': [low, high]} on a numeric column: " + col["id"])
+            if "reference" in heat and (heat["reference"] == col["id"] or col.get("direction") not in {"max", "min"}
+                                        or not any(c["id"] == heat["reference"] and c["kind"] in NUMERIC for c in cols)):
+                raise ValueError("heat.reference names another numeric column and needs this column's direction: " + col["id"])
             if not spec.get("heat_meaning"):
                 raise ValueError("Shaded cells need a root heat_meaning that names the scale, e.g. 'Darker blue = higher accuracy, linear on 0-100%.'")
         if col.get("direction") not in {None, "max", "min"}:
@@ -245,13 +266,17 @@ def validate(spec):
                     if len(following) != cell["span"] - 1 or any(row["cells"][c] != {"spanned": True} for c in following):
                         raise ValueError("Cells covered by a span must be {\"spanned\": true}: " + row["id"])
                     expected = expected | {"span"}
+                if isinstance(cell, dict) and "bound" in cell:
+                    if col["kind"] != "number" or cell["bound"] not in BOUNDS or col.get("delta"):
+                        raise ValueError(f"bound is one of {sorted(BOUNDS)} on a number cell outside change columns: {row['id']}/{col['id']}")
+                    expected = expected | {"bound"}
                 if isinstance(cell, dict) and "mark" in cell:
                     if cell["mark"] not in spec.get("marks", {}):
                         raise ValueError(f"Cell mark {cell['mark']!r} needs a definition in root 'marks': {row['id']}")
                     expected = expected | {"mark"}
                 if not isinstance(cell, dict) or set(cell) != expected:
                     raise ValueError(f"Cell {row['id']}/{col['id']} needs exactly {expected}")
-                for key in expected - {"mark", "span"}:
+                for key in expected - {"mark", "span", "bound"}:
                     decimal(cell[key])
                 if "sd" in cell and decimal(cell["sd"]) < 0:
                     raise ValueError("SD cannot be negative")
@@ -265,7 +290,7 @@ def validate(spec):
         if col.get("heat"):
             lo, hi = map(decimal, col["heat"]["domain"])
             for row in rows:
-                value = None if row.get("delta") or row.get("heat") is False else value_of(row["cells"][col["id"]])
+                value = heat_value(col, row, row["cells"][col["id"]])
                 if value is not None and not lo <= value <= hi:
                     raise ValueError(f"{row['id']}/{col['id']} lies outside the heat domain; widen the domain rather than clipping the shade")
     if spec.get("missing_style", "codes") not in {"codes", "dash"}:
@@ -279,15 +304,15 @@ def validate(spec):
             raise ValueError("marks map short symbols (e.g. '*', '†') to their meaning")
     if spec["style"].get("group_style", "banner") not in {"banner", "label", "band"}:
         raise ValueError("style.group_style is banner, label or band")
-    if spec.get("status_style", "symbols") not in {"symbols", "words"}:
-        raise ValueError("status_style is symbols or words")
+    if spec.get("status_style", "symbols") not in STATUS_GLYPHS:
+        raise ValueError("status_style is symbols, circles or words")
     for col in cols:
         if col.get("delta") not in {None, "max", "min"}:
             raise ValueError("column delta is the direction in which a change is an improvement: max or min")
+        if col.get("suffix", "×") not in {"×", "%"}:
+            raise ValueError("suffix is × or %; any other unit goes in the header or a unit column: " + col["id"])
         if col.get("format", "fixed") not in {"fixed", "sci"} or col.get("sd_style", "pm") not in {"pm", "paren"}:
             raise ValueError("format is fixed or sci; sd_style is pm or paren")
-        if col.get("sd_style") == "paren" and "(" not in col.get("uncertainty_definition", "("):
-            pass
     positions = {cid: n + 1 for n, cid in enumerate(ids)}
     occupied = set()
     for group in spec.get("column_groups", []):
@@ -299,6 +324,8 @@ def validate(spec):
     ranking = spec.get("ranking", {"axis": "none"})
     if ranking["axis"] not in {"none", "column", "row"}:
         raise ValueError("Ranking axis must be declared")
+    if ranking.get("fill") and ranking["axis"] == "none":
+        raise ValueError("ranking.fill needs a ranking axis")
     if ranking["axis"] != "none":
         if ranking.get("tie_policy") not in {"rounded", "raw", "tolerance"}:
             raise ValueError("Declare a tie policy")
@@ -308,6 +335,12 @@ def validate(spec):
             raise ValueError("runner_up is omitted or 'underline'")
         if ranking.get("runner_up") and "underline" not in ranking["meaning"].lower():
             raise ValueError("Say what the underline means in ranking.meaning")
+        if ranking.get("fill"):
+            # a fill has one job per table: rank tints cannot share it with a heat scale or a focus tint
+            if any(c.get("heat") or c.get("focus") for c in cols) or any(r.get("focus") for r in rows):
+                raise ValueError("ranking.fill cannot be combined with heat or focus fills; a fill has one job per table")
+            if not re.search(r"shad|tint|fill", ranking["meaning"], re.I):
+                raise ValueError("Say what the rank shading means in ranking.meaning")
         if ranking["axis"] == "column" and any("comparison_group" not in r for r in rows):
             raise ValueError("Column ranking requires a comparison_group on every row")
         if ranking["axis"] == "row":

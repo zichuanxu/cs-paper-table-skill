@@ -1,101 +1,91 @@
 ---
 name: cs-paper-table
-description: Design, analyze, repair, and produce publication-ready computer science research tables from data, manuscript tables, or AI research-paper references. Use for benchmark and leaderboard tables, controlled or cumulative ablations, efficiency and scaling comparisons, dataset statistics, capability matrices, long text tables, and LaTeX table formatting. Apply measured lessons from 54 recent major-tech AI papers and 95 visually inspected tables, plus a 13-paper visual-craft study (DeepSeek-V3, Qwen2.5, Llama 3, Gemini 1.5, GPT-4, Phi-4, Nemotron-4, DINOv2 and others), to typography, color, rules, layout, grouping, precision, and emphasis while preserving scientific comparability, uncertainty, missingness, and provenance. Export editable LaTeX, vector PDF, preview PNG, semantic HTML, and data; do not use this skill for ordinary spreadsheets or scientific plots.
+description: Design, redesign, repair and typeset tables for computer-science research papers - benchmark and leaderboard tables, ablations, efficiency and scaling comparisons, dataset statistics, capability and feature matrices, robustness (degradation) tables and long text tables. Use when the user asks to make a table from results, improve or redesign a table from a paper, fix LaTeX table formatting, or fit a table into a one- or two-column venue template. Applies principles distilled from about 190 inspected tables in 50 papers (AI-lab reports and 2025-2026 award papers from NeurIPS, ICML, ICLR, CVPR, ICCV, ACL, EMNLP, OSDI, SOSP, NSDI, USENIX Security, S&P, CCS, VLDB, SIGMOD, PLDI and CHI) and a 95-table measurement corpus, while preserving scientific comparability, uncertainty, missingness and provenance. Exports editable LaTeX, vector PDF, preview PNG, semantic HTML and CSV. Not for ordinary spreadsheets or scientific plots.
 ---
 
 # CS Paper Table
 
-Make the table's scientific comparison easy to read and hard to misinterpret. Treat typography and grouping as part of the argument. Use the bundled research as evidence for particular design choices, not as a universal corporate style or a ranking of prestigious papers.
+Make the table's scientific comparison easy to read and hard to misread. Typography, grouping and emphasis are part of the argument.
 
-**Craft first.** Read [table-craft.md](references/table-craft.md) before styling: what 13 top-lab papers do in their typeset tables (restraint, booktabs weights, two-line headers, banner row groups, bold best within a scope, muted deltas and uncertainty, short captions with notes underneath) and the renderer defaults that implement it. Its redesign protocol and the worked redesigns (`assets/specs/redesigns/`) show how to beat an existing table without changing a value.
+## The eight principles
 
-## Establish the table contract
+Decide from these; the detailed rules, the evidence for each and the renderer field that implements it are in [table-craft.md](references/table-craft.md). Read it before styling.
 
-1. Read the supplied data and manuscript context. Preserve values, source identifiers, metric definitions and experimental conditions. If only a screenshot is available, transcribe and verify every cell before ranking anything; mark unresolved entries instead of guessing.
-2. Identify the reader's task: compare models, explain an ablation, audit resource costs, describe data, or inspect coverage. Write a one-sentence intended claim that the available evidence actually supports.
-3. Record metric direction, units, denominators, evaluation version, model/configuration identity, training/inference budgets, hardware and workload where relevant. Specify which rows or columns are comparable. Keep incompatible groups visually separate.
-4. Declare uncertainty type, sampling unit, repetition count and estimation method. Distinguish SD, SE, CI, quantiles, deltas and gaps to a reference. Do not infer these from `±`, parentheses, a subscript, or a paper's ambiguous legend.
-5. Choose an explicit emphasis policy: structural headers, focal method, within-scope rank, reference row, or significance supported by an appropriate analysis. Define ties and eligibility. Do not treat bold, underline or color as self-explanatory.
-6. Set final manuscript width and font requirements. Infer a reversible draft placement if none is supplied; ask only for unknown scientific facts that materially affect correctness. Label synthetic demonstration data prominently in both caption and exported metadata.
+1. **One table answers one question.** Put the compared numbers next to each other, down a column, in a stated order.
+2. **The reader never computes.** Print direction, unit, n, the reference and the margin.
+3. **Space and alignment before ink.** Rules only at real boundaries; a fill for one declared role.
+4. **Emphasis is a budget.** One mark per meaning, every mark defined beside the table. Undefined bold is the most common defect in award papers.
+5. **Secondary information recedes but stays readable.** Uncertainty, units and counts are smaller or muted, never below the size floor.
+6. **Comparability is visible.** Comparable rows share a block whose banner names the condition; the rest is separated or marked. Missing, failed and censored results are values.
+7. **Design at the final size, in the venue's template.** One table size per paper; recompose, never scale.
+8. **One paper, one system.** The same row order, precision, marks and hue meanings in every table.
 
-Read [scientific-contract.md](references/scientific-contract.md) before constructing ranks, aggregates, uncertainty, or ablation deltas. Use `NR`, `NA`, `NT`, `NC`, and observed execution outcomes deliberately; never replace them with zero.
+## 1. Establish the table contract
 
-## Select evidence and a table structure
+1. Read the data and the manuscript context. Preserve values, identifiers, metric definitions and conditions. From a screenshot or PDF, transcribe and verify every cell before ranking anything; mark unresolved entries instead of guessing.
+2. Write the one question the table answers and a one-sentence claim the evidence supports. That sentence becomes the caption.
+3. Record metric direction, units, denominators, evaluation version, budgets, hardware and workload where relevant. State which rows or columns are comparable.
+4. Declare the uncertainty type, sampling unit, repetition count and method. Distinguish SD, SE, CI, quantiles and deltas; do not infer them from `±`, parentheses or a subscript.
+5. Choose the emphasis policy (best within a scope, threshold, focal method, reference row) with its ties and eligibility.
+6. Find the venue template, its column width and table type size. Without one, assume a reversible draft placement and say so. Label synthetic data in the caption and metadata.
 
-Search the inspected corpus by purpose or source rather than reading the entire archive:
+Read [scientific-contract.md](references/scientific-contract.md) before constructing ranks, aggregates, uncertainty or ablation deltas. Use `NR`, `NA`, `NT`, `NC`, bounds (`> 180`) and observed failures (OOM, TO) deliberately; never replace them with zero.
+
+## 2. Choose the structure
+
+| Reader's question | Structure | Renderer support | Constraint |
+|---|---|---|---|
+| Which method is best, by how much? | Method rows; metric spanners; one block per budget or protocol; a "Δ vs. best baseline" row | `ranking`, `row.delta`, `focus` | Rank only within a comparable scope |
+| What does each component contribute? | Full system first, then removals with a change column or as signed delta rows | `status`, `column.delta`, `row.delta` | One reference; say independent or cumulative |
+| What does it cost? | Metrics as rows with a unit-and-direction column; conditions as bands | `ranking.axis: "row"`, `group_style: "band"`, failures | Fix hardware, batch and timing boundaries |
+| How much is lost under a harder condition? | Reference block unshaded, other blocks shaded by the drop | `heat.reference` | State the scale; raw values stay printed |
+| Where is performance high or low across a matrix? | Heat shading on one shared scale | `column.heat`, `header_fill` | One quantity, one direction per hue |
+| What does each system support? | Feature matrix with ✓/✗ or ●/◐/○ and a legend | `status_style`, `status_colors`, `group_rules` | Unknown is not no |
+| What is in the data? | Text columns, aligned counts, the unit beside them | `thousands`, typed missing values | No total across unlike units |
+| Long catalogue, taxonomy, codebook | Wrapping text, record IDs, repeated headers | manuscript-native | Keep records together across pages |
+
+Use [design-guide.md](references/design-guide.md) for structure and fitting decisions and [latex-recipes.md](references/latex-recipes.md) for manuscript integration, wrapped and side-by-side tables, multipage tables and anything beyond the renderer. Follow the community conventions in table-craft.md: a systems or HCI table is not an ML leaderboard.
+
+For a measured precedent, search the corpus instead of reading it:
 
 ```bash
 python /path/to/cs-paper-table/scripts/search_corpus.py --query ablation --limit 5
 python /path/to/cs-paper-table/scripts/search_corpus.py --company DeepSeek --year 2026 --limit 4
 ```
 
-Use [evidence-atlas.md](references/evidence-atlas.md) for study scope and representative anchors. Use [source-index.json](references/source-index.json), [paper-corpus.csv](references/paper-corpus.csv) and [table-corpus.csv](references/table-corpus.csv) when exact versions, table numbers, pages, PDF hashes, or measurements matter. Follow its links to detailed evidence only as needed. Distinguish **observed**, **measured**, and **recommended** statements. Do not claim to have inspected unlisted tables or infer a source's LaTeX implementation from a rendered PDF.
+[craft-study.md](references/craft-study.md) holds what each of the 50 visually studied papers does well and badly; [evidence-atlas.md](references/evidence-atlas.md) and `references/*.csv` hold the 54-paper measurement corpus. Distinguish **observed**, **measured** and **recommended** statements, and do not claim to have inspected unlisted tables.
 
-| Reader task | Starting structure | Scientific constraint |
-|---|---|---|
-| Dense benchmark | Method stub; grouped metric headers; separate protocol/budget row blocks | Rank only within eligible comparison scopes; keep aggregate weights explicit |
-| Independent ablation | Configuration matrix plus estimate and paired delta | Define one reference and retain paired sampling units |
-| Cumulative ablation | Ordered configuration states or stages | Label dependencies; adjacent changes are conditional increments |
-| Efficiency | Metrics as rows when directions/units differ; setup above or in notes | Fix hardware, precision, batch, sequence lengths and timing boundaries |
-| Dataset registry | Text columns plus aligned split counts and unit of observation | Preserve versions, zeros, missing states and heterogeneous count units |
-| Capability / taxonomy | Grouped categorical columns with a symbol or word legend | Separate no, unknown, unsupported and not tested; avoid false numeric ranks |
-| Long catalog / examples | Wrapping text columns; repeated headers for multipage output | Keep records together and avoid losing header associations |
+## 3. Produce editable output
 
-Use [design-guide.md](references/design-guide.md) for specific layout and style decisions. Use [latex-recipes.md](references/latex-recipes.md) for manuscript integration, multipage tables, and alternatives beyond the bundled renderer.
-
-## Design at the final physical size
-
-- Inherit the manuscript's typeface. The standalone preview uses Times (newtx), the most common CS venue face; it is only a portable specimen. Keep typography consistent with the paper's mathematics and caption style.
-- Start at 8–9 pt body type for a dense full-width table. Keep the bundled renderer's 7.2 pt authoring floor; it is a design guard, not a conference rule. Shorten or wrap headers, remove repeated units, transpose, split panels, or move detail to an appendix before reducing type.
-- Align text stubs left and simple numeric columns on the decimal point. Retain meaningful trailing zeros. Format percentages, counts, latency and memory at justified precision instead of applying one decimal policy to the entire table.
-- Use header spanners and trimmed group rules to make related metrics visible. Use whitespace and a light hierarchy of horizontal rules. Add a vertical separator only if a specific association would otherwise be ambiguous; avoid default spreadsheet grids.
-- Use two-line headers: a bold name, then a smaller muted line for n, unit, shots or direction (`Latency` / `ms ↓`). Show uncertainty and intervals as smaller secondary text, deltas as signed values coloured by improvement after the metric's direction, binary states as ✓/✗, counts with thousands separators and FLOPs as `a·10^n`. Keep the source's precision when transcribing (`precision: "reported"`).
-- Keep the caption to a bold title and one or two sentences; put definitions, the emphasis legend and data status in the notes, in two or three lines. Every note must change how a cell is read. Leave out how the table or its artwork was made (tools, recolouring), how marks are placed, procedure the methods already give (sampling schedules, draws fixed in advance, seeds, prompts) and disclaimers ("the names are illustrative"); the renderer rejects such phrases. Keep that detail in `provenance` or the methods text.
-- Use dark text, a white background, and at most one or two semantic accent roles. Treat pale fills as opaque specified colors unless transparency is actually measured. State whether a fill marks a reference, a focal row, a condition or an effect; preserve meaning in grayscale and through labels.
-- Shade cells as a heat map (`column.heat`) only when the table is a matrix of one kind of quantity and the pattern across it is the point: one hue on a declared domain shared by those columns, a second hue only for a different quantity, numbers still printed, totals unshaded, the scale named in the notes. Keep bold for the best value, and add `style.header_fill` so the header stays apart from shaded cells.
-- Print a count with its denominator and share in one cell (`kind: "fraction"`, `65/76 (85.5%)`), and keep one row order for the models across all tables of a paper.
-- Keep bold sparse and explicit. Add second-place underlining (`ranking.runner_up`) only when the notes say what it means, and never highlight all cells in a focal row as winners. Apply any source-inspired convention only after explaining its meaning in this table.
-- Put the caption and notes in the manuscript's required positions. Make the caption identify the comparison and protocol; put uncertainty, emphasis, missing-value and exception definitions close enough to travel with the table.
-
-## Produce editable output
-
-Use the typed JSON renderer for the supported structures. Read [spec-schema.md](references/spec-schema.md); the JSON specification is the input contract, not an excuse to invent data or comparability.
+Write a typed JSON spec ([spec-schema.md](references/spec-schema.md)) and render it. The spec is the input contract, not a licence to invent data or comparability.
 
 ```bash
-# Compile an existing specimen at its declared physical width.
 python /path/to/cs-paper-table/scripts/render_table.py \
-  /path/to/cs-paper-table/assets/specs/benchmark.json \
-  --out /absolute/workdir/table-output
-
-# Real-table redesigns: Transformer Table 2, Harness² Table 1, ARE-bench Table 6 (transcribed, reported values).
-python /path/to/cs-paper-table/scripts/render_table.py \
-  /path/to/cs-paper-table/assets/specs/redesigns/harness2_t1.json --out /absolute/workdir/h2
-
-# Rebuild all four specimens and their constructed raw data.
-python /path/to/cs-paper-table/scripts/build_examples.py \
-  --out /absolute/workdir/table-examples --render
+  /path/to/cs-paper-table/assets/specs/benchmark.json --out /absolute/workdir/table-output
 ```
 
-Write output outside the installed skill. The renderer requires Python with PyMuPDF and `pdflatex` with `standalone`, `newtx` (or `lmodern` with `style.font`), `booktabs`, `array`, `dcolumn`, `pifont`, `xcolor`, and `colortbl`. The example builder additionally requires NumPy. Use `--source-only` when LaTeX is unavailable, and clearly say that the PDF was not compiled.
+Start from the closest example in `assets/specs/`: `benchmark`, `ablation`, `efficiency`, `budget_comparison` (single column), `registry`, `capability`, `robustness` (shaded by drop from a reference), and the five transcribed redesigns in `redesigns/`. `scripts/build_examples.py --out DIR --render` regenerates the four examples that have constructed raw data.
 
-Keep `.tex`, `_body.tex`, `_caption.tex`, the typed JSON, raw inputs, CSV, semantic HTML and provenance together. The standalone PDF is vector output; PNG is a review preview. Integrate the body and caption fragments into the real manuscript, then compile and inspect that placement again. Do not claim that a standalone preview proves compatibility with an unseen conference template. Use manuscript-native LaTeX for unsupported structures, Chinese or other non-Latin text, nested panels, special cells and multipage tables; preserve the same data contract and review gates.
+Write output outside the installed skill. The renderer needs Python with PyMuPDF and `pdflatex` with `standalone`, `newtx` (or `lmodern`), `booktabs`, `array`, `dcolumn`, `pifont`, `xcolor` and `colortbl` (`wasysym` only for ●/◐/○). With no LaTeX, use `--source-only` and say the PDF was not compiled.
 
-The renderer supports column or row ranking, explicit scopes, exclusions, rounded/raw/tolerance ties, an optional underlined runner-up, mean ± SD or mean (SD), estimate with interval, ✓/✗ status, signed delta rows, cells spanning columns, scientific notation, thousands separators, reported per-value precision, focus rows or columns, grey category bands, hairlines between column groups, coloured ✓/✗ for capability matrices, cell marks (`*`, `†`) with automatic legends, heat-map cell shading on a declared shared scale, a header band, count/denominator (share) cells, unit suffixes (`1.0×`), typed missingness (codes or a single dash) and observed failure outcomes. It intentionally does not infer statistical significance, compute second-place semantics, guess unknown metric directions, or rank multiple incompatible scopes in one cell. Use custom code when needed and save the decisions and calculations.
+Each table comes out as `.tex`, `_body.tex`, `_caption.tex`, PDF, PNG (216 dpi, 96 dpi, greyscale), HTML, CSV, the typed spec, `_emphasis.json`, `_checks.json` and provenance hashes. Put `_body.tex` inside the manuscript's own float; it carries its notes and defines its own colours. Then compile the manuscript and look at that placement: a standalone preview does not prove a fit in an unseen template.
 
-To examine another PDF table, use:
+The renderer refuses, rather than repairs: text under 7.2 pt, a table wider than its target, emphasis without a stated meaning, a tint without a meaning, heat without a declared domain, rank tints combined with another fill, and captions or notes that narrate how the table was made. It does not infer significance, guess a metric's direction, or rank incompatible scopes in one cell. Use manuscript-native LaTeX for non-Latin text, nested panels, merged row labels, stacked cells and multipage tables, under the same contract and review.
+
+To examine a table in another PDF:
 
 ```bash
 python /path/to/cs-paper-table/scripts/inspect_table_pdf.py paper.pdf \
   --page 12 --bbox 60 140 550 430 --out /absolute/workdir/table-inspection
 ```
 
-Read the resulting crop visually. PDF object extraction can measure font resources, nominal sizes, colors and strokes; it cannot establish the intended semantics of an underline, arrow or missing marker. Keep source artwork as research material, not as a template asset to redistribute.
+Read the crop visually. Object extraction measures fonts, sizes, colours and strokes; it cannot tell what an underline or an arrow means.
 
-## Verify and deliver
+## 4. Verify and deliver
 
-1. **Verify content.** Reconcile cells with the data, check denominators and aggregate weights, recalculate deltas, and audit ties and metric directions. Confirm scope exclusions and the interpretation of every special marker. Retain raw data and source versions.
-2. **Compile and inspect.** Open the rendered PNG/PDF at intended size and at a closer view. Check wrapped headers, alignment, glyphs, row fills, line weights, spacing, caption/notes, clipping, and visible winner marks. Inspect grayscale where color carries structure.
-3. **Use automated checks as evidence, not approval.** Inspect `_checks.json` for font embedding, width, text bounds and TeX overflow, and `_emphasis.json` for eligible scopes and marked cells. An automated pass does not prove good layout, complete accessibility or correct science. Fix a failed check by recomposing the table, not by silently weakening it.
-4. **Finish with the editable source.** Deliver the requested PDF/PNG plus the LaTeX, input data/specification and a concise explanation of design choices and any unresolved scientific facts. Offer semantic HTML/CSV alongside untagged PDF when useful. State which outputs were compiled and visually reviewed.
+1. **Content.** Reconcile every cell with the data; recompute deltas, shares and aggregates; audit ties, directions and scope exclusions in `_emphasis.json`.
+2. **Five-second review.** Open the PNG at final size and answer the seven questions at the end of table-craft.md; then look closer for wrapped headers, alignment, glyphs, fills and clipping, and check the greyscale preview.
+3. **Automated checks are evidence, not approval.** `_checks.json` covers fonts, width, bounds and overflow. Fix a failure by recomposing, never by weakening the check. After changing the renderer, run `python scripts/test_render.py`.
+4. **Deliver** the PDF/PNG with the LaTeX, the spec and a short account of the design choices and any unresolved scientific facts. Say which outputs were compiled and looked at.
 
-Stop after the requested artifacts are correct and the relevant gates pass. Do not enlarge the study or rerun unrelated tests merely to increase a paper count. Do not promise that a table objectively “beats” every source; identify the specific improvements in readability, verifiability and editing.
+Stop when the requested table is correct and passes. Do not claim a redesign "beats" its source in general; name the specific gains in readability and verifiability.
