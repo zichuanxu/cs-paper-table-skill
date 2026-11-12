@@ -26,7 +26,7 @@ def tex(value):
                "↑": r"\ensuremath{\uparrow}", "↓": r"\ensuremath{\downarrow}", "±": r"\ensuremath{\pm}",
                "−": r"\ensuremath{-}", "–": "--", "—": "---", "≤": r"\ensuremath{\leq}", "≥": r"\ensuremath{\geq}",
                "×": r"\ensuremath{\times}", "→": r"\ensuremath{\rightarrow}", "·": r"\ensuremath{\cdot}",
-               "Δ": r"\ensuremath{\Delta}", "μ": r"\ensuremath{\mu}", "µ": r"\ensuremath{\mu}",
+               "\u00a0": "~", "Δ": r"\ensuremath{\Delta}", "μ": r"\ensuremath{\mu}", "µ": r"\ensuremath{\mu}",
                "σ": r"\ensuremath{\sigma}", "α": r"\ensuremath{\alpha}", "β": r"\ensuremath{\beta}",
                # raised marks at a fixed 6.2 pt: \textsuperscript at 8-9 pt body falls to ~5.5 pt
                "²": r"\raisebox{0.6ex}{\fontsize{6.2}{6.2}\selectfont 2}", "†": r"\raisebox{0.6ex}{\fontsize{6.2}{6.2}\selectfont\dag}",
@@ -46,6 +46,7 @@ COLORS = {"TableRule": "000000", "TableMuted": "6B7280", "TableNote": "374151", 
           # ranking.fill: one hue, two strengths, lightness monotone with rank (D4RT, arXiv 2512.08924)
           "RankBest": "CDE3FF", "RankSecond": "EBF3FF"}
 
+NBSP = "\u00a0"
 MISSING_WORDS = {"not_reported": "not reported", "not_applicable": "not applicable", "not_run": "not run",
                  "incomparable": "not comparable"}
 
@@ -74,19 +75,19 @@ def notes(spec):
     used = {c.get("mark") for r in spec["rows"] for c in r["cells"].values() if isinstance(c, dict) and c.get("mark")}
     for mark, meaning in spec.get("marks", {}).items():
         if mark in used:
-            result.append(mark + " " + meaning.rstrip(".") + ".")
+            result.append(mark + NBSP + meaning.rstrip(".") + ".")
     if seen_missing:
         if spec.get("missing_style") == "dash":
-            result.append("– = " + MISSING_WORDS[next(iter(seen_missing))] + ".")
+            result.append("–" + NBSP + "=" + NBSP + MISSING_WORDS[next(iter(seen_missing))] + ".")
         else:
-            result.append("; ".join(f"{MISSING[k]} = {MISSING_WORDS[k]}" for k in sorted(seen_missing)) + ".")
+            result.append("; ".join(MISSING[k] + NBSP + "=" + NBSP + MISSING_WORDS[k] for k in sorted(seen_missing)) + ".")
     if seen_failures:
         descriptions = {'oom': 'out of memory', 'timeout': 'timeout', 'execution_error': 'execution error'}
-        result.append("; ".join(f"{FAILURES[k]} = {descriptions[k]}" for k in sorted(seen_failures)) + " (an outcome, not a score of zero).")
+        result.append("; ".join(FAILURES[k] + NBSP + "=" + NBSP + descriptions[k] for k in sorted(seen_failures)) + " (an outcome, not a zero).")
     style = spec.get("status_style", "symbols")
     if seen_status and style != "words":
         legend = {"yes": "enabled", "no": "disabled", "partial": "partial", "unknown": "unknown", **spec.get("status_legend", {})}
-        result.append(", ".join(STATUS_GLYPHS[style][k] + " " + legend[k] for k in ("yes", "no", "partial", "unknown") if k in seen_status) + ".")
+        result.append(", ".join(STATUS_GLYPHS[style][k] + NBSP + legend[k] for k in ("yes", "no", "partial", "unknown") if k in seen_status) + ".")
     return result
 
 

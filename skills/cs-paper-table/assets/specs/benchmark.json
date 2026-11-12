@@ -2,7 +2,7 @@
   "id": "benchmark",
   "number": 1,
   "title": "Task success and inference cost at two token budgets",
-  "caption": "Adaptive routing is best on every suite within each budget and costs less than Verifier, the strongest baseline.",
+  "caption": "Adaptive routing is best on every suite within each budget: 2.9 and 2.4 points above Verifier, the strongest baseline, on average, with 13% and 18% fewer tokens.",
   "data_status": "synthetic",
   "provenance": {
     "origin": "Original constructed demonstration data; no real system results",
@@ -451,7 +451,7 @@
     }
   ],
   "notes": [
-    "Success = successes / n; Avg. is the unweighted mean of the four rates. Δ is Adaptive routing minus Verifier, from unrounded values; green marks an improvement."
+    "Success = successes / n; Avg. is the unweighted mean of the four rates, and orders the baselines. Δ is Adaptive routing minus Verifier, from unrounded values; green marks an improvement."
   ],
   "ranking": {
     "axis": "column",

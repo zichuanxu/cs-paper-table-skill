@@ -28,7 +28,7 @@ def base(stem, title, caption, number):
 
 def benchmark():
     spec = base("benchmark", "Task success and inference cost at two token budgets",
-                "Adaptive routing is best on every suite within each budget and costs less than Verifier, the strongest baseline.", 1)
+                "Adaptive routing is best on every suite within each budget: 2.9 and 2.4 points above Verifier, the strongest baseline, on average, with 13% and 18% fewer tokens.", 1)
     tasks = [("math", "Math", 250), ("code", "Code", 200), ("docs", "Docs", 150), ("tools", "Tools", 100)]
     spec["columns"] = [{"id": "method", "label": "Method", "kind": "text", "width_mm": 30}]
     for key, label, size in tasks:
@@ -64,7 +64,7 @@ def benchmark():
     spec["ranking"] = {"axis": "column", "tie_policy": "rounded", "meaning": "Bold: best within a budget."}
     spec["focus_meaning"] = "Shaded: proposed method."
     spec["provenance"]["derived"] = "Δ vs. Verifier rows: Adaptive routing minus Verifier in the same budget, computed from unrounded values."
-    spec["notes"] = ["Success = successes / n; Avg. is the unweighted mean of the four rates. Δ is Adaptive routing minus Verifier, from unrounded values; green marks an improvement."]
+    spec["notes"] = ["Success = successes / n; Avg. is the unweighted mean of the four rates, and orders the baselines. Δ is Adaptive routing minus Verifier, from unrounded values; green marks an improvement."]
     return spec, raw
 
 

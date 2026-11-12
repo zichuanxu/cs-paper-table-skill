@@ -45,7 +45,7 @@ Every value, row and column comes from the paper; only the typesetting changes.
 - The rotated monospace model labels become banner rows naming the model and the initial harness.
 - Score ↑ and #Steps ↓ carry their direction, so bold works for both.
 - The "+ Recursion" changes are coloured by improvement after each column's direction: a step reduction (−2.0) is green, a step increase (+1.3) red.
-- SDs stay as small grey (SD); the caption shrinks to two sentences and the definitions move to the notes.
+- SDs stay as small grey (SD); the caption shrinks to two sentences, the second stating what the table shows, and the definitions move to the notes.
 
 [PDF](gallery/redesign/harness2_t1.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/harness2_t1.json)
 
@@ -63,7 +63,7 @@ Underline for second best, the method row shaded and set apart, and a derived "�
 | --- | --- |
 | <img src="gallery/redesign/original/paperbanana_t2_original.png" width="420"> | <img src="gallery/redesign/paperbanana_t2.png" width="420"> |
 
-Coloured ✓/✗ with a legend that defines the random retriever, an "Agents" spanner instead of vertical rules, bold and underline per column with the Aesthetic tie stated, and a "Δ Overall vs. ①" column coloured by improvement. [PDF](gallery/redesign/paperbanana_t2.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/paperbanana_t2.json)
+Coloured ✓/✗ with a legend that defines the random retriever, an "Agents" spanner instead of vertical rules, bold and underline per column with ties sharing the mark, and a "Δ Overall" column coloured by improvement. A missing critic reads "none", so the dash keeps a single meaning, and the caption ends with the finding (every change costs 8.4 to 16.0 points). [PDF](gallery/redesign/paperbanana_t2.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/paperbanana_t2.json)
 
 #### ARE-bench, Table 6 ([arXiv:2611.14364](https://arxiv.org/abs/2611.14364))
 
@@ -71,7 +71,7 @@ Coloured ✓/✗ with a legend that defines the random retriever, an "Agents" sp
 | --- | --- |
 | <img src="gallery/redesign/original/arebench_t6_original.png" width="420"> | <img src="gallery/redesign/arebench_t6.png" width="420"> |
 
-The heat map stays, now linear on a shared 0–100% scale named in the notes (the original is quadratic); bold marks the best mean per column, which the original leaves to the shades; SDs are set small; "ISR (%) ↑" becomes one spanner; the shares are recomputed from the counts; the four-line caption becomes two sentences plus notes. [PDF](gallery/redesign/arebench_t6.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/arebench_t6.json)
+The heat map stays, now linear on a shared 0–100% scale named in the notes (the original is quadratic); bold marks the best mean per column, which the original leaves to the shades; SDs are set small; "ISR (%) ↑" becomes one spanner and "Share of failed runs" another, so every column name sits on one line; the shares are recomputed from the counts; the four-line caption becomes two sentences plus notes. [PDF](gallery/redesign/arebench_t6.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/arebench_t6.json)
 
 ### Six more examples
 
@@ -81,7 +81,7 @@ Synthetic data; each table is designed from the skill's rules for its own readin
 
 <img src="gallery/after/robustness.png" width="640">
 
-**Benchmark.** Two budgets as banner groups, the proposed method shaded and last in each, and under it a "Δ vs. Verifier" row: the margin over the strongest baseline, green for higher success and for lower cost alike. Directions sit in the spanners, n under each suite. [PDF](gallery/after/benchmark.pdf) · [spec](skills/cs-paper-table/assets/specs/benchmark.json)
+**Benchmark.** Two budgets as banner groups, baselines ordered by their average, the proposed method shaded and last in each, and under it a "Δ vs. Verifier" row: the margin over the strongest baseline, green for higher success and for lower cost alike. Directions sit in the spanners, n under each suite, and the caption states the margin in numbers. [PDF](gallery/after/benchmark.pdf) · [spec](skills/cs-paper-table/assets/specs/benchmark.json)
 
 <img src="gallery/after/benchmark.png" width="640">
 
@@ -93,7 +93,7 @@ Synthetic data; each table is designed from the skill's rules for its own readin
 
 <img src="gallery/after/registry.png" width="640">
 
-**Efficiency** and **single-column results**, both at 88 mm. Left: metrics as rows with a unit-and-direction column, grey bands for the three test conditions, bold within the matched 16k columns only, OOM as an outcome. Right: ties share the bold, the external reference sits below its own rule with a † instead of a ranking. [PDF](gallery/after/efficiency.pdf) · [spec](skills/cs-paper-table/assets/specs/efficiency.json) · [PDF](gallery/after/budget_comparison.pdf) · [spec](skills/cs-paper-table/assets/specs/budget_comparison.json)
+**Efficiency** and **single-column results**, both at 88 mm. Left: metrics as rows with a unit-and-direction column, grey bands for the three test conditions, bold within the matched 16k columns only, OOM as an outcome. Right: the caption states the finding and the protocol moves to the notes, ties share the bold, the external reference sits below its own rule with a † instead of a ranking. [PDF](gallery/after/efficiency.pdf) · [spec](skills/cs-paper-table/assets/specs/efficiency.json) · [PDF](gallery/after/budget_comparison.pdf) · [spec](skills/cs-paper-table/assets/specs/budget_comparison.json)
 
 <img src="gallery/after/efficiency.png" width="315"> <img src="gallery/after/budget_comparison.png" width="315">
 
@@ -101,7 +101,7 @@ Synthetic data; each table is designed from the skill's rules for its own readin
 
 <img src="gallery/after/capability.png" width="620">
 
-Grey category bands instead of rules, hairlines only between column groups, coloured ✓/✗ with the glyph shape still distinct, `1.0×` relative cost, and `*` / `†` cell marks defined once in the notes, following the PlugMem and StudentSim tables (synthetic data). [PDF](gallery/after/capability.pdf) · [spec](skills/cs-paper-table/assets/specs/capability.json)
+Column names in full words, so the notes need no glossary; grey category bands that carry what a "task-agnostic" column would only repeat; the proposed system marked once, by its band and tint; bold only where a ranking means something (success, not the cost of the reference itself); rows ordered by success within each category; hairlines only between column groups, coloured ✓/✗ with the glyph shape still distinct, `1.0×` relative cost, and `*` / `†` cell marks defined once in the notes. The caption states the finding. After the PlugMem and StudentSim tables (synthetic data). [PDF](gallery/after/capability.pdf) · [spec](skills/cs-paper-table/assets/specs/capability.json)
 
 ## What the study found
 

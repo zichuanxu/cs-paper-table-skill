@@ -1,285 +1,288 @@
 {
- "id": "arebench_t6",
- "number": 6,
- "title": "ISR by checklist dimension",
- "caption": "Seven models on 75 tasks, ordered by overall ISR. Correctness is the lowest-scoring dimension for every model.",
- "data_status": "reported",
- "provenance": {
-  "origin": "ARE-bench: Benchmarking Agents' Research Ability in Real-World Researcher Sessions and Workspaces, arXiv:2611.14364v1, Table 6 (PDF p. 11)",
-  "transcribed": "2026-11-12 from the PDF text layer; values match the printed table",
-  "derived": "The shares in the last column are recomputed from the printed counts and agree with the printed shares. Bold best and the linear 0-100% shading are added here; the original shades on a quadratic scale and marks no best value."
- },
- "style": {
-  "width_mm": 165,
-  "body_pt": 8.5,
-  "note_pt": 7.6,
-  "caption_pt": 9.0,
-  "tabcolsep_pt": 6.0,
-  "arraystretch": 1.2,
-  "header_fill": true
- },
- "columns": [
-  {
-   "id": "model",
-   "label": "Model",
-   "kind": "text",
-   "width_mm": 32
+  "id": "arebench_t6",
+  "number": 6,
+  "title": "ISR by checklist dimension",
+  "caption": "Seven models on 75 tasks, in the paper's order of overall ISR (not shown here). Correctness is the lowest-scoring dimension for every model.",
+  "data_status": "reported",
+  "provenance": {
+    "origin": "ARE-bench: Benchmarking Agents' Research Ability in Real-World Researcher Sessions and Workspaces, arXiv:2611.14364v1, Table 6 (PDF p. 11)",
+    "transcribed": "2026-11-12 from the PDF text layer; values match the printed table",
+    "derived": "The shares in the last column are recomputed from the printed counts and agree with the printed shares. Bold best and the linear 0-100% shading are added here; the original shades on a quadratic scale and marks no best value."
   },
-  {
-   "id": "comp",
-   "label": "Completeness",
-   "kind": "mean_sd",
-   "precision": 2,
-   "direction": "max",
-   "bounds": [
-    0,
-    100
-   ],
-   "uncertainty_definition": "Mean ± sample SD over three rollout rounds; each round scores the same 75 tasks.",
-   "heat": {
-    "hue": "blue",
-    "domain": [
-     0,
-     100
-    ]
-   }
+  "style": {
+    "width_mm": 165,
+    "body_pt": 8.5,
+    "note_pt": 7.6,
+    "caption_pt": 9.0,
+    "tabcolsep_pt": 6.0,
+    "arraystretch": 1.2,
+    "header_fill": true
   },
-  {
-   "id": "corr",
-   "label": "Correctness",
-   "kind": "mean_sd",
-   "precision": 2,
-   "direction": "max",
-   "bounds": [
-    0,
-    100
-   ],
-   "uncertainty_definition": "Mean ± sample SD over three rollout rounds; each round scores the same 75 tasks.",
-   "heat": {
-    "hue": "blue",
-    "domain": [
-     0,
-     100
-    ]
-   }
-  },
-  {
-   "id": "cons",
-   "label": "Constraint compliance",
-   "kind": "mean_sd",
-   "precision": 2,
-   "direction": "max",
-   "bounds": [
-    0,
-    100
-   ],
-   "uncertainty_definition": "Mean ± sample SD over three rollout rounds; each round scores the same 75 tasks.",
-   "heat": {
-    "hue": "blue",
-    "domain": [
-     0,
-     100
-    ]
-   }
-  },
-  {
-   "id": "fail",
-   "label": [
-    "Correctness errors",
-    "share of failed runs"
-   ],
-   "kind": "fraction",
-   "precision": 1,
-   "heat": {
-    "hue": "orange",
-    "domain": [
-     0,
-     100
-    ]
-   }
-  }
- ],
- "column_groups": [
-  {
-   "label": "ISR (%) ↑",
-   "columns": [
-    "comp",
-    "corr",
-    "cons"
-   ]
-  }
- ],
- "rows": [
-  {
-   "id": "gpt",
-   "comparison_group": "all",
-   "cells": {
-    "model": "GPT-6.1-Sol",
-    "comp": {
-     "value": "83.11",
-     "sd": "5.39"
+  "columns": [
+    {
+      "id": "model",
+      "label": "Model",
+      "kind": "text",
+      "width_mm": 32
     },
-    "corr": {
-     "value": "71.11",
-     "sd": "5.05"
+    {
+      "id": "comp",
+      "label": "Completeness",
+      "kind": "mean_sd",
+      "precision": 2,
+      "direction": "max",
+      "bounds": [
+        0,
+        100
+      ],
+      "uncertainty_definition": "Mean ± sample SD over three rollout rounds; each round scores the same 75 tasks.",
+      "heat": {
+        "hue": "blue",
+        "domain": [
+          0,
+          100
+        ]
+      }
     },
-    "cons": {
-     "value": "93.78",
-     "sd": "0.77"
+    {
+      "id": "corr",
+      "label": "Correctness",
+      "kind": "mean_sd",
+      "precision": 2,
+      "direction": "max",
+      "bounds": [
+        0,
+        100
+      ],
+      "uncertainty_definition": "Mean ± sample SD over three rollout rounds; each round scores the same 75 tasks.",
+      "heat": {
+        "hue": "blue",
+        "domain": [
+          0,
+          100
+        ]
+      }
     },
-    "fail": {
-     "count": 65,
-     "of": 76
+    {
+      "id": "cons",
+      "label": "Constraint compliance",
+      "kind": "mean_sd",
+      "precision": 2,
+      "direction": "max",
+      "bounds": [
+        0,
+        100
+      ],
+      "uncertainty_definition": "Mean ± sample SD over three rollout rounds; each round scores the same 75 tasks.",
+      "heat": {
+        "hue": "blue",
+        "domain": [
+          0,
+          100
+        ]
+      }
+    },
+    {
+      "id": "fail",
+      "label": "Correctness errors",
+      "kind": "fraction",
+      "precision": 1,
+      "heat": {
+        "hue": "orange",
+        "domain": [
+          0,
+          100
+        ]
+      }
     }
-   }
-  },
-  {
-   "id": "claude",
-   "comparison_group": "all",
-   "cells": {
-    "model": "Claude Opus 5.5",
-    "comp": {
-     "value": "87.56",
-     "sd": "3.08"
+  ],
+  "column_groups": [
+    {
+      "label": "ISR (%) ↑",
+      "columns": [
+        "comp",
+        "corr",
+        "cons"
+      ]
     },
-    "corr": {
-     "value": "62.67",
-     "sd": "3.53"
-    },
-    "cons": {
-     "value": "89.33",
-     "sd": "4.62"
-    },
-    "fail": {
-     "count": 84,
-     "of": 97
+    {
+      "label": "Share of failed runs",
+      "columns": [
+        "fail"
+      ]
     }
-   }
-  },
-  {
-   "id": "deepseek",
-   "comparison_group": "all",
-   "cells": {
-    "model": "DeepSeek-V4.1-Flash",
-    "comp": {
-     "value": "82.67",
-     "sd": "2.67"
+  ],
+  "rows": [
+    {
+      "id": "gpt",
+      "comparison_group": "all",
+      "cells": {
+        "model": "GPT-6.1-Sol",
+        "comp": {
+          "value": "83.11",
+          "sd": "5.39"
+        },
+        "corr": {
+          "value": "71.11",
+          "sd": "5.05"
+        },
+        "cons": {
+          "value": "93.78",
+          "sd": "0.77"
+        },
+        "fail": {
+          "count": 65,
+          "of": 76
+        }
+      }
     },
-    "corr": {
-     "value": "47.11",
-     "sd": "1.54"
+    {
+      "id": "claude",
+      "comparison_group": "all",
+      "cells": {
+        "model": "Claude Opus 5.5",
+        "comp": {
+          "value": "87.56",
+          "sd": "3.08"
+        },
+        "corr": {
+          "value": "62.67",
+          "sd": "3.53"
+        },
+        "cons": {
+          "value": "89.33",
+          "sd": "4.62"
+        },
+        "fail": {
+          "count": 84,
+          "of": 97
+        }
+      }
     },
-    "cons": {
-     "value": "88.89",
-     "sd": "5.05"
+    {
+      "id": "deepseek",
+      "comparison_group": "all",
+      "cells": {
+        "model": "DeepSeek-V4.1-Flash",
+        "comp": {
+          "value": "82.67",
+          "sd": "2.67"
+        },
+        "corr": {
+          "value": "47.11",
+          "sd": "1.54"
+        },
+        "cons": {
+          "value": "88.89",
+          "sd": "5.05"
+        },
+        "fail": {
+          "count": 119,
+          "of": 136
+        }
+      }
     },
-    "fail": {
-     "count": 119,
-     "of": 136
+    {
+      "id": "qwenmax",
+      "comparison_group": "all",
+      "cells": {
+        "model": "Qwen3.8-Max",
+        "comp": {
+          "value": "79.11",
+          "sd": "2.04"
+        },
+        "corr": {
+          "value": "43.56",
+          "sd": "8.57"
+        },
+        "cons": {
+          "value": "84.89",
+          "sd": "0.77"
+        },
+        "fail": {
+          "count": 127,
+          "of": 140
+        }
+      }
+    },
+    {
+      "id": "glm",
+      "comparison_group": "all",
+      "cells": {
+        "model": "GLM-5.3-Flash",
+        "comp": {
+          "value": "80.44",
+          "sd": "0.77"
+        },
+        "corr": {
+          "value": "39.11",
+          "sd": "3.08"
+        },
+        "cons": {
+          "value": "81.78",
+          "sd": "1.54"
+        },
+        "fail": {
+          "count": 137,
+          "of": 156
+        }
+      }
+    },
+    {
+      "id": "kimi",
+      "comparison_group": "all",
+      "cells": {
+        "model": "Kimi-K3",
+        "comp": {
+          "value": "76.44",
+          "sd": "1.54"
+        },
+        "corr": {
+          "value": "34.22",
+          "sd": "2.04"
+        },
+        "cons": {
+          "value": "83.56",
+          "sd": "1.54"
+        },
+        "fail": {
+          "count": 148,
+          "of": 162
+        }
+      }
+    },
+    {
+      "id": "qwen27",
+      "comparison_group": "all",
+      "cells": {
+        "model": "Qwen3.8-27B",
+        "comp": {
+          "value": "72.00",
+          "sd": "1.33"
+        },
+        "corr": {
+          "value": "31.11",
+          "sd": "0.77"
+        },
+        "cons": {
+          "value": "79.11",
+          "sd": "2.04"
+        },
+        "fail": {
+          "count": 155,
+          "of": 167
+        }
+      }
     }
-   }
+  ],
+  "ranking": {
+    "axis": "column",
+    "tie_policy": "rounded",
+    "meaning": "Bold: highest mean in each ISR column."
   },
-  {
-   "id": "qwenmax",
-   "comparison_group": "all",
-   "cells": {
-    "model": "Qwen3.8-Max",
-    "comp": {
-     "value": "79.11",
-     "sd": "2.04"
-    },
-    "corr": {
-     "value": "43.56",
-     "sd": "8.57"
-    },
-    "cons": {
-     "value": "84.89",
-     "sd": "0.77"
-    },
-    "fail": {
-     "count": 127,
-     "of": 140
-    }
-   }
-  },
-  {
-   "id": "glm",
-   "comparison_group": "all",
-   "cells": {
-    "model": "GLM-5.3-Flash",
-    "comp": {
-     "value": "80.44",
-     "sd": "0.77"
-    },
-    "corr": {
-     "value": "39.11",
-     "sd": "3.08"
-    },
-    "cons": {
-     "value": "81.78",
-     "sd": "1.54"
-    },
-    "fail": {
-     "count": 137,
-     "of": 156
-    }
-   }
-  },
-  {
-   "id": "kimi",
-   "comparison_group": "all",
-   "cells": {
-    "model": "Kimi-K3",
-    "comp": {
-     "value": "76.44",
-     "sd": "1.54"
-    },
-    "corr": {
-     "value": "34.22",
-     "sd": "2.04"
-    },
-    "cons": {
-     "value": "83.56",
-     "sd": "1.54"
-    },
-    "fail": {
-     "count": 148,
-     "of": 162
-    }
-   }
-  },
-  {
-   "id": "qwen27",
-   "comparison_group": "all",
-   "cells": {
-    "model": "Qwen3.8-27B",
-    "comp": {
-     "value": "72.00",
-     "sd": "1.33"
-    },
-    "corr": {
-     "value": "31.11",
-     "sd": "0.77"
-    },
-    "cons": {
-     "value": "79.11",
-     "sd": "2.04"
-    },
-    "fail": {
-     "count": 155,
-     "of": 167
-    }
-   }
-  }
- ],
- "ranking": {
-  "axis": "column",
-  "tie_policy": "rounded",
-  "meaning": "Bold: highest mean in each ISR column."
- },
- "heat_meaning": "Shading is linear on 0–100%: darker blue, higher ISR; darker orange, larger share.",
- "notes": [
-  "ISR: share of task runs in which every applicable checklist item of the dimension passes (mean ± sample SD over three rounds).",
-  "Correctness errors: failed runs with an unmet correctness item / all failed runs of the model's 225; error categories can overlap."
- ]
+  "heat_meaning": "Shading is linear on 0–100%: darker blue, higher ISR; darker orange, larger share.",
+  "notes": [
+    "ISR: share of task runs in which every applicable checklist item of the dimension passes (mean ± sample SD over three rounds).",
+    "Correctness errors: failed runs with an unmet correctness item / the model's failed runs, out of 225 runs; error categories can overlap."
+  ]
 }

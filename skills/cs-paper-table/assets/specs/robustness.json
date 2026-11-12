@@ -1,6 +1,6 @@
 {
   "id": "robustness",
-  "number": 6,
+  "number": 7,
   "title": "Single-turn versus multi-turn task success",
   "caption": "Six models on four tasks (%), ordered by mean single-turn success. Every model loses most on Code, SQL and Math once the instruction arrives over several turns; Summary barely moves.",
   "data_status": "synthetic",
@@ -388,6 +388,6 @@
   },
   "heat_meaning": "Red shading: points lost against the same model's single-turn score, linear on 0–40; a white multi-turn cell lost nothing.",
   "notes": [
-    "Higher is better in every column."
+    "Higher is better in every column. Retained: the four multi-turn scores summed, as a share of the four single-turn scores."
   ]
 }
