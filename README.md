@@ -116,8 +116,6 @@ Column names in full words, so the notes need no glossary; grey category bands t
 
 Avoid: undefined bold or tints, a metric with no stated direction, "%" in every cell, `1354365` without separators, three-hue and traffic-light fills, the own row tinted pink, and 100-word captions that define each column.
 
-The full rules, with the renderer field for each, are in [table-craft.md](skills/cs-paper-table/references/table-craft.md). They come from five visual studies of typeset PDFs: 13 AI-lab reports, five single papers, and 32 papers from 2025–2026 award lists (NeurIPS, ICML, ICLR; CVPR, ICCV, ACL, EMNLP; OSDI, SOSP, NSDI, USENIX Security, S&P, CCS, VLDB, SIGMOD, PLDI, CHI). The per-paper notes are in [craft-study.md](skills/cs-paper-table/references/craft-study.md).
-
 ## Installation
 
 ```bash
