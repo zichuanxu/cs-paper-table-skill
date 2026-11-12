@@ -1,20 +1,21 @@
 {
   "id": "ablation",
   "number": 2,
-  "title": "Controlled ablations with paired uncertainty",
-  "caption": "Removing components from the full system; each row is paired with the full system on the same eight seeds.",
+  "title": "Component ablations",
+  "caption": "Retrieval contributes most to success; the cache has no detectable effect on success but saves 177 ms.",
   "data_status": "synthetic",
   "provenance": {
     "origin": "Original constructed demonstration data; no real system results",
     "generator": "scripts/build_examples.py",
+    "derived": "Latency Δ vs. full: each row's latency minus the full system's 512 ms.",
     "raw_data": "../data/ablation_raw.json"
   },
   "style": {
     "width_mm": 180,
-    "body_pt": 8.3,
+    "body_pt": 8.5,
     "note_pt": 7.6,
     "caption_pt": 9.0,
-    "tabcolsep_pt": 2.3,
+    "tabcolsep_pt": 4.2,
     "arraystretch": 1.18
   },
   "columns": [
@@ -47,42 +48,52 @@
     {
       "id": "score",
       "label": [
-        "Success (%)",
-        "mean ± SD"
+        "Success",
+        "% ↑, ± SD"
       ],
       "kind": "mean_sd",
       "precision": 1,
-      "uncertainty_definition": "Sample standard deviation across 8 independent synthetic training-seed blocks; ddof=1, not a confidence interval",
       "bounds": [
         0,
         100
-      ]
+      ],
+      "uncertainty_definition": "Sample standard deviation across 8 independent synthetic training-seed blocks; ddof=1, not a confidence interval"
     },
     {
       "id": "delta",
       "label": [
-        "Δ vs. full (pp)",
-        "[95% CI]"
+        "Δ vs. full",
+        "pp [95% CI]"
       ],
       "kind": "interval",
       "precision": 1,
-      "signed": true,
+      "delta": "max",
       "uncertainty_definition": "Paired seed bootstrap of the mean difference from full; 20,000 resamples, 8 paired seed blocks, percentile 2.5/97.5, generator seed 120"
     },
     {
       "id": "latency",
       "label": [
         "Latency",
-        "ms"
+        "ms ↓"
       ],
       "kind": "number",
       "precision": 0
+    },
+    {
+      "id": "dlat",
+      "label": [
+        "Δ vs. full",
+        "ms"
+      ],
+      "kind": "number",
+      "precision": 0,
+      "delta": "min"
     }
   ],
   "rows": [
     {
       "id": "full",
-      "display_group": "single",
+      "display_group": "ref",
       "focus": true,
       "cells": {
         "method": "Full system",
@@ -99,6 +110,9 @@
         },
         "latency": {
           "value": 512
+        },
+        "dlat": {
+          "missing": "not_applicable"
         }
       }
     },
@@ -107,7 +121,7 @@
       "display_group": "single",
       "focus": false,
       "cells": {
-        "method": "Remove retrieval",
+        "method": "− Retrieval",
         "retrieve": "no",
         "verify": "yes",
         "route": "yes",
@@ -123,6 +137,9 @@
         },
         "latency": {
           "value": 418
+        },
+        "dlat": {
+          "value": -94
         }
       }
     },
@@ -131,7 +148,7 @@
       "display_group": "single",
       "focus": false,
       "cells": {
-        "method": "Remove verifier",
+        "method": "− Verifier",
         "retrieve": "yes",
         "verify": "no",
         "route": "yes",
@@ -147,6 +164,9 @@
         },
         "latency": {
           "value": 435
+        },
+        "dlat": {
+          "value": -77
         }
       }
     },
@@ -155,7 +175,7 @@
       "display_group": "single",
       "focus": false,
       "cells": {
-        "method": "Remove routing",
+        "method": "− Routing",
         "retrieve": "yes",
         "verify": "yes",
         "route": "no",
@@ -171,6 +191,9 @@
         },
         "latency": {
           "value": 566
+        },
+        "dlat": {
+          "value": 54
         }
       }
     },
@@ -179,7 +202,7 @@
       "display_group": "single",
       "focus": false,
       "cells": {
-        "method": "Remove cache",
+        "method": "− Cache",
         "retrieve": "yes",
         "verify": "yes",
         "route": "yes",
@@ -195,6 +218,9 @@
         },
         "latency": {
           "value": 689
+        },
+        "dlat": {
+          "value": 177
         }
       }
     },
@@ -203,7 +229,7 @@
       "display_group": "joint",
       "focus": false,
       "cells": {
-        "method": "Remove retrieval + verifier",
+        "method": "− Retrieval, verifier",
         "retrieve": "no",
         "verify": "no",
         "route": "yes",
@@ -219,6 +245,9 @@
         },
         "latency": {
           "value": 341
+        },
+        "dlat": {
+          "value": -171
         }
       }
     },
@@ -227,7 +256,7 @@
       "display_group": "joint",
       "focus": false,
       "cells": {
-        "method": "Remove routing + cache",
+        "method": "− Routing, cache",
         "retrieve": "yes",
         "verify": "yes",
         "route": "no",
@@ -243,12 +272,15 @@
         },
         "latency": {
           "value": 748
+        },
+        "dlat": {
+          "value": 236
         }
       }
     }
   ],
   "notes": [
-    "SD over 8 seeds; CI is a paired percentile bootstrap over seeds (20,000 resamples), so it excludes item-sampling uncertainty. pp = percentage points. Joint removals do not isolate single-component effects."
+    "Success Δ is the paired difference from the full system on the same 8 seeds, with a percentile-bootstrap 95% CI over seeds; ± is the SD across seeds. Δ is green for an improvement, red for a loss, grey for none."
   ],
   "ranking": {
     "axis": "none"
@@ -262,18 +294,17 @@
         "route",
         "cache"
       ]
-    },
-    {
-      "label": "Paired evaluation",
-      "columns": [
-        "score",
-        "delta"
-      ]
     }
   ],
   "row_group_labels": {
-    "single": "Remove one component",
-    "joint": "Remove two components"
+    "ref": "",
+    "single": "One component removed",
+    "joint": "Two components removed"
   },
-  "focus_meaning": "Shaded: the reference for Δ."
+  "missing_style": "dash",
+  "status_legend": {
+    "yes": "kept",
+    "no": "removed"
+  },
+  "focus_meaning": "Shaded: the full system, the reference for Δ."
 }

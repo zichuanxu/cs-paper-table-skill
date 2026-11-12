@@ -17,7 +17,7 @@ import shutil
 import subprocess
 import sys
 
-from table_core import FAILURES, MISSING, STATUS, decimal, display_cell, emphasis, formatted, number, precision, rounded, sha256, validate, write_json
+from table_core import FAILURES, MISSING, STATUS, decimal, display_cell, heat_fill, emphasis, formatted, number, precision, rounded, sha256, validate, write_json
 
 
 def tex(value):
@@ -51,6 +51,8 @@ def notes(spec):
         result.append(spec["ranking"]["meaning"])
     if spec.get("focus_meaning"):
         result.append(spec["focus_meaning"])
+    if any(c.get("heat") for c in spec["columns"]):
+        result.append(spec["heat_meaning"])
     seen_missing, seen_failures, seen_status = set(), set(), set()
     status_cols = {c["id"] for c in spec["columns"] if c["kind"] == "status"}
     for row in spec["rows"]:
@@ -134,7 +136,18 @@ def cell_tex(spec, col, row, bold, under=False):
         # \rlap keeps the decimal alignment of the number itself
         mark = r"\rlap{\raisebox{0.6ex}{\fontsize{6.2}{6.2}\selectfont " + tex(cell["mark"]) + "}}"
         body = body + ("$" + mark + "$" if col["kind"] == "number" and column_format(spec, col).startswith("D") else mark)
-    return body
+    fill = heat_fill(col, row, cell)
+    if not fill or body is None:
+        return body
+    fill = r"\cellcolor[HTML]{" + fill + "}"
+    # \multicolumn must stay the first token of its cell (spanning and change cells): colour goes inside it
+    head = re.match(r"\\multicolumn\{[^}]*\}\{[^}]*\}\{", body)
+    return body[:head.end()] + fill + body[head.end():] if head else fill + body
+
+
+def interval_tex(col, cell, digits):
+    low, high = (math_number(number(cell[k], digits, col.get("signed", False))) for k in ("low", "high"))
+    return r"\,{\CSPsmall$[" + low + r",\," + high + "]$}"
 
 
 def _cell_tex(spec, col, row, bold, under=False):
@@ -145,14 +158,17 @@ def _cell_tex(spec, col, row, bold, under=False):
     if isinstance(cell, dict) and ("missing" in cell or "failure" in cell):
         mark = tex(text) if text == "–" else r"\textit{" + tex(text) + "}"
         return r"\multicolumn{1}{c}{\textcolor{TableMuted}{" + mark + "}}"
-    if col.get("delta") in {"max", "min"} and col["kind"] == "number" and isinstance(cell, dict) and "value" in cell:
-        # a change column (e.g. "Δ vs. default"): signed, coloured by whether the change is an improvement
-        value = decimal(cell["value"])
-        shown = rounded(value, precision(col, row, cell))
+    if col.get("delta") in {"max", "min"} and col["kind"] in {"number", "interval"} and not row.get("delta") \
+            and isinstance(cell, dict) and "value" in cell:
+        # a change column (e.g. "Δ vs. default"): signed, coloured by whether the change is an improvement;
+        # an interval keeps its CI after the coloured estimate
+        digits = precision(col, row, cell)
+        shown = rounded(cell["value"], digits)
         good = shown > 0 if col["delta"] == "max" else shown < 0
         shade = "TableMuted" if shown == 0 else ("DeltaUp" if good else "DeltaDown")
         sign = "+" if shown > 0 else ""
-        return r"\multicolumn{1}{c}{\textcolor{" + shade + "}{$" + math_number(sign + text.lstrip("+")) + "$}}"
+        lead = r"\textcolor{" + shade + "}{$" + math_number(sign + formatted(col, cell["value"], digits)) + "$}"
+        return r"\multicolumn{1}{c}{" + lead + (interval_tex(col, cell, digits) if col["kind"] == "interval" else "") + "}"
     if row.get("delta") and col["kind"] in {"number", "mean_sd", "interval"}:
         # Change rows: colour follows the column's direction (better = green, worse = red);
         # the sign carries the same meaning in greyscale.
@@ -170,6 +186,14 @@ def _cell_tex(spec, col, row, bold, under=False):
         if isinstance(cell, dict) and cell.get("span"):
             return r"\multicolumn{" + str(cell["span"]) + "}{c}{$" + numeric_tex(text, bold, under) + "$}"
         return content
+    if col["kind"] == "fraction":
+        body = tex(text)
+        body = r"\textbf{" + body + "}" if bold else body
+        body = r"\underline{" + body + "}" if under else body
+        # pad with invisible digits to the longest cell: a centred block whose shares still line up on the right
+        widest = max(len(display_cell(col, r, r["cells"][col["id"]], spec)) for r in spec["rows"]
+                     if isinstance(r["cells"][col["id"]], dict) and "count" in r["cells"][col["id"]])
+        return r"\hphantom{" + "0" * (widest - len(text)) + "}" + body
     if col["kind"] in {"mean_sd", "interval"}:
         # Compound estimates retain an explicit separator/interval convention.
         # No uncertainty notation is guessed from a parenthetical number.
@@ -178,11 +202,12 @@ def _cell_tex(spec, col, row, bold, under=False):
         lead = r"\mathbf{" + lead + "}" if bold else lead
         lead = r"\underline{" + lead + "}" if under else lead
         if col['kind'] == 'mean_sd' and col.get("sd_style") == "paren":
-            return r"$" + lead + r"$\,{\CSPsmall\textcolor{TableMuted}{(" + number(cell['sd'], digits) + ")}}"
+            # on a shaded cell the SD stays black: muted grey loses contrast on the darker shades
+            sd = "(" + number(cell['sd'], digits) + ")"
+            return r"$" + lead + r"$\,{\CSPsmall " + (sd if col.get("heat") else r"\textcolor{TableMuted}{" + sd + "}") + "}"
         if col['kind'] == 'mean_sd':
             return r"$" + lead + r"$\,{\CSPsmall$\pm$" + number(cell['sd'], digits) + "}"
-        interval = "[" + math_number(number(cell['low'], digits, col.get('signed', False))) + r",\," + math_number(number(cell['high'], digits, col.get('signed', False))) + "]"
-        return r"$" + lead + r"$\,{\CSPsmall$" + interval + "$}"
+        return r"$" + lead + "$" + interval_tex(col, cell, digits)
     if col["kind"] == "status":
         if spec.get("status_colors") and spec.get("status_style", "symbols") == "symbols":
             shade = {"yes": "StatusYes", "no": "StatusNo", "partial": "StatusPartial"}.get(cell, "TableMuted")
@@ -196,7 +221,11 @@ def header_tex(label, bold):
     """First line is the name; further lines (n, unit, direction) are set smaller and muted."""
     lines = label if isinstance(label, list) else str(label).split("\n")
     head = (r"\textbf{" + tex(lines[0]) + "}") if bold else tex(lines[0])
-    rest = [r"{\CSPsmall\textcolor{TableMuted}{" + tex(x) + "}}" for x in lines[1:]]
+    # every line gets the same height and depth, so names share a baseline whatever sits under them
+    # ("Math / n=250" beside "Tokens / mean")
+    rest = [r"{\CSPsmall\textcolor{TableMuted}{" + tex(x) + r"}\vphantom{1g}}" for x in lines[1:]]
+    if rest:
+        head += r"\vphantom{Ag}"
     return r"\shortstack{" + r"\\[-0.15ex] ".join([head] + rest) + "}"
 
 
@@ -227,6 +256,9 @@ def make_latex(spec, marked, second=frozenset()):
                       (r">{\columncolor{FocusFill}}" if c.get("focus") else "") + column_format(spec, c)
                       for i, c in enumerate(cols))
     parts = [r"\toprule"]
+    # pale band behind the column names, for tables whose body cells are shaded (ARE-bench);
+    # a spanner row above stays white, since booktabs' rule spacing would stripe a two-row band
+    head_fill = r"\rowcolor{HeadFill}" if style.get("header_fill") else ""
     if groups:
         cells, i = [], 0
         while i < n:
@@ -240,7 +272,7 @@ def make_latex(spec, marked, second=frozenset()):
                 i += 1
         parts.append(" & ".join(cells) + r" \\")
         parts.append("".join(r"\cmidrule(lr){" + str(ids.index(g["columns"][0])+1) + "-" + str(ids.index(g["columns"][-1])+1) + "}" for g in groups))
-    parts.append(" & ".join(r"\multicolumn{1}{" + ("l" if c["kind"] == "text" and c.get("align", "l") == "l" else "c") + "}{" + header_tex(c["label"], bold_head) + "}" for c in cols) + r" \\")
+    parts.append(head_fill + " & ".join(r"\multicolumn{1}{" + ("l" if c["kind"] == "text" and c.get("align", "l") == "l" else "c") + "}{" + header_tex(c["label"], bold_head) + "}" for c in cols) + r" \\")
     parts.append(r"\midrule")
     previous = None
     labels = spec.get("row_group_labels", {})
@@ -306,6 +338,7 @@ def make_latex(spec, marked, second=frozenset()):
 \definecolor{FocusFill}{HTML}{""" + style.get("focus_fill", "EEF3FA") + r"""}
 \definecolor{DeltaFill}{HTML}{F6F7F9}
 \definecolor{BandFill}{HTML}{ECEDEF}
+\definecolor{HeadFill}{HTML}{F0F4F7}
 \definecolor{StatusYes}{HTML}{2E8B57}
 \definecolor{StatusNo}{HTML}{B5523F}
 \definecolor{StatusPartial}{HTML}{C9822B}
@@ -361,6 +394,8 @@ def make_html(spec, marked):
             value=e(display_cell(col,row,cell,spec)).replace('\n','<br>')
             if (row["id"],col["id"]) in marked: value='<strong>'+value+'</strong>'
             span=' colspan="'+str(cell['span'])+'"' if isinstance(cell,dict) and cell.get('span') else ''
+            fill=heat_fill(col,row,cell)
+            if fill: span+=' style="background:#'+fill+'"'
             tag='th' if i==0 else 'td'
             cls='row' if i==0 else 'text' if col["kind"]=='text' else 'status' if col["kind"]=='status' else 'num'
             associated=[header_for[col['id']]]

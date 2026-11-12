@@ -11,8 +11,8 @@ An agent skill for designing, repairing and typesetting tables for computer-scie
 | Part | Purpose |
 | --- | --- |
 | [`SKILL.md`](skills/cs-paper-table/SKILL.md) | The workflow: table contract → structure → design at final size → editable output → verification |
-| [`table-craft.md`](skills/cs-paper-table/references/table-craft.md) | How it should look: a 17-paper visual study, 22 rules with LaTeX hints, the renderer's defaults and a redesign protocol |
-| [`render_table.py`](skills/cs-paper-table/scripts/render_table.py) | Typed spec → LaTeX / PDF / PNG / HTML / CSV, with scoped bold and underline, decimal alignment, ± or (SD), ✓/✗, direction-aware delta rows, spanning cells, `a·10ⁿ`, thousands separators and automated export checks |
+| [`table-craft.md`](skills/cs-paper-table/references/table-craft.md) | How it should look: an 18-paper visual study, 27 rules with LaTeX hints, the renderer's defaults and a redesign protocol |
+| [`render_table.py`](skills/cs-paper-table/scripts/render_table.py) | Typed spec → LaTeX / PDF / PNG / HTML / CSV, with scoped bold and underline, decimal alignment, ± or (SD), ✓/✗, direction-aware delta rows, heat-map shading on a declared scale, count/share cells, spanning cells, `a·10ⁿ`, thousands separators and automated export checks |
 | [`scientific-contract.md`](skills/cs-paper-table/references/scientific-contract.md), [`spec-schema.md`](skills/cs-paper-table/references/spec-schema.md) | What a table may claim: comparison scopes, uncertainty types, typed missing values, provenance |
 | `references/evidence*`, `*.csv` | A 54-paper / 95-table evidence corpus with measured fonts, rules and colours |
 
@@ -64,19 +64,33 @@ Underline for second best, the method row shaded and set apart, and a derived "�
 
 Coloured ✓/✗ with a legend that defines the random retriever, an "Agents" spanner instead of vertical rules, bold and underline per column with the Aesthetic tie stated, and a "Δ Overall vs. ①" column coloured by improvement. [PDF](gallery/redesign/paperbanana_t2.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/paperbanana_t2.json)
 
-### Five examples: before → after
+#### ARE-bench, Table 6 ([arXiv:2611.14364](https://arxiv.org/abs/2611.14364))
 
-Synthetic data for illustration.
+| Original (ARE-bench paper) | Redesigned with this skill |
+| --- | --- |
+| <img src="gallery/redesign/original/arebench_t6_original.png" width="420"> | <img src="gallery/redesign/arebench_t6.png" width="420"> |
 
-| | Before | After |
-| --- | --- | --- |
-| **Benchmark**: two budgets, quality and cost | <img src="gallery/before/benchmark.png" width="400"> | <img src="gallery/after/benchmark.png" width="400"> |
-| **Ablation**: components, SD and paired CIs | <img src="gallery/before/ablation.png" width="400"> | <img src="gallery/after/ablation.png" width="400"> |
-| **Efficiency**: metrics as rows, OOM | <img src="gallery/before/efficiency.png" width="400"> | <img src="gallery/after/efficiency.png" width="400"> |
-| **Registry**: text, counts, NA/NR | <img src="gallery/before/registry.png" width="400"> | <img src="gallery/after/registry.png" width="400"> |
-| **Single column**: 88 mm | <img src="gallery/before/budget_comparison.png" width="260"> | <img src="gallery/after/budget_comparison.png" width="260"> |
+The heat map stays, now linear on a shared 0–100% scale named in the notes (the original is quadratic); bold marks the best mean per column, which the original leaves to the shades; SDs are set small; "ISR (%) ↑" becomes one spanner; the shares are recomputed from the counts; the four-line caption becomes two sentences plus notes. [PDF](gallery/redesign/arebench_t6.pdf) · [spec](skills/cs-paper-table/assets/specs/redesigns/arebench_t6.json)
 
-What changed: Times instead of Latin Modern, bold names over small muted units, centred italic group banners, ✓/✗ instead of Yes/No, `120,000` instead of `120000`, smaller ± and intervals, an optional underline for second best, and captions and notes cut from six lines to two or three.
+### Five more examples
+
+Synthetic data; each table is designed from the skill's rules for its own reading task.
+
+**Benchmark.** Two budgets as banner groups, the proposed method shaded and last in each, and under it a "Δ vs. Verifier" row: the margin over the strongest baseline, green for higher success and for lower cost alike. Directions sit in the spanners, n under each suite. [PDF](gallery/after/benchmark.pdf) · [spec](skills/cs-paper-table/assets/specs/benchmark.json)
+
+<img src="gallery/after/benchmark.png" width="640">
+
+**Ablation.** The full system first as the shaded reference, removals ordered by their effect, and a change column beside each metric: the paired success difference with its 95% CI, and the latency difference, both coloured by improvement. The component with no detectable effect on success but 177 ms of latency is visible at once. [PDF](gallery/after/ablation.pdf) · [spec](skills/cs-paper-table/assets/specs/ablation.json)
+
+<img src="gallery/after/ablation.png" width="640">
+
+**Dataset register.** The unit sits right after the counts it qualifies, text is ragged right with no rules between records, and a genuine 0 stays distinct from NA and NR. [PDF](gallery/after/registry.pdf) · [spec](skills/cs-paper-table/assets/specs/registry.json)
+
+<img src="gallery/after/registry.png" width="640">
+
+**Efficiency** and **single-column results**, both at 88 mm. Left: metrics as rows with a unit-and-direction column, grey bands for the three test conditions, bold within the matched 16k columns only, OOM as an outcome. Right: ties share the bold, the external reference sits below its own rule with a † instead of a ranking. [PDF](gallery/after/efficiency.pdf) · [spec](skills/cs-paper-table/assets/specs/efficiency.json) · [PDF](gallery/after/budget_comparison.pdf) · [spec](skills/cs-paper-table/assets/specs/budget_comparison.json)
+
+<img src="gallery/after/efficiency.png" width="315"> <img src="gallery/after/budget_comparison.png" width="315">
 
 ### Capability matrix
 
@@ -129,4 +143,4 @@ Each table comes out as `.tex`, `_body.tex` (drop into your `table` float), `_ca
 
 ## License
 
-[MIT](LICENSE), except the original table crops in `gallery/redesign/original/`: the Transformer table is reproduced under Google's permission to reproduce tables and figures of *Attention Is All You Need* for scholarly works with attribution (Vaswani et al., NeurIPS 2017); the Harness² and PaperBanana tables are © their authors under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); the ReHarness table is © its authors, reproduced for commentary and comparison and removed on request. The redesigns are independent demonstrations, not affiliated with those papers' authors.
+[MIT](LICENSE), except the original table crops in `gallery/redesign/original/`: the Transformer table is reproduced under Google's permission to reproduce tables and figures of *Attention Is All You Need* for scholarly works with attribution (Vaswani et al., NeurIPS 2017); the Harness² and PaperBanana tables are © their authors under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); the ReHarness and ARE-bench tables are © their authors, reproduced for commentary and comparison and removed on request. The redesigns are independent demonstrations, not affiliated with those papers' authors.

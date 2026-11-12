@@ -1,8 +1,8 @@
 {
   "id": "efficiency",
   "number": 3,
-  "title": "Quality, serving cost and capacity constraints",
-  "caption": "Quality and serving cost of three attention variants at 16k context; the 32k column is for reference and is not ranked.",
+  "title": "Quality and serving cost of three attention variants",
+  "caption": "Hybrid is best on every metric at 16k context; Dense runs out of memory at batch 32.",
   "data_status": "synthetic",
   "provenance": {
     "origin": "Original constructed demonstration data; no real system results",
@@ -10,53 +10,48 @@
     "raw_data": "../data/efficiency_raw.json"
   },
   "style": {
-    "width_mm": 180,
+    "width_mm": 88,
     "body_pt": 8.5,
     "note_pt": 7.6,
     "caption_pt": 9.0,
-    "tabcolsep_pt": 5.0,
-    "arraystretch": 1.18
+    "tabcolsep_pt": 3.4,
+    "arraystretch": 1.18,
+    "group_style": "band"
   },
   "columns": [
     {
       "id": "metric",
       "label": "Metric",
       "kind": "text",
-      "width_mm": 50
+      "width_mm": 25
+    },
+    {
+      "id": "unit",
+      "label": "Unit",
+      "kind": "text",
+      "width_mm": 11
     },
     {
       "id": "dense",
-      "label": [
-        "Dense",
-        "16k"
-      ],
+      "label": "Dense",
       "kind": "number",
       "precision": 1
     },
     {
       "id": "sparse",
-      "label": [
-        "Sparse",
-        "16k"
-      ],
+      "label": "Sparse",
       "kind": "number",
       "precision": 1
     },
     {
       "id": "hybrid",
-      "label": [
-        "Hybrid",
-        "16k"
-      ],
+      "label": "Hybrid",
       "kind": "number",
       "precision": 1
     },
     {
       "id": "extended",
-      "label": [
-        "Hybrid",
-        "32k"
-      ],
+      "label": "Hybrid",
       "kind": "number",
       "precision": 1
     }
@@ -68,7 +63,8 @@
       "direction": "max",
       "precision": 1,
       "cells": {
-        "metric": "Task success (%) ↑",
+        "metric": "Task success",
+        "unit": "% ↑",
         "dense": {
           "value": 74.2
         },
@@ -89,7 +85,8 @@
       "direction": "min",
       "precision": 1,
       "cells": {
-        "metric": "Calibration error (pp) ↓",
+        "metric": "Calibration error",
+        "unit": "pp ↓",
         "dense": {
           "value": 4.8
         },
@@ -110,7 +107,8 @@
       "direction": "min",
       "precision": 1,
       "cells": {
-        "metric": "P95 request latency (ms) ↓",
+        "metric": "P95 latency",
+        "unit": "ms ↓",
         "dense": {
           "value": 184.2
         },
@@ -131,7 +129,8 @@
       "direction": "max",
       "precision": 1,
       "cells": {
-        "metric": "Throughput (requests/s) ↑",
+        "metric": "Throughput",
+        "unit": "req/s ↑",
         "dense": {
           "value": 30.4
         },
@@ -152,7 +151,8 @@
       "direction": "min",
       "precision": 1,
       "cells": {
-        "metric": "Peak device memory (GB) ↓",
+        "metric": "Peak memory",
+        "unit": "GB ↓",
         "dense": {
           "value": 36.4
         },
@@ -173,7 +173,8 @@
       "direction": "min",
       "precision": 1,
       "cells": {
-        "metric": "Energy per request (J) ↓",
+        "metric": "Energy / request",
+        "unit": "J ↓",
         "dense": {
           "value": 9.8
         },
@@ -194,7 +195,8 @@
       "direction": "min",
       "precision": 0,
       "cells": {
-        "metric": "P95 request latency (ms) ↓",
+        "metric": "P95 latency",
+        "unit": "ms ↓",
         "dense": {
           "failure": "oom"
         },
@@ -215,7 +217,8 @@
       "direction": "max",
       "precision": 1,
       "cells": {
-        "metric": "Throughput (requests/s) ↑",
+        "metric": "Throughput",
+        "unit": "req/s ↑",
         "dense": {
           "failure": "oom"
         },
@@ -232,7 +235,7 @@
     }
   ],
   "notes": [
-    "One 80 GB GPU, BF16 weights, 256 output tokens per request. P95 is a within-run latency quantile, not an interval."
+    "One 80 GB GPU, BF16 weights, 256 output tokens per request."
   ],
   "ranking": {
     "axis": "row",
@@ -244,11 +247,11 @@
       ]
     ],
     "tie_policy": "rounded",
-    "meaning": "Bold: best 16k value in each row, following its arrow."
+    "meaning": "Bold: best of the three 16k variants; the 32k column is context and is not ranked."
   },
   "column_groups": [
     {
-      "label": "Matched 16k context",
+      "label": "16k context",
       "columns": [
         "dense",
         "sparse",
@@ -256,15 +259,15 @@
       ]
     },
     {
-      "label": "Reference",
+      "label": "32k",
       "columns": [
         "extended"
       ]
     }
   ],
   "row_group_labels": {
-    "quality": "Quality (1,000 requests)",
-    "serve": "Serving (batch 4)",
-    "stress": "Capacity stress (batch 32)"
+    "quality": "Quality · 1,000 requests",
+    "serve": "Serving · batch 4",
+    "stress": "Stress · batch 32"
   }
 }

@@ -176,6 +176,8 @@ Use the documented `\endfirsthead`, `\endhead`, `\endfoot`, and `\endlastfoot` d
 Do not place a multipage table inside a nonbreaking float or minipage and expect it to split.
 For a two-column paper, use a permitted one-column appendix section, split tables, or the venue's documented multipage mechanism.
 Compile until widths stabilize and inspect the actual page breaks; do not claim the one-page renderer validated this custom path.
+For a long catalogue (a rubric, a taxonomy), give each record a short ID in a narrow first column so the text and other tables can cite it, and separate records by space rather than rules.
+For a hierarchy, set the parent label once in a merged cell (`\multirow`) and tint alternate leaf rows very lightly (`\rowcolor[HTML]{F7F7F7}`) so a wrapped record is not read as two; do not let a merged cell straddle a page break.
 
 ## Font, width, and compilation constraints
 

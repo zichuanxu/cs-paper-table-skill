@@ -53,6 +53,18 @@ Two further studies (2026-10):
   the leading columns. Weak: bold is the only emphasis, the method row looks like a baseline, and the margin
   over the strongest baseline is left to mental subtraction.
 
+- **ARE-bench** (arXiv 2611.14364, Shanghai AI Laboratory / Fudan and others; 18 tables, studied 2026-11). Cell
+  shading as a heat map in seven results tables: one blue (white → `#5B8CA5`) on a scale shared by every column
+  of the table, so "CSR is high for everyone, ISR is not" reads before any digit; orange kept for a different
+  quantity (share of failures, gap between models); the marginal totals of a confusion matrix in neutral grey;
+  each such caption ends by naming the scale. A pale header band (`#F0F4F7`) with regular-weight names; the same
+  model order (by overall ISR) in every table; `65/76 (85.5%)` cells and "20/20" in a column header; a Total row
+  whose caption says it is a union, not a sum; text tables with record IDs (O1 … O20) cited from other tables,
+  monospace identifiers, and a six-page taxonomy with merged parent cells and zebra leaf rows. Weak: no best
+  mark anywhere, so a column's winner is read off shades; ± SD at full size; a quadratic colour scale that
+  flattens the low range; Table 1 at 6.4 pt with red ✓ beside black ✗ and link-blue citations in every row;
+  four- to seven-line captions carrying the definitions; `4,096–49152`.
+
 ## 2. Rules (each implemented by the renderer unless noted)
 
 1. **Restraint first.** Black text, booktabs rules, no vertical lines, no per-row hairlines. Colour,
@@ -100,6 +112,24 @@ Two further studies (2026-10):
 21. **Row IDs the text can cite**: circled digits ① … ⑩ in a narrow first column.
 22. **Never** rotate column headers, put citations or descriptions in data cells, use link blue for
     emphasis, or mix "46%" with "46.2". (Llama 3, Gemini 1.5, GPT-4)
+23. **Shade for the pattern, bold for the winner** (`column.heat`): in a matrix of one kind of quantity
+    (models × stages, score dimensions, a confusion matrix) fill each cell from white to one hue over a
+    *declared* domain shared by every column of that quantity, so columns compare with each other and not only
+    within themselves. A second hue (orange) only for a different kind of quantity. Numbers stay printed in
+    black, bold still marks the best, total and marginal rows stay unshaded (`row.heat: false`), and the notes
+    name the scale (`heat_meaning`). Not for leaderboards with mixed units or for a single column. (ARE-bench)
+24. **Header band with shaded bodies** (`style.header_fill`): a pale tint behind the column names keeps header
+    and data apart once the cells carry fills. Leave headers unfilled otherwise. (ARE-bench)
+25. **Count / denominator (share)** (`kind: "fraction"`): `65/76 (85.5%)`, the share computed from the counts so
+    the two cannot drift apart. A denominator common to a column goes in its header ("Successful, 20/20").
+26. **One row order for the whole paper**: sort the models once by the headline metric and keep that order in
+    every later table, so a model sits in the same row and departures from the headline ranking show as breaks
+    in the shading. A total follows a light rule (`rule_before`); when it is not the column sum, the caption
+    says what it counts ("the total counts their union"). (Not enforced by the renderer.)
+27. **Text tables**: ragged-right wrapped columns, records separated by space and not by rules, a short ID per
+    record (O1 … O20) that the prose and other tables cite ("failing O4"), literal identifiers in monospace. In
+    a multi-page taxonomy, merge the parent cells, zebra the leaf rows (`#F7F7F7`) and repeat the header with
+    "Continued on next page" (manuscript-native `longtable`, see [latex-recipes.md](latex-recipes.md)).
 
 ## 3. Defaults the renderer now uses
 
@@ -112,6 +142,8 @@ Two further studies (2026-10):
 | Focus tint | `#EEF3FA` (`style.focus_fill`), row or column (`column.focus`) | Llama 3, Harness² |
 | Deltas | `#408C40` / `#8C4040`, direction-aware | DINOv2 |
 | Muted text | `#6B7280`; notes `#374151` | secondary information recedes |
+| Heat shading | off; white → `#5B8CA5` (blue) or `#CA9657` (orange), linear on the declared domain | ARE-bench; black text keeps > 5:1 on the darkest shade |
+| Header band | off; `#F0F4F7` behind the column names (`style.header_fill`) | ARE-bench |
 | Width | natural, centred (`style.fill: true` to stretch) | close columns group better |
 | PNG preview | 216 dpi, plus 96 dpi and greyscale | review at size and without colour |
 
@@ -126,5 +158,7 @@ Two further studies (2026-10):
 4. Compare side by side at the same width; the redesign must be easier for the five-second question
    ("which is best, by how much, under what conditions?") and no less faithful.
 
-Worked examples: `assets/specs/redesigns/transformer_t2.json` (Vaswani et al. 2017, Table 2) and
-`assets/specs/redesigns/harness2_t1.json` (Harness², Table 1, CC BY 4.0).
+Worked examples: `assets/specs/redesigns/transformer_t2.json` (Vaswani et al. 2017, Table 2),
+`assets/specs/redesigns/harness2_t1.json` (Harness², Table 1, CC BY 4.0) and
+`assets/specs/redesigns/arebench_t6.json` (ARE-bench, Table 6: the heat map kept, on a linear shared scale,
+with bold best, small SDs and a three-line note in place of a four-line caption).

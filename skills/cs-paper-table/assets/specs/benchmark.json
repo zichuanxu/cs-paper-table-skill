@@ -1,12 +1,13 @@
 {
   "id": "benchmark",
   "number": 1,
-  "title": "Quality and cost under matched inference budgets",
-  "caption": "Success rate on four task suites and inference cost, compared within each token budget.",
+  "title": "Task success and inference cost at two token budgets",
+  "caption": "Adaptive routing is best on every suite within each budget and costs less than Verifier, the strongest baseline.",
   "data_status": "synthetic",
   "provenance": {
     "origin": "Original constructed demonstration data; no real system results",
     "generator": "scripts/build_examples.py",
+    "derived": "Δ vs. Verifier rows: Adaptive routing minus Verifier in the same budget, computed from unrounded values.",
     "raw_data": "../data/benchmark_raw.json"
   },
   "style": {
@@ -98,7 +99,7 @@
       "id": "tokens",
       "label": [
         "Tokens",
-        "mean ↓"
+        "mean"
       ],
       "kind": "number",
       "precision": 0,
@@ -109,7 +110,7 @@
       "id": "latency",
       "label": [
         "Latency",
-        "ms ↓"
+        "ms"
       ],
       "kind": "number",
       "precision": 0,
@@ -269,6 +270,36 @@
       }
     },
     {
+      "id": "margin_16k",
+      "display_group": "16k",
+      "comparison_group": "16k",
+      "delta": true,
+      "cells": {
+        "method": "Δ vs. Verifier",
+        "math": {
+          "value": 2.4000000000000057
+        },
+        "code": {
+          "value": 2.0
+        },
+        "docs": {
+          "value": 2.0
+        },
+        "tools": {
+          "value": 5.0
+        },
+        "macro": {
+          "value": 2.8500000000000085
+        },
+        "tokens": {
+          "value": -1480
+        },
+        "latency": {
+          "value": -198.20000000000005
+        }
+      }
+    },
+    {
       "id": "r5",
       "display_group": "32k",
       "comparison_group": "32k",
@@ -387,16 +418,45 @@
           "value": 1128.3
         }
       }
+    },
+    {
+      "id": "margin_32k",
+      "display_group": "32k",
+      "comparison_group": "32k",
+      "delta": true,
+      "cells": {
+        "method": "Δ vs. Verifier",
+        "math": {
+          "value": 1.5999999999999943
+        },
+        "code": {
+          "value": 2.5
+        },
+        "docs": {
+          "value": 1.3333333333333286
+        },
+        "tools": {
+          "value": 4.0
+        },
+        "macro": {
+          "value": 2.3583333333333343
+        },
+        "tokens": {
+          "value": -3300
+        },
+        "latency": {
+          "value": -274.4000000000001
+        }
+      }
     }
   ],
   "notes": [
-    "Rate = successes / n; Avg. = unweighted mean of the four unrounded rates. Budgets cap all branches and verification calls."
+    "Success = successes / n; Avg. is the unweighted mean of the four rates. Δ is Adaptive routing minus Verifier, from unrounded values; green marks an improvement."
   ],
   "ranking": {
     "axis": "column",
     "tie_policy": "rounded",
-    "runner_up": "underline",
-    "meaning": "Bold: best and underline: second best within each budget (ties at the shown precision share the mark; not a significance test)."
+    "meaning": "Bold: best within a budget."
   },
   "column_groups": [
     {
@@ -410,7 +470,7 @@
       ]
     },
     {
-      "label": "Inference cost",
+      "label": "Cost ↓",
       "columns": [
         "tokens",
         "latency"
@@ -421,5 +481,5 @@
     "16k": "16k-token budget",
     "32k": "32k-token budget"
   },
-  "focus_meaning": "Shaded: the proposed method."
+  "focus_meaning": "Shaded: proposed method."
 }

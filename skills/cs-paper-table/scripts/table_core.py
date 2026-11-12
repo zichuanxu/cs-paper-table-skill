@@ -16,6 +16,10 @@ FAILURES = {"oom": "OOM", "timeout": "TO", "execution_error": "ERR"}
 STATUS = {"yes": "Yes", "no": "No", "partial": "Partial", "unknown": "Unknown"}
 # status_style "symbols" (default): marks read faster than words in capability/ablation matrices
 STATUS_SYMBOLS = {"yes": "✓", "no": "✗", "partial": "◐", "unknown": "?"}
+# column.heat: white -> this colour, linear over the declared domain (ARE-bench, arXiv 2611.14364, Tables 5-12).
+# Black text keeps > 5:1 contrast on the darkest shade of either hue.
+HEAT = {"blue": (0x5B, 0x8C, 0xA5), "orange": (0xCA, 0x96, 0x57)}
+NUMERIC = {"number", "mean_sd", "interval", "fraction"}
 
 
 def decimal(value):
@@ -54,9 +58,23 @@ def number(value, digits, signed=False):
 
 
 def value_of(cell):
+    if isinstance(cell, dict) and "count" in cell:  # fraction: the share in percent
+        return decimal(cell["count"]) * 100 / decimal(cell["of"])
     if not isinstance(cell, dict) or "missing" in cell or "value" not in cell:
         return None
     return decimal(cell["value"])
+
+
+def heat_fill(col, row, cell):
+    """Hex fill for a shaded cell, or None. The scale is the column's declared domain, never the
+    observed range, so columns that declare the same domain and hue are directly comparable."""
+    # row.heat = false keeps totals and marginals unshaded
+    value = None if row.get("delta") or row.get("heat") is False or not col.get("heat") else value_of(cell)
+    if value is None:
+        return None
+    lo, hi = map(decimal, col["heat"]["domain"])
+    t = float((value - lo) / (hi - lo))
+    return "".join(f"{round(255 + (c - 255) * t):02X}" for c in HEAT[col["heat"]["hue"]])
 
 
 def grouped(text):
@@ -104,6 +122,9 @@ def display_cell(col, row, cell, spec=None):
     if kind == "status":
         return (STATUS if (spec or {}).get("status_style") == "words" else STATUS_SYMBOLS)[cell]
     digits = precision(col, row, cell)
+    if kind == "fraction":
+        count, of = (grouped(str(cell[k])) if col.get("thousands") else str(cell[k]) for k in ("count", "of"))
+        return f"{count}/{of} ({number(value_of(cell), digits)}%)"
     if row.get("delta"):
         return formatted(col, cell["value"], digits, signed=True)
     lead = formatted(col, cell["value"], digits, col.get("signed", False))
@@ -163,8 +184,15 @@ def validate(spec):
     if not rows or len({r["id"] for r in rows}) != len(rows):
         raise ValueError("Rows need distinct IDs")
     for col in cols:
-        if col["kind"] not in {"text", "number", "mean_sd", "interval", "status"}:
+        if col["kind"] not in {"text", "status"} | NUMERIC:
             raise ValueError("Unknown column kind")
+        if col.get("heat") is not None:
+            heat = col["heat"]
+            if col["kind"] not in NUMERIC or not isinstance(heat, dict) or heat.get("hue") not in HEAT \
+                    or len(heat.get("domain", [])) != 2 or decimal(heat["domain"][0]) >= decimal(heat["domain"][1]):
+                raise ValueError("heat is {'hue': 'blue'|'orange', 'domain': [low, high]} on a numeric column: " + col["id"])
+            if not spec.get("heat_meaning"):
+                raise ValueError("Shaded cells need a root heat_meaning that names the scale, e.g. 'Darker blue = higher accuracy, linear on 0-100%.'")
         if col.get("direction") not in {None, "max", "min"}:
             raise ValueError("direction must be max, min or null")
         if col["kind"] == "text" and col.get("width_mm", 0) <= 0:
@@ -204,6 +232,10 @@ def validate(spec):
             elif col["kind"] == "status":
                 if cell not in STATUS:
                     raise ValueError("Unknown status; do not turn unknown into no")
+            elif col["kind"] == "fraction":
+                if not isinstance(cell, dict) or set(cell) != {"count", "of"} or any(type(cell[k]) is not int for k in cell) \
+                        or not 0 <= cell["count"] <= cell["of"] or cell["of"] == 0:
+                    raise ValueError(f"Fraction cell {row['id']}/{col['id']} needs integers {{'count', 'of'}} with 0 <= count <= of, of > 0")
             else:
                 expected = {"value"} | ({"sd"} if col["kind"] == "mean_sd" else {"low", "high"} if col["kind"] == "interval" else set())
                 if isinstance(cell, dict) and "span" in cell:
@@ -229,6 +261,13 @@ def validate(spec):
                     lo, hi = map(decimal, col["bounds"])
                     if not lo <= decimal(cell["value"]) <= hi:
                         raise ValueError("Value outside declared metric bounds")
+    for col in cols:
+        if col.get("heat"):
+            lo, hi = map(decimal, col["heat"]["domain"])
+            for row in rows:
+                value = None if row.get("delta") or row.get("heat") is False else value_of(row["cells"][col["id"]])
+                if value is not None and not lo <= value <= hi:
+                    raise ValueError(f"{row['id']}/{col['id']} lies outside the heat domain; widen the domain rather than clipping the shade")
     if spec.get("missing_style", "codes") not in {"codes", "dash"}:
         raise ValueError("missing_style is codes or dash")
     if spec.get("missing_style") == "dash":

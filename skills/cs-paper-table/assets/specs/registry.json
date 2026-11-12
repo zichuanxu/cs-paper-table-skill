@@ -1,8 +1,8 @@
 {
   "id": "registry",
   "number": 4,
-  "title": "Dataset and evaluation split register",
-  "caption": "Collections and split sizes. Counts are in each collection's own unit, so no total is given.",
+  "title": "Datasets and evaluation splits",
+  "caption": "Counts are in each collection's own unit, so no total is given.",
   "data_status": "synthetic",
   "provenance": {
     "origin": "Original constructed demonstration data; no real system results",
@@ -11,24 +11,24 @@
   },
   "style": {
     "width_mm": 180,
-    "body_pt": 8.4,
+    "body_pt": 8.5,
     "note_pt": 7.6,
     "caption_pt": 9.0,
-    "tabcolsep_pt": 5.0,
-    "arraystretch": 1.22
+    "tabcolsep_pt": 4.2,
+    "arraystretch": 1.25
   },
   "columns": [
     {
       "id": "collection",
       "label": "Collection",
       "kind": "text",
-      "width_mm": 28
+      "width_mm": 30
     },
     {
-      "id": "unit",
-      "label": "Unit",
+      "id": "coverage",
+      "label": "Coverage",
       "kind": "text",
-      "width_mm": 17
+      "width_mm": 20
     },
     {
       "id": "train",
@@ -52,16 +52,16 @@
       "thousands": true
     },
     {
-      "id": "coverage",
-      "label": "Coverage",
+      "id": "unit",
+      "label": "Unit",
       "kind": "text",
-      "width_mm": 22
+      "width_mm": 16
     },
     {
       "id": "separation",
       "label": "Separation rule",
       "kind": "text",
-      "width_mm": 39
+      "width_mm": 58
     }
   ],
   "rows": [
@@ -200,7 +200,7 @@
     }
   ],
   "notes": [
-    "Counts are manifest entries. 0 is an intentionally empty split, distinct from NA and NR."
+    "Counts are manifest entries; 0 is an intentionally empty split."
   ],
   "ranking": {
     "axis": "none"

@@ -183,6 +183,7 @@ Never map a positive raw delta to “good” before consulting metric direction:
 Do not map unlike score ranges to one shared heat scale, or normalize columns without explaining the transformation.
 Do not treat link blue, citation green, low-opacity text, or baseline fill as a numerical color scale.
 Avoid a heatmap unless magnitude patterns are a real reading task; retain exact printed numbers and a defined scale if one is used.
+When one is used (`column.heat`), declare the domain, share it across columns of the same quantity, keep one hue per kind of quantity, leave totals unshaded, and keep bold for the best value: shade shows the pattern, not the winner.
 Provide semantic HTML and a machine-readable CSV/JSON companion for reuse; keep group labels, units, status reasons, and emphasis meaning in those alternatives.
 The alternatives supplement the PDF and do not by themselves certify PDF accessibility.
 

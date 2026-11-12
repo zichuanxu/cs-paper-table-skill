@@ -1,8 +1,8 @@
 {
  "id": "budget_comparison",
- "number": 1,
- "title": "Budget-specific configuration results",
- "caption": "Internal rows share a checkpoint, hardware and a 10,000-item evaluation set.",
+ "number": 5,
+ "title": "Configuration results at two token budgets",
+ "caption": "Internal configurations share a checkpoint, hardware and a 10,000-item evaluation set; Expert does not fit in memory at 32k.",
  "data_status": "synthetic",
  "provenance": {
   "source": "Constructed application-example CSV and context JSON; no real performance claims.",
@@ -251,7 +251,7 @@
    "source_budget": "other",
    "source_origin": "external",
    "cells": {
-    "configuration": "External reference",
+    "configuration": "External reference†",
     "success_percent": {
      "value": "80.00"
     },
@@ -267,15 +267,15 @@
  "row_group_labels": {
   "internal_16k": "16k-token budget",
   "internal_32k": "32k-token budget",
-  "external_context": "External reference (different harness)"
+  "external_context": ""
  },
  "ranking": {
   "axis": "column",
   "tie_policy": "rounded",
-  "meaning": "Bold: best within each internal budget (ties share the mark)."
+  "meaning": "Bold: best within a budget; ties at the shown precision share it."
  },
  "notes": [
-  "P95 is a within-run latency quantile; no replication, so no intervals. The external reference uses a different harness and is not ranked."
+  "One run per configuration, so no intervals. † Different evaluation harness: context only, not ranked."
  ],
  "style": {
   "width_mm": 88,
@@ -284,5 +284,6 @@
   "caption_pt": 9.0,
   "tabcolsep_pt": 4.0,
   "arraystretch": 1.18
- }
+ },
+ "missing_style": "dash"
 }

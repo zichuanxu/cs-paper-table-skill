@@ -7,7 +7,7 @@ description: Design, analyze, repair, and produce publication-ready computer sci
 
 Make the table's scientific comparison easy to read and hard to misinterpret. Treat typography and grouping as part of the argument. Use the bundled research as evidence for particular design choices, not as a universal corporate style or a ranking of prestigious papers.
 
-**Craft first.** Read [table-craft.md](references/table-craft.md) before styling: what 13 top-lab papers do in their typeset tables (restraint, booktabs weights, two-line headers, banner row groups, bold best within a scope, muted deltas and uncertainty, short captions with notes underneath) and the renderer defaults that implement it. Its redesign protocol and the two worked redesigns (`assets/specs/redesigns/`) show how to beat an existing table without changing a value.
+**Craft first.** Read [table-craft.md](references/table-craft.md) before styling: what 13 top-lab papers do in their typeset tables (restraint, booktabs weights, two-line headers, banner row groups, bold best within a scope, muted deltas and uncertainty, short captions with notes underneath) and the renderer defaults that implement it. Its redesign protocol and the worked redesigns (`assets/specs/redesigns/`) show how to beat an existing table without changing a value.
 
 ## Establish the table contract
 
@@ -52,6 +52,8 @@ Use [design-guide.md](references/design-guide.md) for specific layout and style 
 - Use two-line headers: a bold name, then a smaller muted line for n, unit, shots or direction (`Latency` / `ms ↓`). Show uncertainty and intervals as smaller secondary text, deltas as signed values coloured by improvement after the metric's direction, binary states as ✓/✗, counts with thousands separators and FLOPs as `a·10^n`. Keep the source's precision when transcribing (`precision: "reported"`).
 - Keep the caption to a bold title and one or two sentences; put definitions, the emphasis legend and data status in the notes, in two or three lines. Every note must change how a cell is read. Leave out how the table or its artwork was made (tools, recolouring), how marks are placed, procedure the methods already give (sampling schedules, draws fixed in advance, seeds, prompts) and disclaimers ("the names are illustrative"); the renderer rejects such phrases. Keep that detail in `provenance` or the methods text.
 - Use dark text, a white background, and at most one or two semantic accent roles. Treat pale fills as opaque specified colors unless transparency is actually measured. State whether a fill marks a reference, a focal row, a condition or an effect; preserve meaning in grayscale and through labels.
+- Shade cells as a heat map (`column.heat`) only when the table is a matrix of one kind of quantity and the pattern across it is the point: one hue on a declared domain shared by those columns, a second hue only for a different quantity, numbers still printed, totals unshaded, the scale named in the notes. Keep bold for the best value, and add `style.header_fill` so the header stays apart from shaded cells.
+- Print a count with its denominator and share in one cell (`kind: "fraction"`, `65/76 (85.5%)`), and keep one row order for the models across all tables of a paper.
 - Keep bold sparse and explicit. Add second-place underlining (`ranking.runner_up`) only when the notes say what it means, and never highlight all cells in a focal row as winners. Apply any source-inspired convention only after explaining its meaning in this table.
 - Put the caption and notes in the manuscript's required positions. Make the caption identify the comparison and protocol; put uncertainty, emphasis, missing-value and exception definitions close enough to travel with the table.
 
@@ -65,7 +67,7 @@ python /path/to/cs-paper-table/scripts/render_table.py \
   /path/to/cs-paper-table/assets/specs/benchmark.json \
   --out /absolute/workdir/table-output
 
-# Real-table redesigns: Transformer Table 2 and Harness² Table 1 (transcribed, reported values).
+# Real-table redesigns: Transformer Table 2, Harness² Table 1, ARE-bench Table 6 (transcribed, reported values).
 python /path/to/cs-paper-table/scripts/render_table.py \
   /path/to/cs-paper-table/assets/specs/redesigns/harness2_t1.json --out /absolute/workdir/h2
 
@@ -78,7 +80,7 @@ Write output outside the installed skill. The renderer requires Python with PyMu
 
 Keep `.tex`, `_body.tex`, `_caption.tex`, the typed JSON, raw inputs, CSV, semantic HTML and provenance together. The standalone PDF is vector output; PNG is a review preview. Integrate the body and caption fragments into the real manuscript, then compile and inspect that placement again. Do not claim that a standalone preview proves compatibility with an unseen conference template. Use manuscript-native LaTeX for unsupported structures, Chinese or other non-Latin text, nested panels, special cells and multipage tables; preserve the same data contract and review gates.
 
-The renderer supports column or row ranking, explicit scopes, exclusions, rounded/raw/tolerance ties, an optional underlined runner-up, mean ± SD or mean (SD), estimate with interval, ✓/✗ status, signed delta rows, cells spanning columns, scientific notation, thousands separators, reported per-value precision, focus rows or columns, grey category bands, hairlines between column groups, coloured ✓/✗ for capability matrices, cell marks (`*`, `†`) with automatic legends, unit suffixes (`1.0×`), typed missingness (codes or a single dash) and observed failure outcomes. It intentionally does not infer statistical significance, compute second-place semantics, guess unknown metric directions, or rank multiple incompatible scopes in one cell. Use custom code when needed and save the decisions and calculations.
+The renderer supports column or row ranking, explicit scopes, exclusions, rounded/raw/tolerance ties, an optional underlined runner-up, mean ± SD or mean (SD), estimate with interval, ✓/✗ status, signed delta rows, cells spanning columns, scientific notation, thousands separators, reported per-value precision, focus rows or columns, grey category bands, hairlines between column groups, coloured ✓/✗ for capability matrices, cell marks (`*`, `†`) with automatic legends, heat-map cell shading on a declared shared scale, a header band, count/denominator (share) cells, unit suffixes (`1.0×`), typed missingness (codes or a single dash) and observed failure outcomes. It intentionally does not infer statistical significance, compute second-place semantics, guess unknown metric directions, or rank multiple incompatible scopes in one cell. Use custom code when needed and save the decisions and calculations.
 
 To examine another PDF table, use:
 
