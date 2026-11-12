@@ -103,20 +103,20 @@ Synthetic data; each table is designed from the skill's rules for its own readin
 
 Column names in full words, so the notes need no glossary; grey category bands that carry what a "task-agnostic" column would only repeat; the proposed system marked once, by its band and tint; bold only where a ranking means something (success, not the cost of the reference itself); rows ordered by success within each category; hairlines only between column groups, coloured ✓/✗ with the glyph shape still distinct, `1.0×` relative cost, and `*` / `†` cell marks defined once in the notes. The caption states the finding. After the PlugMem and StudentSim tables (synthetic data). [PDF](gallery/after/capability.pdf) · [spec](skills/cs-paper-table/assets/specs/capability.json)
 
-## What the study found
+## Design rules in brief
 
-Five visual studies, every table rendered from the typeset PDF and looked at: 13 AI-lab reports (DeepSeek-V3, Qwen2.5, Llama 3, Gemini 1.5, GPT-4, Phi-4, DINOv2 and others), five single papers, and 32 papers from 2025–2026 award lists (NeurIPS, ICML, ICLR; CVPR, ICCV, ACL, EMNLP; OSDI, SOSP, NSDI, USENIX Security, S&P, CCS, VLDB, SIGMOD, PLDI, CHI). The per-paper notes are in [craft-study.md](skills/cs-paper-table/references/craft-study.md). They distill into eight principles:
+1. **One table answers one question.** Put the compared numbers next to each other, down a column, in a stated order.
+2. **The reader never computes.** Print the direction, unit, n, the reference and the margin.
+3. **Space and alignment before ink.** Rules only at real boundaries; at most one vertical hairline, between what was set and what was measured.
+4. **Emphasis is a budget.** One mark per meaning, each defined beside the table; a fill has one job per table.
+5. **Secondary information recedes but stays readable.** Set ±, units and counts smaller or muted, never under the size floor.
+6. **Comparability is visible.** Group comparable rows under a banner that names the condition or caveat; show missing, failed and censored results (`TO`, `> 180`) as values.
+7. **Design at the final size, in the venue's template.** One table size per paper; recompose, never scale.
+8. **One paper, one system.** Keep the same row order, precision, marks and hue meanings in every table.
 
-1. **One table answers one question.** The compared numbers sit next to each other, down a column, in a stated order.
-2. **The reader never computes.** Direction, unit, n, the reference and the margin are printed.
-3. **Space and alignment before ink.** Rules only at real boundaries; the one vertical hairline award papers agree on separates what was set from what was measured.
-4. **Emphasis is a budget.** One mark per meaning, defined beside the table. Bold is defined in 1 of the 7 ML award papers that use it, and the legend is complete in 2 of 9 vision and NLP papers.
-5. **Secondary information recedes but stays readable.** ±, units and counts are smaller or muted, never under the size floor.
-6. **Comparability is visible.** Blocks whose banner names the condition or caveat; missing, failed and censored results (`TO`, `> 180`) as values.
-7. **Design at the final size, in the venue's template.** One table size per paper. Every table under 7 pt in the studies was scaled, and 7 of 13 systems award papers do not shrink tables at all.
-8. **One paper, one system.** The same row order, precision, marks and hue meanings throughout.
+Avoid: undefined bold or tints, a metric with no stated direction, "%" in every cell, `1354365` without separators, three-hue and traffic-light fills, the own row tinted pink, and 100-word captions that define each column.
 
-What award papers still get wrong: undefined emphasis, direction stated nowhere (7 of 9 ML papers), "%" in every cell, `1354365` without separators, three-hue and traffic-light fills, the own row tinted pink, and 100-word captions that define each column.
+The full rules, with the renderer field for each, are in [table-craft.md](skills/cs-paper-table/references/table-craft.md). They come from five visual studies of typeset PDFs: 13 AI-lab reports, five single papers, and 32 papers from 2025–2026 award lists (NeurIPS, ICML, ICLR; CVPR, ICCV, ACL, EMNLP; OSDI, SOSP, NSDI, USENIX Security, S&P, CCS, VLDB, SIGMOD, PLDI, CHI). The per-paper notes are in [craft-study.md](skills/cs-paper-table/references/craft-study.md).
 
 ## Installation
 
